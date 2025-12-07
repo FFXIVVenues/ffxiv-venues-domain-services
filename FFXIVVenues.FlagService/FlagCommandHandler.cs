@@ -16,7 +16,7 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
         var venueExists = domainData.Venues.Any(v => v.Id == command.VenueId && v.Deleted == null);
         if (!venueExists)
         {
-            logger.LogInformation("Rejecting flag from {SourceAddress} for venue {VenueId}, venue does not exist", command.VenueId, sourceAddress);   
+            logger.LogInformation("Rejecting flag from {SourceAddress} for venue {VenueId}, venue does not exist", sourceAddress, command.VenueId);   
             return;
         }
         

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Serilog;
@@ -52,6 +53,7 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 builder.Environment.EnvironmentName = environment;
 builder.Configuration.AddConfiguration(config);
+builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseWolverine(opts =>
 {

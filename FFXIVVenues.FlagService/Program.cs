@@ -29,6 +29,7 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddDomainData(connectionString, mediaUriTemplate);
+builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>
 {
