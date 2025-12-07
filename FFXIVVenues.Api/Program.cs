@@ -30,7 +30,6 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-
 var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
 var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
@@ -56,7 +55,7 @@ builder.Configuration.AddConfiguration(config);
 builder.Logging.AddSerilog();
 builder.Host.UseWolverine(opts =>
 {
-    opts.UseRabbitMq(rabbitServiceUrl);
+    opts.UseRabbitMq(rabbitServiceUrl).AutoProvision();
     opts.AddFlagServiceMessages();
 });
 
