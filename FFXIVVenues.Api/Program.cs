@@ -18,7 +18,7 @@ using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Wolverine;
-using Wolverine.Pulsar;
+using Wolverine.RabbitMQ;
 
 var environment = args.SkipWhile(s => !string.Equals(s, "--environment", StringComparison.OrdinalIgnoreCase)).Skip(1).FirstOrDefault()
                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
@@ -33,7 +33,7 @@ var config = new ConfigurationBuilder()
 
 var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
 var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
-var pulsarServiceUrl = config.GetValue<string>("Pulsar:ServiceUrl");
+var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
 var connectionString = config.GetConnectionString("FFXIVVenues");
 var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
 var mediaStorageProvider = config.GetValue<string>("MediaStorage:Provider");
@@ -56,8 +56,7 @@ builder.Configuration.AddConfiguration(config);
 builder.Logging.AddSerilog();
 builder.Host.UseWolverine(opts =>
 {
-    opts.UsePulsar(pulsar =>
-        pulsar.ServiceUrl(new Uri(pulsarServiceUrl)));
+    opts.UseRabbitMq(rabbitServiceUrl);
     opts.AddFlagServiceMessages();
 });
 

@@ -1,7 +1,7 @@
 using FFXIVVenues.FlagService.Client.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Wolverine;
-using Wolverine.Pulsar;
+using Wolverine.RabbitMQ;
 
 namespace FFXIVVenues.FlagService.Client;
 
@@ -15,8 +15,8 @@ public static class BuilderExtensions
     
     public static WolverineOptions AddFlagServiceMessages(this WolverineOptions wolverineOptions)
     {
-        wolverineOptions.PublishMessage<FlagVenueCommand>()
-            .ToPulsarTopic("persistent://ffxivvenues/flagging/commands");
+        wolverineOptions
+            .PublishMessage<FlagVenueCommand>().ToRabbitQueue("FFXIVVenues.Flagging.Commands");
         return wolverineOptions;
     }
 }

@@ -1,9 +1,10 @@
 using FFXIVVenues.DomainData;
+using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.FlagService.Client.Commands;
 using Serilog;
 using Serilog.Events;
 using Wolverine;
-using Wolverine.Pulsar;
+using Wolverine.RabbitMQ;
 
 var config = new ConfigurationBuilder()
     .AddEnvironmentVariables("FFXIV_VENUES_FLAGSERVICE__")
@@ -15,7 +16,7 @@ var connectionString = config.GetConnectionString("FFXIVVenues");
 var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
 var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
 var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
-var pulsarServiceUrl = config.GetValue<string>("Pulsar:ServiceUrl");
+var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.BetterStack(betterStackToken)
@@ -31,13 +32,9 @@ builder.Services.AddDomainData(connectionString, mediaUriTemplate);
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>
 {
-    opts.UsePulsar(pulsar =>
-        pulsar.ServiceUrl(new Uri(pulsarServiceUrl)));
-
-    opts.PublishMessage<FlagVenueCommand>()
-        .ToPulsarTopic("persistent://ffxivvenues/flagging/commands");
-
-    opts.ListenToPulsarTopic("persistent://ffxivvenues/flagging/commands")
+    opts.UseRabbitMq(rabbitServiceUrl).AutoProvision();
+    opts.AddFlagServiceMessages();
+    opts.ListenToRabbitQueue("FFXIVVenues.Flagging.Commands")
         .ProcessInline();
 });
 
