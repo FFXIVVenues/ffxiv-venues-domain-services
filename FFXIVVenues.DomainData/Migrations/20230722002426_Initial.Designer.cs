@@ -30,7 +30,7 @@ partial class Initial
 
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.VenueView", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.VenueView", b =>
         {
             b.Property<string>("Id")
                 .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ partial class Initial
             b.ToTable("VenueViews", "VenueMetrics");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", b =>
         {
             b.Property<string>("Id")
                 .HasColumnType("text");
@@ -86,7 +86,7 @@ partial class Initial
             b.ToTable("Locations", "Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Notice", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Notice", b =>
         {
             b.Property<string>("VenueId")
                 .HasColumnType("text");
@@ -111,7 +111,7 @@ partial class Initial
             b.ToTable("Notices", "Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.OpenOverride", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.OpenOverride", b =>
         {
             b.Property<string>("VenueId")
                 .HasColumnType("text");
@@ -130,7 +130,7 @@ partial class Initial
             b.ToTable("OpenOverrides", "Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Opening", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Opening", b =>
         {
             b.Property<string>("VenueId")
                 .HasColumnType("text");
@@ -163,7 +163,7 @@ partial class Initial
             b.ToTable("Openings", "Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
         {
             b.Property<string>("Id")
                 .HasColumnType("text");
@@ -223,18 +223,18 @@ partial class Initial
             b.ToTable("Venues", "Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.VenueView", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.VenueView", b =>
         {
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                 .WithMany()
                 .HasForeignKey("VenueId");
 
             b.Navigation("Venue");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Notice", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Notice", b =>
         {
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                 .WithMany("Notices")
                 .HasForeignKey("VenueId")
                 .OnDelete(DeleteBehavior.Cascade)
@@ -243,9 +243,9 @@ partial class Initial
             b.Navigation("Venue");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.OpenOverride", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.OpenOverride", b =>
         {
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                 .WithMany("OpenOverrides")
                 .HasForeignKey("VenueId")
                 .OnDelete(DeleteBehavior.Cascade)
@@ -254,13 +254,13 @@ partial class Initial
             b.Navigation("Venue");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Opening", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Opening", b =>
         {
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", "Location")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", "Location")
                 .WithMany()
                 .HasForeignKey("LocationId");
 
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                 .WithMany("Openings")
                 .HasForeignKey("VenueId")
                 .OnDelete(DeleteBehavior.Cascade)
@@ -271,21 +271,21 @@ partial class Initial
             b.Navigation("Venue");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
         {
-            b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", "Location")
+            b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", "Location")
                 .WithMany("Venues")
                 .HasForeignKey("LocationId");
 
             b.Navigation("Location");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", b =>
         {
             b.Navigation("Venues");
         });
 
-        modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+        modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
         {
             b.Navigation("Notices");
 

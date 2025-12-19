@@ -30,7 +30,7 @@ namespace FFXIVVenues.DomainData.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.VenueView", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.VenueView", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("VenueViews", "VenueMetrics");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -86,7 +86,7 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("Locations", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Notice", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Notice", b =>
                 {
                     b.Property<string>("VenueId")
                         .HasColumnType("text");
@@ -111,7 +111,7 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("Notices", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Schedule", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Schedule", b =>
                 {
                     b.Property<string>("VenueId")
                         .HasColumnType("text");
@@ -144,7 +144,7 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("Schedules", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.ScheduleOverride", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.ScheduleOverride", b =>
                 {
                     b.Property<string>("VenueId")
                         .HasColumnType("text");
@@ -163,7 +163,7 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("ScheduleOverrides", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -226,18 +226,18 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("Venues", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.VenueView", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.VenueView", b =>
                 {
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                         .WithMany()
                         .HasForeignKey("VenueId");
 
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Notice", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Notice", b =>
                 {
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                         .WithMany("Notices")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -246,13 +246,13 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Schedule", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Schedule", b =>
                 {
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", "Location")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                         .WithMany("Schedule")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -263,9 +263,9 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.ScheduleOverride", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.ScheduleOverride", b =>
                 {
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", "Venue")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", "Venue")
                         .WithMany("ScheduleOverrides")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -274,21 +274,21 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
                 {
-                    b.HasOne("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", "Location")
+                    b.HasOne("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", "Location")
                         .WithMany("Venues")
                         .HasForeignKey("LocationId");
 
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Location", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Location", b =>
                 {
                     b.Navigation("Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.Api.PersistenceModels.Entities.Venues.Venue", b =>
+            modelBuilder.Entity("FFXIVVenues.ApiGateway.PersistenceModels.Entities.Venues.Venue", b =>
                 {
                     b.Navigation("Notices");
 

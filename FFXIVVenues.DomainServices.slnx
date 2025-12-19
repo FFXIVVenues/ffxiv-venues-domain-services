@@ -1,0 +1,13 @@
+﻿<Solution>
+  <Folder Name="/Meta/">
+    <File Path=".github\workflows\main_ffxivvenues-api.yml" />
+    <File Path=".github\workflows\merge_main_to_test.yml" />
+    <File Path=".github\workflows\run_playtests.yml" />
+    <File Path=".github\workflows\test_ffxivvenues-api.yml" />
+  </Folder>
+  <Project Path="FFXIVVenues.ApiGateway/FFXIVVenues.ApiGateway.csproj" />
+  <Project Path="FFXIVVenues.DomainData\FFXIVVenues.DomainData.csproj" />
+  <Project Path="FFXIVVenues.FlagService.Client/FFXIVVenues.FlagService.Client.csproj" />
+  <Project Path="FFXIVVenues.FlagService/FFXIVVenues.FlagService.csproj" />
+  <Project Path="FFXIVVenues.OGCardService/FFXIVVenues.OGCardService.csproj" />
+</Solution>
