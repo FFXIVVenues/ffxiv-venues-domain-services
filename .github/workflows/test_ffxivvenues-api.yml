@@ -23,11 +23,13 @@ jobs:
           - name: amd64
             runner: ubuntu-24.04
             alias: linux/amd64
+            tag: amd64
           - name: arm64
             runner: self-hosted
             alias: linux/arm64
+            tag: arm64
     
-    name: Publishing ${{ matrix.application.name }} for ${{ matrix.platform.name }}
+    name: Publish ${{ matrix.application.name }} for ${{ matrix.platform.name }}
     runs-on: ${{ matrix.platform.runner }}
 
     steps:
@@ -42,7 +44,7 @@ jobs:
       - name: Build and push API Gateway docker image
         run: |
           docker build --push --platform ${{ matrix.platform.alias }} \
-          -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:test-${{ matrix.platform.name }} \
+          -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:test-${{ matrix.platform.tag }} \
           -f ${{ matrix.application.path }}/Dockerfile .
   
   
@@ -57,7 +59,7 @@ jobs:
           - name: OGCardService
             image: ffxivvenues.ogcardservice
     
-    name: Publish multiplatform manifest for ${{ matrix.name }}
+    name: Publish ${{ matrix.name }} multiplatform manifest
     runs-on: self-hosted
     needs: publish_for_platforms
     

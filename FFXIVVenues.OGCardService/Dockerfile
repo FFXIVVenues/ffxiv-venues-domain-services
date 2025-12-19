@@ -23,4 +23,4 @@ EXPOSE 80
 
 WORKDIR /appim g
 COPY --from=build /src/build .
-ENTRYPOINT ["dotnet", "FFXIVVenues.OGCard.dll"]
+ENTRYPOINT ["dotnet", "FFXIVVenues.OGCardService.dll"]
