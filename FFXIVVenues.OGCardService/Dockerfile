@@ -11,12 +11,12 @@ RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 FROM base AS build
 COPY ./FFXIVVenues.OGCardService /src/FFXIVVenues.OGCardService
 COPY ./FFXIVVenues.DomainData /src/FFXIVVenues.DomainData
-RUN ./dotnet-install.sh --channel STS --install-dir /usr/share/dotnet
+RUN ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet
 RUN dotnet publish /src/FFXIVVenues.OGCardService/FFXIVVenues.OGCardService.csproj -c Release -o /src/build
 
 FROM base AS final
 
-RUN ./dotnet-install.sh --channel STS --runtime aspnetcore --install-dir /usr/share/dotnet
+RUN ./dotnet-install.sh --channel 10.0 --runtime aspnetcore --install-dir /usr/share/dotnet
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:80
 EXPOSE 80

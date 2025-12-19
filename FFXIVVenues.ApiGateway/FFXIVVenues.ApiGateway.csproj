@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>disable</Nullable>
     <UserSecretsId>ffxiv-venues-api-secrets</UserSecretsId>
     <LangVersion>latest</LangVersion>
@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DocumentationFile>bin\Debug\FFXIVVenues.Api.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\FFXIVVenues.ApiGateway.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DocumentationFile>bin\Release\FFXIVVenues.Api.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\FFXIVVenues.ApiGateway.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
