@@ -1,79 +1,14 @@
-name: Publish Production Domain Services
+name: "* Publish Production Domain Services"
 
 on:
   push:
     branches:
       - main
-
+      - 
 jobs:
-  publish_for_platforms:
-    strategy:
-      matrix:
-        application:
-          - name: ApiGateway
-            path: FFXIVVenues.ApiGateway
-            image: ffxivvenues.apigateway
-          - name: FlagService
-            path: FFXIVVenues.FlagService
-            image: ffxivvenues.flagservice
-          - name: OGCardService
-            path: FFXIVVenues.OGCardService
-            image: ffxivvenues.ogcardservice
-        platform:
-          - name: amd64
-            runner: ubuntu-24.04
-            alias: linux/amd64
-            tag: amd64
-          - name: arm64
-            runner: self-hosted
-            alias: linux/arm64
-            tag: arm64
-
-    name: Publish ${{ matrix.application.name }} for ${{ matrix.platform.name }}
-    runs-on: ${{ matrix.platform.runner }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch }}
-
-      - name: Docker Login
-        uses: docker/login-action@v3.6.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN}}
-
-      - name: Build and push API Gateway docker image
-        run: |
-          docker build --push --platform ${{ matrix.platform.alias }} \
-          -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:latest-${{ matrix.platform.tag }} \
-          -f ${{ matrix.application.path }}/Dockerfile .
-
-
-  publish_multiplatform_manifest:
-    strategy:
-      matrix:
-        include:
-          - name: ApiGateway
-            image: ffxivvenues.apigateway
-          - name: FlagService
-            image: ffxivvenues.flagservice
-          - name: OGCardService
-            image: ffxivvenues.ogcardservice
-
-    name: Publish ${{ matrix.name }} multiplatform manifest
-    runs-on: self-hosted
-    needs: publish_for_platforms
-
-    steps:
-      - name: Docker Login
-        uses: docker/login-action@v3.6.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN}}
-
-      - name: Create and push manifest
-        run: |
-          docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest \
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest-amd64 \
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest-arm64
+  publish_production_domain_services:
+    uses: ./.github/workflows/publish-ffxivvenues-domain-services.yml
+    with:
+      branch: main
+      tag: latest
+    secrets: inherit
