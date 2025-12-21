@@ -1,0 +1,13 @@
+name: Publish Production Domain Services
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_production_domain_services:
+    uses: ./.github/workflows/publish-ffxivvenues-domain-services.yml
+    with:
+      branch: main
+      tag: latest

@@ -1,15 +1,22 @@
-name: Build and publish Test API
+name: Publish FFXIV Venues Domain Services
 
 on:
-  push:
-    branches:
-      - test
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+        default: main
+      tag:
+        required: true
+        type: string
+        default: latest
 
 jobs:
   publish_for_platforms:
     strategy:
       matrix:
-        application: 
+        application:
           - name: ApiGateway
             path: FFXIVVenues.ApiGateway
             image: ffxivvenues.apigateway
@@ -28,12 +35,14 @@ jobs:
             runner: self-hosted
             alias: linux/arm64
             tag: arm64
-    
+
     name: Publish ${{ matrix.application.name }} for ${{ matrix.platform.name }}
     runs-on: ${{ matrix.platform.runner }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch }}
 
       - name: Docker Login
         uses: docker/login-action@v2.0.0
@@ -44,10 +53,10 @@ jobs:
       - name: Build and push API Gateway docker image
         run: |
           docker build --push --platform ${{ matrix.platform.alias }} \
-          -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:test-${{ matrix.platform.tag }} \
+          -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:${{ inputs.tag }}-${{ matrix.platform.tag }} \
           -f ${{ matrix.application.path }}/Dockerfile .
-  
-  
+
+
   publish_multiplatform_manifest:
     strategy:
       matrix:
@@ -58,11 +67,11 @@ jobs:
             image: ffxivvenues.flagservice
           - name: OGCardService
             image: ffxivvenues.ogcardservice
-    
+
     name: Publish ${{ matrix.name }} multiplatform manifest
     runs-on: self-hosted
     needs: publish_for_platforms
-    
+
     steps:
       - name: Docker Login
         uses: docker/login-action@v2.0.0
@@ -72,6 +81,6 @@ jobs:
 
       - name: Create and push manifest
         run: |
-          docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:test \
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:test-amd64 \
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:test-arm64
+          docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }} \
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }}-amd64 \
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }}-arm64

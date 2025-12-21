@@ -1,0 +1,13 @@
+name: Publish Test Domain Services
+
+on:
+  push:
+    branches:
+      - test
+      
+jobs:
+  publish_test_domain_services:
+    uses: ./.github/workflows/publish-ffxivvenues-domain-services.yml
+    with:
+      branch: test
+      tag: test
