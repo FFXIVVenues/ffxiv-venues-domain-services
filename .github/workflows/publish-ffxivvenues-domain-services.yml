@@ -1,6 +1,18 @@
-name: Publish FFXIV Venues Domain Services
+name: Publish Domain Services
 
 on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to publish from
+        required: true
+        type: string
+        default: main
+      tag:
+        description: Tag to publish with
+        required: true
+        type: string
+        default: latest
   workflow_call:
     inputs:
       branch:
@@ -11,6 +23,11 @@ on:
         required: true
         type: string
         default: latest
+    secrets:
+      docker_username:
+        required: true
+      docker_access_token:
+        required: true
 
 jobs:
   publish_for_platforms:
@@ -32,7 +49,7 @@ jobs:
             alias: linux/amd64
             tag: amd64
           - name: arm64
-            runner: self-hosted
+            runner: ubuntu-24.04-arm
             alias: linux/arm64
             tag: arm64
 
@@ -45,7 +62,7 @@ jobs:
           ref: ${{ inputs.branch }}
 
       - name: Docker Login
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v3.6.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN}}
@@ -69,12 +86,12 @@ jobs:
             image: ffxivvenues.ogcardservice
 
     name: Publish ${{ matrix.name }} multiplatform manifest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: publish_for_platforms
 
     steps:
       - name: Docker Login
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v3.6.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN}}
