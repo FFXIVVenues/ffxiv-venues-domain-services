@@ -5,6 +5,7 @@
     <File Path=".github\workflows\merge_main_to_test.yml" />
     <File Path=".github\workflows\run_playtests.yml" />
     <File Path=".github\workflows\on_push_to_main.yml" />
+    <File Path="README" />
   </Folder>
   <Project Path="FFXIVVenues.ApiGateway/FFXIVVenues.ApiGateway.csproj" />
   <Project Path="FFXIVVenues.DomainData\FFXIVVenues.DomainData.csproj" />
