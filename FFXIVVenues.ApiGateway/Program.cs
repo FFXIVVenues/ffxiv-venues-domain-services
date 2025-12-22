@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
@@ -71,6 +72,10 @@ else if (mediaStorageProvider.ToLower() == "azure")
 else
     builder.Services.AddSingleton<IMediaRepository, LocalMediaRepository>();
 
+builder.Services.AddOpenApi("v1");
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddApiVersioning();
+// builder.Services.AddVersionedApiExplorer();
 builder.Services.AddDomainData(connectionString, mediaUriTemplate);
 builder.Services.AddSingleton(venueCache);
 builder.Services.AddFlagService();
@@ -79,14 +84,6 @@ builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-
-// todo: Remove the below services for .net 9
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FFXIV Venues API", Version = "v1" });
-    c.IncludeXmlComments(Assembly.GetExecutingAssembly());
-});
-builder.Services.AddEndpointsApiExplorer();
 
 
 
@@ -100,18 +97,13 @@ if (builder.Configuration.GetValue("HttpsOnly", true))
 
 app.UseCors(
         pb => pb.SetIsOriginAllowed(_ => true).AllowCredentials().AllowAnyHeader())
-    .UseSwagger(options =>
-        options.RouteTemplate = "openapi/{documentName}.json")
     .UseWebSockets()
     .UseRouting();
 
-app.MapScalarApiReference();
 app.MapControllers();
-// todo: Add for .net 9, replace UseSwagger and MapScalarApiReference
-// app.MapOpenApi();
-// app.MapScalarApiReference();
-
-
+app.MapOpenApi();
+app.MapScalarApiReference(o => 
+    o.EndpointPathPrefix = "/docs/{documentName}");
 
 await app.Services.MigrateDomainDataAsync();
 await app.RunAsync();

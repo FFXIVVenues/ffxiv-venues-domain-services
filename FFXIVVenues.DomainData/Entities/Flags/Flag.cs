@@ -20,7 +20,7 @@ public class Flag
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum FlagCategory {
-    Empty,
+    VenueEmpty,
     IncorrectInformation,
     InappropriateContent
 }
