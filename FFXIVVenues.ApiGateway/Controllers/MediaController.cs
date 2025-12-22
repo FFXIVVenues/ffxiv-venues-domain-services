@@ -16,6 +16,8 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 /// Venue image endpoints
 /// </summary>
 [ApiController]
+[ApiVersion("1.0")]
+[Route("v{apiVersion:ApiVersion}/venue/{id}/media")]
 public class MediaController(
     IMediaRepository mediaManager,
     IAuthorizationManager authorizationManager,
@@ -31,7 +33,7 @@ public class MediaController(
     /// <param name="id">The Id of the venue.</param>
     /// <code></code>
     /// <returns>The image for the venue, otherwise a default banner image.</returns>
-    [HttpGet("/venue/{id}/media")]
+    [HttpGet]
     public async Task<ActionResult> GetAsync(string id)
     {
         if (mediaManager.IsMetered)
@@ -58,7 +60,7 @@ public class MediaController(
     /// or the provided Authorization Key must have a scope of 'all'.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
-    [HttpPut("/venue/{id}/media")]
+    [HttpPut]
     public async Task<ActionResult> PutAsync(string id)
     {
         var venue = await domainData.Venues.FindAsync(id);
@@ -100,7 +102,7 @@ public class MediaController(
     /// or the provided Authorization Key must have a scope of 'all'.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
-    [HttpDelete("/venue/{id}/media")]
+    [HttpDelete]
     public async Task<ActionResult> Delete(string id)
     {
         var venue = await domainData.Venues.FindAsync(id);

@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
@@ -12,6 +11,7 @@ using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.VenueModels;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -72,10 +72,6 @@ else if (mediaStorageProvider.ToLower() == "azure")
 else
     builder.Services.AddSingleton<IMediaRepository, LocalMediaRepository>();
 
-builder.Services.AddOpenApi("v1");
-// builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddApiVersioning();
-// builder.Services.AddVersionedApiExplorer();
 builder.Services.AddDomainData(connectionString, mediaUriTemplate);
 builder.Services.AddSingleton(venueCache);
 builder.Services.AddFlagService();
@@ -84,8 +80,22 @@ builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-
-
+builder.Services.AddApiVersioning(o =>
+{
+    o.DefaultApiVersion = new ApiVersion(1, 0);
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.ReportApiVersions = true;
+});
+builder.Services.AddVersionedApiExplorer(o =>
+{
+  o.GroupNameFormat = "'v'VV";
+  o.DefaultApiVersion = new ApiVersion(1, 0);
+  o.AssumeDefaultVersionWhenUnspecified = true;
+  o.SubstituteApiVersionInUrl = true;
+  o.SubstitutionFormat = "VV";
+});
+builder.Services.AddVersionedOpenApi(new (1, 0));
+builder.Services.AddVersionedOpenApi(new (2, 0));
 
 var app = builder.Build();
 
@@ -96,14 +106,20 @@ if (builder.Configuration.GetValue("HttpsOnly", true))
     app.UseHttpsRedirection();
 
 app.UseCors(
-        pb => pb.SetIsOriginAllowed(_ => true).AllowCredentials().AllowAnyHeader())
+        pb => pb
+            .SetIsOriginAllowed(_ => true)
+            .AllowCredentials().AllowAnyHeader())
     .UseWebSockets()
     .UseRouting();
 
 app.MapControllers();
 app.MapOpenApi();
-app.MapScalarApiReference(o => 
-    o.EndpointPathPrefix = "/docs/{documentName}");
+app.UseApiVersioning();
+app.MapScalarApiReference(o =>
+{
+    o.EndpointPathPrefix = "/docs/{documentName}";
+    o.Title = "FFXIV Venues API Gateway {documentName}";
+});
 
 await app.Services.MigrateDomainDataAsync();
 await app.RunAsync();

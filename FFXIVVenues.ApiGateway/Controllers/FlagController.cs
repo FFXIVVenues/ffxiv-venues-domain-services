@@ -8,19 +8,22 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 /// Venue flagging endpoints.
 /// </summary>
 [ApiController]
+[ApiVersion("1.0")]
+[Route("v{apiVersion:ApiVersion}/venue/{id}/flag")]
 public class FlagController(IFlagServiceClient flagServiceClient): ControllerBase
 {
     /// <summary>
-    /// Flags a venue for inappropriate content, incorrect information, or empty venue.
+    /// Flag a venue.
     /// </summary>
     /// <remarks>
+    /// Flags a venue for inappropriate content, incorrect information, or empty venue.
     /// If the venue has been flagged already by recently by the address, subsequent flags will be ignored.  
     /// </remarks>
     /// <param name="flag">The flag information containing venue ID, category, and description.</param>
     /// <returns>
     /// Returns <see cref="OkObjectResult"/> with the flag data if successful.
     /// </returns>
-    [HttpPut("venue/{id}/flag")]
+    [HttpPut]
     public ActionResult Flag([FromBody] FlagDto flag)
     {
         var ip = this.HttpContext.Connection.RemoteIpAddress;

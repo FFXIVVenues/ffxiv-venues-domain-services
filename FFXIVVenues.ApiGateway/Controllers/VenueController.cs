@@ -25,10 +25,11 @@ using Domain = FFXIVVenues.DomainData.Entities.Venues;
 namespace FFXIVVenues.ApiGateway.Controllers;
 
 /// <summary>
-/// Venue endpoints
+/// Venue querying and authoring endpoints
 /// </summary>
 [ApiController]
-[Route("venue")]
+[ApiVersion("1.0")]
+[Route("v{apiVersion:ApiVersion}/venue")]
 public class VenueController(
     IAuthorizationManager authorizationManager,
     IMapFactory mapFactory,
