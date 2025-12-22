@@ -1,7 +1,8 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
@@ -10,11 +11,11 @@ using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.VenueModels;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
@@ -79,16 +80,22 @@ builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-
-// todo: Remove the below services for .net 9
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddApiVersioning(o =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FFXIV Venues API", Version = "v1" });
-    c.IncludeXmlComments(Assembly.GetExecutingAssembly());
+    o.DefaultApiVersion = new ApiVersion(1, 0);
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.ReportApiVersions = true;
 });
-builder.Services.AddEndpointsApiExplorer();
-
-
+builder.Services.AddVersionedApiExplorer(o =>
+{
+  o.GroupNameFormat = "'v'VV";
+  o.DefaultApiVersion = new ApiVersion(1, 0);
+  o.AssumeDefaultVersionWhenUnspecified = true;
+  o.SubstituteApiVersionInUrl = true;
+  o.SubstitutionFormat = "VV";
+});
+builder.Services.AddVersionedOpenApi(new (1, 0));
+builder.Services.AddVersionedOpenApi(new (2, 0));
 
 var app = builder.Build();
 
@@ -99,19 +106,20 @@ if (builder.Configuration.GetValue("HttpsOnly", true))
     app.UseHttpsRedirection();
 
 app.UseCors(
-        pb => pb.SetIsOriginAllowed(_ => true).AllowCredentials().AllowAnyHeader())
-    .UseSwagger(options =>
-        options.RouteTemplate = "openapi/{documentName}.json")
+        pb => pb
+            .SetIsOriginAllowed(_ => true)
+            .AllowCredentials().AllowAnyHeader())
     .UseWebSockets()
     .UseRouting();
 
-app.MapScalarApiReference();
 app.MapControllers();
-// todo: Add for .net 9, replace UseSwagger and MapScalarApiReference
-// app.MapOpenApi();
-// app.MapScalarApiReference();
-
-
+app.MapOpenApi();
+app.UseApiVersioning();
+app.MapScalarApiReference(o =>
+{
+    o.EndpointPathPrefix = "/docs/{documentName}";
+    o.Title = "FFXIV Venues API Gateway {documentName}";
+});
 
 await app.Services.MigrateDomainDataAsync();
 await app.RunAsync();
