@@ -365,85 +365,66 @@ public class VenueController(
     /// Observe venue changes
     /// </summary>
     /// <remarks>
-    /// <p>
     /// This is a websocket connection endpoint.
-    /// </p>
-    /// <p>
+    /// 
     /// Before events will be piped into the websocket connection an Observation Request
-    /// must be sent on the connection. Subsequent Observation Requests superseeded previous
+    /// must be sent on the connection. Subsequent Observation Requests superseed previous
     /// requests.
-    /// </p>
-    /// <p>
-    /// A subsequent request is a Json formatted object with a 'OperationCriteria' field,
-    /// the value either being the string 'Create', 'Update' or 'Delete'.
-    /// </p>
-    /// <p>
+    /// 
+    /// An observation request is a Json formatted object with an 'OperationCriteria' field,
+    /// the value being an Operation; being either 'Create', 'Update' or 'Delete'.
+    /// 
     /// <code>
     /// { OperationCriteria = "Create" }
     /// </code>
-    /// </p>
-    /// <p>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>operation</term>
-    ///     <description>description</description>
-    ///   </listheader>
-    ///   <item>
-    ///     <operation>Create</operation>
-    ///     <description>Any venue created after this Observation Request for the lifetime
-    /// of the connection will be piped to the client.</description>
-    ///   </item>
-    ///   <item>
-    ///     <operation>Update</operation>
-    ///     <description>Any venue that already exists and but updated after this Observation Request
-    /// for the lifetime of the connection will be piped to the client.</description>
-    ///   </item>
-    ///   <item>
-    ///     <operation>Delete</operation>
-    ///     <description>Any venue deleted after this Observation Request for the lifetime
-    /// of the connection will be piped to the client.</description>
-    ///   </item>
-    /// </list>
-    /// </p>
-    /// <p>
+    /// 
+    /// ## Operations
+    /// **Create**
+    /// 
+    /// Any venue created after this Observation Request for the lifetime
+    /// of the connection will be piped to the client.
+    /// 
+    /// **Update**
+    /// 
+    /// Any venue that already exists and updated after this Observation Request
+    /// for the lifetime of the connection will be piped to the client.
+    /// 
+    /// **Delete**
+    /// 
+    /// Any venue deleted after this Observation Request for the lifetime
+    /// of the connection will be piped to the client.
+    /// 
+    /// ## Response
+    /// 
     /// Venues are piped to the client in a Json formatted object with the following fields:
-    /// </p>
-    /// <p>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <field>operation</field>
-    ///     <description>description</description>
-    ///   </listheader>
-    ///   <item>
-    ///     <field>Operation</field>
-    ///     <description>Create or Update or Delete</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>SubjectId</field>
-    ///     <description>The id of the venue</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>SubjectName</field>
-    ///     <description>The name of the venue</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>Approved</field>
-    ///     <description>The approved state of the venue</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>DataCenter</field>
-    ///     <description>The data center the venue is in</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>World</field>
-    ///     <description>The world the venue is in</description>
-    ///   </item>
-    ///   <item>
-    ///     <field>Manager</field>
-    ///     <description>The id of the managers on the venue</description>
-    ///   </item>
-    /// </list>
-    /// </p>
+    /// 
+    /// **Operation**
+    /// 
+    /// Create or Update or Delete
+    /// 
+    /// **SubjectId**
+    /// 
+    /// The id of the venue
+    /// 
+    /// **SubjectName**
+    /// 
+    /// The name of the venue
+    /// 
+    /// **Approved**
+    /// 
+    /// The approved state of the venue
+    /// 
+    /// **DataCenter**
+    /// 
+    /// The data center the venue is in
+    /// 
+    /// **World**
+    /// 
+    /// The world the venue is in
+    /// 
+    /// **Manager**
+    /// 
+    /// The id of the managers on the venue
     /// </remarks>
     [HttpGet("observe")]
     public async Task Observe()
