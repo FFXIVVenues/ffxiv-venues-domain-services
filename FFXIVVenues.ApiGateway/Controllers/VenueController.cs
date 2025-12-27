@@ -170,7 +170,7 @@ public class VenueController(
     }
 
     /// <summary>
-    /// Get approval status of a venue
+    /// Get venue approval status
     /// </summary>
     /// <param name="id">The Id of the venue.</param>
     /// <returns>The approval status of the venue if found.</returns>
@@ -189,7 +189,7 @@ public class VenueController(
     }
 
     /// <summary>
-    /// Update approval status of a venue
+    /// Update venue approval status
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Approve permission.
@@ -225,7 +225,7 @@ public class VenueController(
     private static PropertyInfo _addedField = typeof(Domain.Venue).GetProperty("Added");
 
     /// <summary>
-    /// Update added date of a venue
+    /// Update venue added date 
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Approve permission.
@@ -255,7 +255,7 @@ public class VenueController(
     }
 
     /// <summary>
-    /// Update last modified date of a venue
+    /// Update venue last modified date
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Approve permission.
@@ -285,7 +285,7 @@ public class VenueController(
     }
 
     /// <summary>
-    /// Add/update a schedule override for a venue
+    /// Add/update venue schedule override
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Update permission.
@@ -323,7 +323,7 @@ public class VenueController(
     }
 
     /// <summary>
-    /// Delete a schedule override for a venue
+    /// Delete venue schedule override 
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Update permission.
