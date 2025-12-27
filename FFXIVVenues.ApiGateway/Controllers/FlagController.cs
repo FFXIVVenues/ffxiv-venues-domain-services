@@ -7,6 +7,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 /// <summary>
 /// Venue flagging endpoints.
 /// </summary>
+/// <param name="id">The Id of the venue to flag.</param>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue/{id}/flag")]
@@ -24,20 +25,19 @@ public class FlagController(IFlagServiceClient flagServiceClient): ControllerBas
     /// Returns <see cref="OkObjectResult"/> with the flag data if successful.
     /// </returns>
     [HttpPut]
-    public ActionResult Flag([FromBody] FlagDto flag)
+    public ActionResult Flag([FromRoute] string id, [FromBody] FlagDto flag)
     {
         var ip = this.HttpContext.Connection.RemoteIpAddress;
         if (ip == null) // Will be hashed, but non-the-less needed
             return Unauthorized();
-        flagServiceClient.SendFlagAsync(flag.VenueId, flag.Category, flag.Description, ip);
-        return Ok(flag);
+        flagServiceClient.SendFlagAsync(id, flag.Category, flag.Description, ip);
+        return Accepted();
     }
 }
 
 /// <summary>
 /// Data transfer object for venue flagging.
 /// </summary>
-/// <param name="VenueId">The ID of the venue to be flagged.</param>
 /// <param name="Category">The type of flag.</param>
 /// <param name="Description">Additional description for the flag.</param>
-public record FlagDto(string VenueId, FlagCategory Category, string Description);
+public record FlagDto(FlagCategory Category, string Description);

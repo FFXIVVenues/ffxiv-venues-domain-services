@@ -108,7 +108,9 @@ if (builder.Configuration.GetValue("HttpsOnly", true))
 app.UseCors(
         pb => pb
             .SetIsOriginAllowed(_ => true)
-            .AllowCredentials().AllowAnyHeader())
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .AllowAnyHeader())
     .UseWebSockets()
     .UseRouting();
 
