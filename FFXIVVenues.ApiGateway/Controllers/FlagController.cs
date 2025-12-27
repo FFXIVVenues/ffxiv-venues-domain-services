@@ -30,7 +30,9 @@ public class FlagController(IFlagServiceClient flagServiceClient): ControllerBas
         var ip = this.HttpContext.Connection.RemoteIpAddress;
         if (ip == null) // Will be hashed, but non-the-less needed
             return Unauthorized();
-        flagServiceClient.SendFlagAsync(id, flag.Category, flag.Description, ip);
+        if (flag.Category == null)
+            return BadRequest("Flag category is required.");
+        flagServiceClient.SendFlagAsync(id, flag.Category.Value, flag.Description, ip);
         return Accepted();
     }
 }
@@ -40,4 +42,4 @@ public class FlagController(IFlagServiceClient flagServiceClient): ControllerBas
 /// </summary>
 /// <param name="Category">The type of flag.</param>
 /// <param name="Description">Additional description for the flag.</param>
-public record FlagDto(FlagCategory Category, string Description);
+public record FlagDto(FlagCategory? Category, string Description);
