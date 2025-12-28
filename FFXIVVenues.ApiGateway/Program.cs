@@ -11,6 +11,7 @@ using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.VenueModels;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ using Serilog;
 using Serilog.Events;
 using Wolverine;
 using Wolverine.RabbitMQ;
+using IPNetwork = System.Net.IPNetwork;
 
 var environment = args.SkipWhile(s => !string.Equals(s, "--environment", StringComparison.OrdinalIgnoreCase)).Skip(1).FirstOrDefault()
                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
@@ -113,6 +115,12 @@ app.UseCors(
             .AllowAnyHeader())
     .UseWebSockets()
     .UseRouting();
+
+var forwardedHeadersOptions = new ForwardedHeadersOptions()
+{ ForwardedHeaders = ForwardedHeaders.XForwardedFor };
+forwardedHeadersOptions.KnownIPNetworks.Clear(); 
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 app.MapControllers();
 app.MapOpenApi();
