@@ -20,6 +20,15 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
             return;
         }
         
+        var recentFlagsFromAddress = domainData.Flags.Any(f => 
+            f.SourceAddress == sourceAddress && 
+            f.Timestamp > DateTimeOffset.UtcNow.AddMinutes(-3)); 
+        if (recentFlagsFromAddress) 
+        {
+            logger.LogInformation("Rejecting flag, {SourceAddress} flagged in last 3 minutes", sourceAddress);
+            return;
+        }
+        
         var recentFlagsForVenueFromAddress = domainData.Flags.Any(f => 
             f.VenueId == command.VenueId &&
             f.SourceAddress == sourceAddress && 
@@ -27,7 +36,7 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
             f.Timestamp > DateTimeOffset.UtcNow.AddHours(-20));
         if (recentFlagsForVenueFromAddress)
         {
-            logger.LogInformation("Rejecting flag, {SourceAddress} flagged venue {VenueId} recently", command.VenueId, sourceAddress);
+            logger.LogInformation("Rejecting flag, {SourceAddress} flagged venue {VenueId} in last 20 hours", command.VenueId, sourceAddress);
             return;
         }
 
