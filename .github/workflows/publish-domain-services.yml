@@ -28,6 +28,8 @@ on:
         required: true
       docker_access_token:
         required: true
+      discord_builds_webhook:
+        required: true
 
 jobs:
   publish_for_platforms:
@@ -101,3 +103,12 @@ jobs:
           docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }}-amd64 \
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ inputs.tag }}-arm64
+
+      - name: Notify Discord Webhook
+        uses: tsickert/discord-webhook@v7.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_BUILDS_WEBHOOK }}
+          embed-author-name: "${{ github.workflow }}"
+          embed-title: "${{ github.event.head_commit.message }}"
+          embed-url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          embed-description: "Build triggered by ${{ github.actor }}"

@@ -8,7 +8,7 @@ on:
 jobs:
   publish_test_domain_services:
     name: Publish Test Domain Services
-    uses: ./.github/workflows/publish-ffxivvenues-domain-services.yml
+    uses: ./.github/workflows/publish-domain-services.yml
     with:
       branch: test
       tag: test        
