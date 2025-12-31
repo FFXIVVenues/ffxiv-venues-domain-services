@@ -3,12 +3,14 @@ using System.Text;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Entities.Flags;
 using FFXIVVenues.FlagService.Client.Commands;
+using FFXIVVenues.FlagService.Client.Events;
+using Wolverine;
 
 namespace FFXIVVenues.FlagService;
 
-public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagCommandHandler> logger)
+public class FlagCommandHandler(IMessageBus bus, DomainDataContext domainData, ILogger<FlagCommandHandler> logger)
 {
-    public void Handle(FlagVenueCommand command)
+    public ValueTask Handle(FlagVenueCommand command)
     {
         var sourceAddress = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(command.SourceAddress)));
         logger.LogInformation("Handling flag for venue {VenueId} from {SourceAddress}", command.VenueId, sourceAddress);
@@ -17,7 +19,7 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
         if (!venueExists)
         {
             logger.LogInformation("Rejecting flag from {SourceAddress} for venue {VenueId}, venue does not exist", sourceAddress, command.VenueId);   
-            return;
+            return ValueTask.CompletedTask;
         }
         
         var recentFlagsFromAddress = domainData.Flags.Any(f => 
@@ -26,7 +28,7 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
         if (recentFlagsFromAddress) 
         {
             logger.LogInformation("Rejecting flag, {SourceAddress} flagged in last 3 minutes", sourceAddress);
-            return;
+            return ValueTask.CompletedTask;
         }
         
         var recentFlagsForVenueFromAddress = domainData.Flags.Any(f => 
@@ -37,7 +39,7 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
         if (recentFlagsForVenueFromAddress)
         {
             logger.LogInformation("Rejecting flag, {SourceAddress} flagged venue {VenueId} in last 20 hours", command.VenueId, sourceAddress);
-            return;
+            return ValueTask.CompletedTask;
         }
 
         var flag = new Flag
@@ -51,5 +53,11 @@ public class FlagCommandHandler(DomainDataContext domainData, ILogger<FlagComman
         domainData.Flags.Add(flag);
         domainData.SaveChanges();
         logger.LogInformation("Flag for venue {VenueId} from {SourceAddress} saved", command.VenueId, sourceAddress);
+        
+        return bus.PublishAsync(new VenueFlaggedEvent(
+            command.VenueId,
+            command.Category,
+            command.Description
+        ));
     }
 }
