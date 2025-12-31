@@ -1,6 +1,6 @@
 using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
-using FFXIVVenues.FlagService.Client.Commands;
+using FFXIVVenues.FlagService.Client.Events;
 using Serilog;
 using Serilog.Events;
 using Wolverine;
@@ -37,6 +37,8 @@ builder.UseWolverine(opts =>
     opts.AddFlagServiceMessages();
     opts.ListenToRabbitQueue("FFXIVVenues.Flagging.Commands")
         .ProcessInline();
+    opts.PublishMessage<VenueFlaggedEvent>()
+        .ToRabbitExchange("FFXIVVenues.Flagging.Events") ;
 });
 
 
