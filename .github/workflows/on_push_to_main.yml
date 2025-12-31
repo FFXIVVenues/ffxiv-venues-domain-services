@@ -8,7 +8,7 @@ on:
 jobs:
   publish_production_domain_services:
     name: Publish Production Domain Services
-    uses: ./.github/workflows/publish-ffxivvenues-domain-services.yml
+    uses: ./.github/workflows/publish-domain-services.yml
     with:
       branch: main
       tag: latest
