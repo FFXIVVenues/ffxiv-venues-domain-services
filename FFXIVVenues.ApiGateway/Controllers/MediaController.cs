@@ -28,7 +28,7 @@ public class MediaController(
 {
 
     /// <summary>
-    /// Get a venue's image.
+    /// Get a venue's banner
     /// </summary>
     /// <param name="id">The Id of the venue.</param>
     /// <code></code>
@@ -52,7 +52,7 @@ public class MediaController(
     }
 
     /// <summary>
-    /// Upload / update the image for a venue
+    /// Upload / update a venue's banner
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Update permission.
@@ -94,7 +94,7 @@ public class MediaController(
     }
 
     /// <summary>
-    /// Delete the media (banner) associated with a specific venue.
+    /// Delete a venue's banner
     /// </summary>
     /// <remarks>
     /// This endpoint requires an Authorization Key with Delete permission.

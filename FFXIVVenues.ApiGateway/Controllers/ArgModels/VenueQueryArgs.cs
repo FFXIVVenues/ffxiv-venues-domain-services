@@ -11,6 +11,13 @@ public class VenueQueryArgs
     public string Manager { get;set; }
     public string DataCenter { get;set; }
     public string World { get;set; }
+    public string District { get; set; }
+    public ushort Ward { get; set; }
+    public ushort Plot { get; set; }
+    public ushort Apartment { get; set; }
+    public ushort Room { get; set; }
+    public bool? Subdivision { get; set; }
+    
     public string Tags { get;set; }
     public bool? HasBanner { get;set; }
     public bool? Approved { get;set; }
@@ -27,14 +34,26 @@ public class VenueQueryArgs
             query = query.Where(v => v.Location.DataCenter.ToLower() == this.DataCenter.ToLower());
         if (this.World != null)
             query = query.Where(v => v.Location.World.ToLower() == this.World.ToLower());
+        if (this.District != null)
+            query = query.Where(v => v.Location.District.ToLower() == this.District.ToLower());
+        if (this.Ward != 0)
+            query = query.Where(v => v.Location.Ward == this.Ward);
+        if (this.Plot != 0)
+            query = query.Where(v => v.Location.Plot == this.Plot);
+        if (this.Apartment != 0)
+            query = query.Where(v => v.Location.Apartment == this.Apartment);
+        if (this.Room != 0)
+            query = query.Where(v => v.Location.Room == this.Room);
+        if (this.Subdivision.HasValue)
+            query = query.Where(v => v.Location.Subdivision);
         if (this.Tags != null)
         {
             var splitTags = this.Tags.Split(',');
             query = query.Where(v => splitTags.All(tag => v.Tags.Contains(tag)));
         }
-        if (this.Approved != null)
+        if (this.Approved.HasValue)
             query = query.Where(v => v.Approved == this.Approved);
-        if (this.HasBanner != null)
+        if (this.HasBanner.HasValue)
             query = query.Where(v => this.HasBanner.Value == (v.Banner != null));
         return query;
     }

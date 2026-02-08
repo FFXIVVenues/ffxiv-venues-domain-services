@@ -14,7 +14,7 @@ The main API gateway service that provides RESTful endpoints for the FFXIV Venue
 - Flagging venues
 - Subscribing to venue updates
 
-Full API documentation be found at https://api.ffxivvenues.com/scalar/
+Full API documentation be found at https://api.ffxivvenues.com/docs/v1.0
 
 ### FlagService
 The background domain service that owns content moderation flagging.

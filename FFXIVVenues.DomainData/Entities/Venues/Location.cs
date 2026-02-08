@@ -13,7 +13,16 @@ namespace FFXIVVenues.DomainData.Entities.Venues;
     nameof(Plot),
     nameof(Apartment),
     nameof(Room),
-    Name = "Address")]
+    nameof(Subdivision),    
+    Name = "DCAddress")]
+[Index(nameof(World), 
+    nameof(District), 
+    nameof(Ward), 
+    nameof(Plot),
+    nameof(Apartment),
+    nameof(Room),
+    nameof(Subdivision),
+    Name = "WorldAddress")]
 [Index(nameof(Override), Name ="Override")] 
 public class Location
 {

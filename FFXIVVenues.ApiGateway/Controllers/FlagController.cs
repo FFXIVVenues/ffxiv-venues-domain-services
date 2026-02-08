@@ -14,7 +14,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 public class FlagController(IFlagServiceClient flagServiceClient): ControllerBase
 {
     /// <summary>
-    /// Flag a venue.
+    /// Flag a venue
     /// </summary>
     /// <remarks>
     /// Flags a venue for inappropriate content, incorrect information, or empty venue.
