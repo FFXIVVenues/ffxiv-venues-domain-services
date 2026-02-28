@@ -107,14 +107,14 @@ if (app.Environment.IsDevelopment())
 if (builder.Configuration.GetValue("HttpsOnly", true))
     app.UseHttpsRedirection();
 
-app.UseCors(
+app .UseWebSockets()
+    .UseRouting()
+    .UseCors(
         pb => pb
             .SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
             .AllowCredentials()
-            .AllowAnyHeader())
-    .UseWebSockets()
-    .UseRouting();
+            .AllowAnyHeader());
 
 var forwardedHeadersOptions = new ForwardedHeadersOptions()
 { ForwardedHeaders = ForwardedHeaders.XForwardedFor };
