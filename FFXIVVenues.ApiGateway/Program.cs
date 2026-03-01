@@ -115,7 +115,7 @@ app .UseWebSockets()
             .AllowAnyMethod()
             .AllowCredentials()
             .AllowAnyHeader()
-            .SetPreflightMaxAge(TimeSpan.FromHours(4)));
+            .SetPreflightMaxAge(TimeSpan.FromHours(1)));
 
 var forwardedHeadersOptions = new ForwardedHeadersOptions()
 { ForwardedHeaders = ForwardedHeaders.XForwardedFor };

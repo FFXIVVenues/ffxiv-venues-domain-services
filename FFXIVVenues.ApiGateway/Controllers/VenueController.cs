@@ -90,10 +90,10 @@ public class VenueController(
     /// This endpoint requires an Authorization Key with Create permission
     /// if the venue does not yet exist, or the Update permission if the
     /// venue already exists.
-    /// The target venue must be created by the Authorization Key provided
-    /// or the provided Authorization Key must have a scope of 'all'.
     /// If the id on the venue does not match the <paramref name="id"/> given
     /// then the request will fail. 
+    /// The target venue must be created by the Authorization Key provided
+    /// for the target venue.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
     /// <param name="venue">The venue object to be updated or created.</param>
@@ -144,9 +144,8 @@ public class VenueController(
     /// Delete a venue
     /// </summary>
     /// <remarks>
-    /// This endpoint requires an Authorization Key with Delete permission.
-    /// The target venue must be created by the Authorization Key provided
-    /// or the provided Authorization Key must have a scope of 'all'.
+    /// This endpoint requires an Authorization Key with Delete permission
+    /// for the target venue.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
     /// <returns>The deleted venue if successful.</returns>
@@ -175,7 +174,7 @@ public class VenueController(
     /// <remarks>
     /// This endpoint requires an Authorization Key with Update permission.
     /// The target venue must be created by the Authorization Key provided
-    /// or the provided Authorization Key must have a scope of 'all'.
+    /// for the target venue.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
     /// <param name="override">The schedule override details.</param>
@@ -191,7 +190,8 @@ public class VenueController(
         if (authorizationManager.Check().CanNot(Operation.Update, venue))
             return Unauthorized();
 
-        if (@override.Open && @override.End > @override.Start.AddHours(7))
+        // We 1 second here to give grace to millisecond variance
+        if (@override.Open && @override.End > @override.Start.AddHours(7).AddSeconds(1))
             return BadRequest("Cannot open for more than 7 hours.");
 
         var newOverrides = venue.ScheduleOverrides.Where(o => o.Start > @override.End).ToList();
@@ -214,7 +214,7 @@ public class VenueController(
     /// <remarks>
     /// This endpoint requires an Authorization Key with Update permission.
     /// The target venue must be created by the Authorization Key provided
-    /// or the provided Authorization Key must have a scope of 'all'.
+    /// for the target venue.
     /// </remarks>
     /// <param name="id">The Id of the venue.</param>
     /// <param name="from">The start time of the override to be deleted.</param>

@@ -18,7 +18,7 @@ public class FlagController(IFlagServiceClient flagServiceClient): ControllerBas
     /// </summary>
     /// <remarks>
     /// Flags a venue for inappropriate content, incorrect information, or empty venue.
-    /// If the venue has been flagged already by recently by the address, subsequent flags will be ignored.  
+    /// If the venue has been flagged already recently by the address, subsequent flags will be ignored.  
     /// </remarks>
     /// <param name="flag">The flag information containing venue ID, category, and description.</param>
     /// <returns>
@@ -41,5 +41,8 @@ public class FlagController(IFlagServiceClient flagServiceClient): ControllerBas
 /// Data transfer object for venue flagging.
 /// </summary>
 /// <param name="Category">The type of flag.</param>
-/// <param name="Description">Additional description for the flag.</param>
-public record FlagDto(FlagCategory? Category, string Description);
+public record FlagDto(FlagCategory? Category)
+{
+    /// <summary>Additional description for the flag.</summary>
+    public string? Description { get; set; }
+}
