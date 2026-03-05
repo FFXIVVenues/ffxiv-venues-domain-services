@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using FFXIVVenues.DomainData;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Mapping;
@@ -30,8 +31,12 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 var app = builder.Build();
 
-app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDataContext domainData) =>
+app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDataContext domainData, HttpContext context) =>
 {
+    context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
+    context.Response.Headers.Pragma = "no-cache";
+    context.Response.Headers.Expires = "0";
+    
     var query = domainData.Venues.AsQueryable().Where(v => v.Id == venueId);
     var venue = mapFactory.GetModelProjector().ProjectTo<FFXIVVenues.VenueModels.Venue>(query).SingleOrDefault();
     if (venue is null)
@@ -43,6 +48,7 @@ app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDa
         ["venue"] = venue,
         ["redirect"] = redirectUriTemplate.Replace("{venueId}", venueId),
     };
+        
     return Results.Content(template.TransformText(), "text/html");
 });
 
