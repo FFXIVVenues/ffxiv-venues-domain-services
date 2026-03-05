@@ -17,7 +17,7 @@ namespace FFXIVVenues.OGCardService
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+    #line 1 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class OGCardTemplate : OGCardTemplateBase
     {
@@ -29,80 +29,93 @@ namespace FFXIVVenues.OGCardService
         {
             this.Write("\r\n");
             
-            #line 5 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 5 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
  var venue = (Venue) Session["venue"]; 
             
             #line default
             #line hidden
             
-            #line 6 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 6 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+ var redirect = (string) Session["redirect"]; 
+            
+            #line default
+            #line hidden
+            
+            #line 7 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
  var description = string.Join("\n\n", venue.Description); 
             
             #line default
             #line hidden
             
-            #line 7 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 8 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
  var encoder = HtmlEncoder.Default; 
             
             #line default
             #line hidden
             this.Write("\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n\r\n    <title>");
             
-            #line 14 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 15 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(venue.Name)));
             
             #line default
             #line hidden
             this.Write(" - FFXIV Venues</title>\r\n    <meta property=\"og:type\" content=\"website\">\r\n    <meta property=\"og:title\" content=\"");
             
-            #line 16 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 17 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(venue.Name)));
             
             #line default
             #line hidden
             this.Write(" - FFXIV Venues\">\r\n    <meta property=\"twitter:title\" content=\"");
             
-            #line 17 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 18 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(venue.Name)));
             
             #line default
             #line hidden
             this.Write(" - FFXIV Venues\">\r\n\r\n    <meta name=\"description\" content=\"");
             
-            #line 19 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 20 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(description)));
             
             #line default
             #line hidden
             this.Write("\">\r\n    <meta property=\"og:description\" content=\"");
             
-            #line 20 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 21 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(description)));
             
             #line default
             #line hidden
             this.Write("\">\r\n    <meta property=\"twitter:description\" content=\"");
             
-            #line 21 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 22 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(description)));
             
             #line default
             #line hidden
             this.Write("\">\r\n\r\n    <meta property=\"og:image\" content=\"");
             
-            #line 23 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 24 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(venue.BannerUri.ToString())));
             
             #line default
             #line hidden
             this.Write("\">\r\n    <meta property=\"twitter:card\" content=\"summary_large_image\">\r\n    <meta property=\"twitter:image\" content=\"");
             
-            #line 25 "C:\Development\FFXIV Venues\FFXIVVenues.VenuesAPI\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            #line 26 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(venue.BannerUri.ToString())));
             
             #line default
             #line hidden
-            this.Write("\">\r\n  </head>\r\n</html>\r\n");
+            this.Write("\">\r\n\r\n    <script>\r\n      window.location.href = \"");
+            
+            #line 29 "C:\Development\FFXIV Venues\FFXIVVenues.DomainServices\FFXIVVenues.OGCardService\OGCardTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(encoder.Encode(redirect)));
+            
+            #line default
+            #line hidden
+            this.Write("\";\r\n    </script>\r\n\r\n  </head>\r\n</html>\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

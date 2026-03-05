@@ -3,6 +3,7 @@
 <#@ import namespace="System.Text.Encodings.Web" #>
 
 <# var venue = (Venue) Session["venue"]; #>
+<# var redirect = (string) Session["redirect"]; #>
 <# var description = string.Join("\n\n", venue.Description); #>
 <# var encoder = HtmlEncoder.Default; #>
 
@@ -23,5 +24,10 @@
     <meta property="og:image" content="<#= encoder.Encode(venue.BannerUri.ToString()) #>">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="<#= encoder.Encode(venue.BannerUri.ToString()) #>">
+
+    <script>
+      window.location.href = "<#= encoder.Encode(redirect) #>";
+    </script>
+
   </head>
 </html>

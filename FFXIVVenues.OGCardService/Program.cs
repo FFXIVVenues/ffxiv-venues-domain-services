@@ -12,7 +12,9 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetConnectionString("FFXIVVenues");
-var mediaUriTemplate = config.GetValue<string>("UriTemplate", 
+var redirectUriTemplate = config.GetValue<string>("RedirectUriTemplate", 
+    "https://ffxivvenues.dev/venue/{venueId}");
+var mediaUriTemplate = config.GetValue<string>("BannerUriTemplate", 
     "https://images.ffxivvenues.dev/{venueId}/{bannerKey}");
 var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
 var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
@@ -36,8 +38,11 @@ app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDa
         return Results.NotFound();
     
     var template = new OGCardTemplate();
-    template.Session = new Dictionary<string, object>();
-    template.Session["venue"] = venue;
+    template.Session = new Dictionary<string, object>
+    {
+        ["venue"] = venue,
+        ["redirect"] = redirectUriTemplate.Replace("{venueId}", venueId),
+    };
     return Results.Content(template.TransformText(), "text/html");
 });
 
