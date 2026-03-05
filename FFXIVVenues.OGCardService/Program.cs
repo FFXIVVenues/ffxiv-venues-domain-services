@@ -49,7 +49,7 @@ app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDa
         ["redirect"] = redirectUriTemplate.Replace("{venueId}", venueId),
     };
         
-    return Results.Content(template.TransformText(), "text/html");
+    return Results.Content(template.TransformText(), "text/html", statusCode: 206);
 });
 
 await app.RunAsync();
