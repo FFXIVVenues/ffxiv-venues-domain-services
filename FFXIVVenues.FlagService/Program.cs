@@ -44,5 +44,9 @@ builder.UseWolverine(opts =>
 
 var host = builder.Build();
 
+Log.Information("Starting migrations");
 await host.Services.MigrateDomainDataAsync();
+Log.Information("Migrations complete");
+
+Log.Information("Starting host");
 await host.RunAsync();

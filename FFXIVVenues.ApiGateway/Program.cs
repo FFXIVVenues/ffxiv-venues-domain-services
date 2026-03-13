@@ -132,5 +132,9 @@ app.MapScalarApiReference(o =>
     o.Title = "FFXIV Venues API Gateway {documentName}";
 });
 
+Log.Information("Starting migrations");
 await app.Services.MigrateDomainDataAsync();
+Log.Information("Migrations complete");
+
+Log.Information("Starting application");
 await app.RunAsync();

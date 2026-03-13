@@ -13,7 +13,7 @@ public class Flag
     public string Id { get; set; }
     public string VenueId { get; set;  }
     public FlagCategory Category { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public DateTime Timestamp { get; set;  } = DateTime.UtcNow;
     public string SourceAddress { get; set;  }
 }
