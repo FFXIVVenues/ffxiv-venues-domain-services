@@ -19,7 +19,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Events;
 using Wolverine;
 using Wolverine.RabbitMQ;
 
@@ -33,8 +32,6 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
-var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
 var connectionString = config.GetConnectionString("FFXIVVenues");
 var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
@@ -43,10 +40,9 @@ var authorizationKeys = new List<AuthorizationKey>();
 config.GetSection("Security:AuthorizationKeys").Bind(authorizationKeys);
 
 Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(config)
     .WriteTo.Console()
-    .WriteTo.BetterStack(betterStackToken)
-    .MinimumLevel.Is(minLevel)
-    .Destructure.ByTransforming<FFXIVVenues.VenueModels.Venue>(
+    .Destructure.ByTransforming<Venue>(
         v => new { VenueId = v.Id, VenueName = v.Name })
     .Destructure.ByTransforming<FFXIVVenues.DomainData.Entities.Venues.Venue>(
         v => new { VenueId = v.Id, VenueName = v.Name })
