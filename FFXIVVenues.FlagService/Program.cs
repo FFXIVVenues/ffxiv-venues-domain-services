@@ -14,13 +14,10 @@ var config = new ConfigurationBuilder()
 
 var connectionString = config.GetConnectionString("FFXIVVenues");
 var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
-var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
-var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
 Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(config)
     .WriteTo.Console()
-    .WriteTo.BetterStack(betterStackToken)
-    .MinimumLevel.Is(minLevel)
     .Destructure.ByTransforming<FFXIVVenues.VenueModels.Venue>(
         v => new { VenueId = v.Id, VenueName = v.Name })
     .Destructure.ByTransforming<FFXIVVenues.DomainData.Entities.Venues.Venue>(

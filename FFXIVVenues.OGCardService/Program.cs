@@ -17,12 +17,8 @@ var redirectUriTemplate = config.GetValue<string>("RedirectUriTemplate",
     "https://ffxivvenues.dev/venue/{venueId}");
 var mediaUriTemplate = config.GetValue<string>("BannerUriTemplate", 
     "https://images.ffxivvenues.dev/{venueId}/{bannerKey}");
-var betterStackToken = config.GetValue<string>("Logging:BetterStackToken");
-var minLevel = config.GetValue<LogEventLevel>("Logging:MinimumLevel");
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.BetterStack(betterStackToken)
-    .MinimumLevel.Is(minLevel)
+    .ReadFrom.Configuration(config)
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
