@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FFXIVVenues.ApiGateway.Bootstrap;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
@@ -11,7 +12,6 @@ using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.VenueModels;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,6 @@ using Serilog;
 using Serilog.Events;
 using Wolverine;
 using Wolverine.RabbitMQ;
-using IPNetwork = System.Net.IPNetwork;
 
 var environment = args.SkipWhile(s => !string.Equals(s, "--environment", StringComparison.OrdinalIgnoreCase)).Skip(1).FirstOrDefault()
                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
@@ -82,6 +81,7 @@ builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 builder.Services.AddApiVersioning(o =>
 {
     o.DefaultApiVersion = new ApiVersion(1, 0);
@@ -117,12 +117,7 @@ app .UseWebSockets()
             .AllowAnyHeader()
             .SetPreflightMaxAge(TimeSpan.FromHours(1)));
 
-var forwardedHeadersOptions = new ForwardedHeadersOptions()
-{ ForwardedHeaders = ForwardedHeaders.XForwardedFor };
-forwardedHeadersOptions.KnownIPNetworks.Clear(); 
-forwardedHeadersOptions.KnownProxies.Clear();
-app.UseForwardedHeaders(forwardedHeadersOptions);
-
+await app.ConfigureForwardHeaders(config.GetSection("Security:KnownProxies"));
 app.MapControllers();
 app.MapOpenApi();
 app.UseApiVersioning();

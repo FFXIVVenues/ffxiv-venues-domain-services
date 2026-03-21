@@ -7,12 +7,12 @@ namespace FFXIVVenues.FlagService.Client;
 
 public interface IFlagServiceClient
 {
-    Task SendFlagAsync(string venueId, FlagCategory category, string description, IPAddress? ipaddress);
+    Task SendFlagAsync(string venueId, FlagCategory category, string? description, IPAddress? ipaddress);
 }
 
 public class FlagServiceClient (IMessageBus bus) : IFlagServiceClient
 {
-    public async Task SendFlagAsync(string venueId, FlagCategory category, string description, IPAddress? ipaddress)
+    public async Task SendFlagAsync(string venueId, FlagCategory category, string? description, IPAddress? ipaddress)
     {
         var flagCommand = new FlagVenueCommand(venueId, category, description, ipaddress?.ToString());
         await bus.PublishAsync(flagCommand);
