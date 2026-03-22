@@ -57,7 +57,8 @@ public class FlagCommandHandler(IMessageBus bus, DomainDataContext domainData, I
         return bus.PublishAsync(new VenueFlaggedEvent(
             command.VenueId,
             command.Category,
-            command.Description
+            command.Description,
+            sourceAddress.Substring(0, 10)
         ));
     }
 }
