@@ -1,0 +1,15 @@
+info:
+  name: Get Venue
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{scheme}}://{{base-url}}/v1.0/venue/{{?Venue Id}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

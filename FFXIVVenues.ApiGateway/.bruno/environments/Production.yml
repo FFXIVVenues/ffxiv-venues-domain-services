@@ -1,0 +1,8 @@
+name: Production
+variables:
+  - name: base-url
+    value: api.ffxivvenues.com
+  - secret: true
+    name: api-key
+  - name: scheme
+    value: https
