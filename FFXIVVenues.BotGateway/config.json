@@ -1,0 +1,64 @@
+{
+  "DiscordBotToken": "",
+
+  "Clu": {
+    "RuntimeKey": "",
+    "PredictionEndpoint": "https://centralus.api.cognitive.microsoft.com/",
+    "Project": "",
+    "Deployment": "Production"
+  },
+
+  "Davinci3": {
+    "ApiKey": ""
+  },
+
+  "Persistence": {
+    "Provider": "InMemory",
+    "ConnectionString": ""
+  },
+  "Ui": {
+    "BaseUrl": "https://ffxivvenues.com"
+  },
+  "Api": {
+    "BaseUrl": "https://api.ffxivvenues.com"
+  },
+  "Notifications": {
+    "Approvals": [
+      
+    ],
+    "Help": [
+      
+    ]
+  },
+  "Authorisation": {
+    "Master": [ ],
+    "ManagerPermissions": [ ],
+    "PermissionSets": [
+      {
+        "Name": "Engineering",
+        "Permissions": [],
+        "Members": []
+      },
+      {
+        "Name": "Leads",
+        "Permissions": [],
+        "Members": []
+      },
+      {
+        "Name": "Community Engagement",
+        "Permissions": [],
+        "Members": []
+      },
+      {
+        "Name": "Administrators",
+        "Permissions": [],
+        "Members": [ ]
+      },
+      {
+        "Name": "Photography",
+        "Permissions": [ ],
+        "Members": [ ]
+      }
+    ]
+  }
+}
