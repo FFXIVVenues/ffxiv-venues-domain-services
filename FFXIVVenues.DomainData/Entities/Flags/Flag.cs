@@ -16,6 +16,9 @@ public class Flag
     public string? Description { get; set; }
     public DateTime Timestamp { get; set;  } = DateTime.UtcNow;
     public string SourceAddress { get; set;  }
+    public FlagResolution Resolution { get; set; }
+    public DateTimeOffset ResolutionDate { get; set; }
+    public long ResolvedBy { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -23,4 +26,11 @@ public enum FlagCategory {
     VenueEmpty,
     IncorrectInformation,
     InappropriateContent
+}
+
+public enum FlagResolution
+{
+    Unresolved,
+    Resolved,
+    Dismissed
 }

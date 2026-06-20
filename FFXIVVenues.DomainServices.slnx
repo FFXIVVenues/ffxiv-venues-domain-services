@@ -1,10 +1,11 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/Meta/">
     <File Path=".github\workflows\publish-domain-services.yml" />
     <File Path=".github\workflows\on_push_to_test.yml" />
     <File Path=".github\workflows\merge_main_to_test.yml" />
     <File Path=".github\workflows\run_playtests.yml" />
     <File Path=".github\workflows\on_push_to_main.yml" />
+    <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
   <Project Path="FFXIVVenues.ApiGateway/FFXIVVenues.ApiGateway.csproj" />
