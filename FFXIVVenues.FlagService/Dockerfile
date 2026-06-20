@@ -6,7 +6,7 @@ COPY ./FFXIVVenues.FlagService /src/FFXIVVenues.FlagService
 COPY ./FFXIVVenues.FlagService.Client /src/FFXIVVenues.FlagService.Client
 COPY ./FFXIVVenues.DomainData /src/FFXIVVenues.DomainData
 
-RUN dotnet publish /src/FFXIVVenues.FlagService.csproj -c Release -o /src/build
+RUN dotnet publish /src/FFXIVVenues.FlagService/FFXIVVenues.FlagService.csproj -c Release -o /src/build
 
 #-----
 

@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 COPY ./FFXIVVenues.OGCardService /src/FFXIVVenues.OGCardService
 COPY ./FFXIVVenues.DomainData /src/FFXIVVenues.DomainData
 
-RUN dotnet publish /src/FFXIVVenues.OGCardService.csproj -c Release -o /src/build
+RUN dotnet publish /src/FFXIVVenues.OGCardService/FFXIVVenues.OGCardService.csproj -c Release -o /src/build
 
 #-----
 
