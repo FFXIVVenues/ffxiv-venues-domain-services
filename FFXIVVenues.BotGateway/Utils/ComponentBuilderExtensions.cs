@@ -1,12 +1,12 @@
 ﻿using Discord;
 using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.VenueControl;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     internal static class ComponentBuilderExtensions
     {

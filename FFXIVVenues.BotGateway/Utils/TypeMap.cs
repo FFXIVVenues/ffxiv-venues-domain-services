@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     internal class TypeMap<T> : IEnumerable<T> where T : class
     {

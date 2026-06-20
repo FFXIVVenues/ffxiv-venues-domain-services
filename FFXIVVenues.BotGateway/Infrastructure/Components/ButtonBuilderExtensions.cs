@@ -2,10 +2,10 @@ using System;
 using System.Configuration;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 
-namespace FFXIVVenues.Veni.Infrastructure.Components;
+namespace FFXIVVenues.BotGateway.Infrastructure.Components;
 
 public static class ButtonBuilderExtensions
 {

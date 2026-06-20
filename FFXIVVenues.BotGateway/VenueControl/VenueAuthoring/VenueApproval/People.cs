@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueApproval
+﻿namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval
 {
     // todo Remove this
     public static class People

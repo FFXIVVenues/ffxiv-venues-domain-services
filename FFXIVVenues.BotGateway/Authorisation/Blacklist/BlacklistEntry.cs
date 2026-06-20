@@ -1,6 +1,6 @@
-﻿using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+﻿using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.Authorisation.Blacklist;
+namespace FFXIVVenues.BotGateway.Authorisation.Blacklist;
 
 internal class BlacklistEntry : IEntity
 {

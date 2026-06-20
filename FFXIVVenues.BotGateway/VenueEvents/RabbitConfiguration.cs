@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.VenueEvents;
+﻿namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public class RabbitConfiguration
 {

@@ -1,7 +1,7 @@
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueControl;
+namespace FFXIVVenues.BotGateway.VenueControl;
 
 // Create a more type safe Session store, maybe Generics
 public static class SessionExtensions

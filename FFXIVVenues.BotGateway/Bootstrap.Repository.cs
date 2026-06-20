@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using FFXIVVenues.Veni.Infrastructure.Persistence;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using Microsoft.Extensions.Configuration;
+﻿using FFXIVVenues.BotGateway.Infrastructure.Persistence;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FFXIVVenues.Veni;

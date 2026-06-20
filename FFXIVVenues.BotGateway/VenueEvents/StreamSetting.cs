@@ -1,6 +1,6 @@
-﻿using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+﻿using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.VenueEvents;
+namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public record EventStreamChannel(ulong ChannelId, StreamableEvent EventType) : IEntity
 {

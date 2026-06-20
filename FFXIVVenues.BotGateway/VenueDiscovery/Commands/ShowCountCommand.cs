@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 
-namespace FFXIVVenues.Veni.VenueDiscovery.Commands
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Commands
 {
     internal class ShowCountCommand
     {

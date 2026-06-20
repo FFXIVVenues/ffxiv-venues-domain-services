@@ -2,11 +2,11 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.VenueModels;
 using Serilog;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
 public interface ISiteValidator
 {

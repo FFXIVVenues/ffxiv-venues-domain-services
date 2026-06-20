@@ -2,17 +2,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation.Configuration;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.Authorisation.Configuration;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
 using FFXIVVenues.VenueModels.Observability;
 
-namespace FFXIVVenues.Veni.VenueObservations.CreatedWithoutSplash;
+namespace FFXIVVenues.BotGateway.VenueObservations.CreatedWithoutSplash;
 
 public class CreatedWithoutSplashObserver(
     IApiService apiService,

@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueRendering;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.SessionStates
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates
 {
     class EditVenueSessionState : ISessionState
     {

@@ -1,16 +1,16 @@
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueCreation.Command;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.Commands;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.Commands;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueDeletion.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueOpening.Command;
-using FFXIVVenues.Veni.VenueControl.VenueOpening.ComponentHandlers;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueCreation.Command;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.Commands;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.Commands;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueOpening.Command;
+using FFXIVVenues.BotGateway.VenueControl.VenueOpening.ComponentHandlers;
 
-namespace FFXIVVenues.Veni.VenueControl;
+namespace FFXIVVenues.BotGateway.VenueControl;
 
 public static class RegistrationExtensions
 {

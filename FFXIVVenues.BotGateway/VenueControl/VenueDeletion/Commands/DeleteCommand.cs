@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.VenueControl.VenueDeletion.SessionStates;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.SessionStates;
+using FFXIVVenues.BotGateway.Api;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueDeletion.Commands
+namespace FFXIVVenues.BotGateway.VenueControl.VenueDeletion.Commands
 {
     [DiscordCommand("delete", "Delete your venue. 😟")]
     public class DeleteCommandHandler : ICommandHandler

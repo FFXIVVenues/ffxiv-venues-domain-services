@@ -1,7 +1,7 @@
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.Authorisation;
+namespace FFXIVVenues.BotGateway.Authorisation;
 
 public enum Permission
 {

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Exporting;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Exporting;
 
 public interface IMassAuditExporter
 {

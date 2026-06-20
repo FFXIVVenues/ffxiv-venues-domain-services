@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.AI.Language.Conversations;
 using Azure.Core;
-using FFXIVVenues.Veni.AI.Clu.CluModels;
-using FFXIVVenues.Veni.AI.Luis;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.AI.Clu.CluModels;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.AI.Clu
+namespace FFXIVVenues.BotGateway.AI.Clu
 {
     internal class CluClient: ICluClient
     {

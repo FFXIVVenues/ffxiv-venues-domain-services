@@ -1,6 +1,6 @@
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.Authorisation;
+namespace FFXIVVenues.BotGateway.Authorisation;
 
 public interface IAuthorizer
 {

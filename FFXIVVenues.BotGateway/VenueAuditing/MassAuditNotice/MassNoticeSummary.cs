@@ -1,7 +1,7 @@
 using System;
-using FFXIVVenues.Veni.Infrastructure.Tasks;
+using FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditNotice;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice;
 
 public class MassNoticeSummary
 {

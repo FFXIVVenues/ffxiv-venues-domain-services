@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 using Kana.Pipelines;
 using Serilog;
 
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     internal class LogOutboundMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

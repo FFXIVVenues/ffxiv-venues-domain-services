@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.Utils.Broadcasting;
+namespace FFXIVVenues.BotGateway.Utils.Broadcasting;
 
 public class BroadcastMessageReceipt
 {

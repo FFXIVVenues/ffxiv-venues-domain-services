@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace FFXIVVenues.Veni.Infrastructure.Presence;
+namespace FFXIVVenues.BotGateway.Infrastructure.Presence;
 
 public interface IActivityManager
 {

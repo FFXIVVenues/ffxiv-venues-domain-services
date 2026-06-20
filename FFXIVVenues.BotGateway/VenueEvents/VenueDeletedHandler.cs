@@ -3,19 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.FlagService.Client.Events;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueRendering;
-using FFXIVVenues.VenueService.Client.Events;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using Serilog;
 
-namespace FFXIVVenues.Veni.VenueEvents;
+namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public class VenueDeletedHandler(IRepository repository, IDiscordClient client)
 {
-    public async Task Handle(VenueDeletedEvent @event)
+    public async Task HandleAsync(VenueDeletedEvent @event)
     {
         var streams = await repository.GetWhereAsync<EventStreamChannel>(
             i => i.EventType == StreamableEvent.Created);

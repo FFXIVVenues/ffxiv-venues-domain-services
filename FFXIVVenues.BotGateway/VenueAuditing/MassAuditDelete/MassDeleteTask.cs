@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FFXIVVenues.Veni.Infrastructure.Tasks;
+using FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditDelete;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete;
 
 public class MassDeleteTask : BaseTask
 {

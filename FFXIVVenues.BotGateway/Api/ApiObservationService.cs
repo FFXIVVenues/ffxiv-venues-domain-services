@@ -10,7 +10,7 @@ using FFXIVVenues.VenueModels.Observability;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace FFXIVVenues.Veni.Api
+namespace FFXIVVenues.BotGateway.Api
 {
     internal class ApiObservationService : IApiObservationService, IDisposable
     {

@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.Infrastructure.Tasks;
+namespace FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
 public enum TaskStatus
 {

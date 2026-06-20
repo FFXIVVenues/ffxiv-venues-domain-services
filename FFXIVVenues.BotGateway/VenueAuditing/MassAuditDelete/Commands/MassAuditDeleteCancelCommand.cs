@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditDelete.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete.Commands;
 
 [DiscordCommand("massaudit delete cancel", "Cancel currently executing deletes.")]
 public class MassAuditDeleteCancelCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler

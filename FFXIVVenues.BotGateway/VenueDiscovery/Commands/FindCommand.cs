@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueControl;
-using FFXIVVenues.Veni.VenueDiscovery.SessionStates;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueDiscovery.SessionStates;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueDiscovery.Commands
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Commands
 {
     [DiscordCommand("find", "Find a venue by it's name.")]
     [DiscordCommandOption("query", "Part or all of the name of the venues you want to find", ApplicationCommandOptionType.String, Required = true)]

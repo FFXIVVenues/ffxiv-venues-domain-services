@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.AI.Clu.CluModels;
-using FFXIVVenues.Veni.Infrastructure.Context.InteractionWrappers;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.AI.Clu.CluModels;
+using FFXIVVenues.BotGateway.Infrastructure.Context.InteractionWrappers;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 
 
-namespace FFXIVVenues.Veni.Infrastructure.Context
+namespace FFXIVVenues.BotGateway.Infrastructure.Context
 {
 
     public abstract class VeniInteractionContext<T>(T message, DiscordSocketClient client, Session conversation)

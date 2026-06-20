@@ -9,9 +9,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 COPY . /src
-RUN dotnet publish /src/FFXIVVenues.Veni.csproj -c Release -o /src/build
+RUN dotnet publish /src/FFXIVVenues.BotGateway.csproj -c Release -o /src/build
 
 FROM base AS final
 WORKDIR /app
 COPY --from=build /src/build .
-ENTRYPOINT ["dotnet", "FFXIVVenues.Veni.dll"]
+ENTRYPOINT ["dotnet", "FFXIVVenues.BotGateway.dll"]

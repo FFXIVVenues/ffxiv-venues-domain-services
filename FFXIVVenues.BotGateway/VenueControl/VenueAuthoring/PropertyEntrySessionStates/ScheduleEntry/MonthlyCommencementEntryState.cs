@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.PropertyEntrySessionStates.ScheduleEntry;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.PropertyEntrySessionStates.ScheduleEntry;
 
 class MonthlyCommencementEntryState : ISessionState
 {

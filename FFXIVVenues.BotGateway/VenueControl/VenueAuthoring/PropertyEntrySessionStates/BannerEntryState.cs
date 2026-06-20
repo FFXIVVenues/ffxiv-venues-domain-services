@@ -3,10 +3,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Color = Discord.Color;
@@ -14,7 +16,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 // ReSharper disable AccessToDisposedClosure
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.PropertyEntrySessionStates;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.PropertyEntrySessionStates;
 
 class BannerEntrySessionState(IAuthorizer authorizer, HttpClient httpClient) : ISessionState
 {

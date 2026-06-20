@@ -1,8 +1,7 @@
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context.Abstractions;
+using FFXIVVenues.BotGateway.Infrastructure.Context.Abstractions;
 
-
-namespace FFXIVVenues.Veni.Infrastructure.Context;
+namespace FFXIVVenues.BotGateway.Infrastructure.Context;
 
 public class InteractionContextFactory : IInteractionContextFactory
 {

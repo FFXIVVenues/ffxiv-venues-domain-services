@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.VenueModels;
-using moment.net;
+using MomentNet.Display;
 
-namespace FFXIVVenues.Veni.VenueDiscovery.Intents
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents
 {
     internal class ShowOpen : IntentHandler
     {

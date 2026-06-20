@@ -1,13 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.VenueAuditing.ComponentHandlers;
+namespace FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers;
 
 public class GetAuditsHandler(IAuthorizer authorizer, IRepository repository, IApiService apiService)
     : IComponentHandler

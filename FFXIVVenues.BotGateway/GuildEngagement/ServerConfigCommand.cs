@@ -2,12 +2,12 @@
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.GuildEngagement;
+namespace FFXIVVenues.BotGateway.GuildEngagement;
 
 [DiscordCommand("server viewconfig", "See all configuration set for this discord server.", GuildPermission.ManageRoles, InteractionContextType.Guild)]
 public class ServerConfigCommand(IRepository repository) : ICommandHandler

@@ -1,18 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.GuildEngagement;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueAuditing;
-using FFXIVVenues.Veni.VenueEvents;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.GuildEngagement;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueAuditing;
+using FFXIVVenues.BotGateway.VenueEvents;
 using FFXIVVenues.VenueModels;
-using FFXIVVenues.VenueService.Client.Events;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueDeletion.SessionStates;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueDeletion.SessionStates;
 
 class DeleteVenueSessionState(IRepository repository, IDiscordClient client, IApiService apiService, IVenueAuditService auditService, IAuthorizer authorizer, IGuildManager guildManager)
     : ISessionState
@@ -55,7 +54,7 @@ class DeleteVenueSessionState(IRepository repository, IDiscordClient client, IAp
                         await auditService.UpdateAuditStatus(latestAudit, this._venue, c.Interaction.User.Id, VenueAuditStatus.DeletedLater);
                     await guildManager.SyncRolesForVenueAsync(_venue);
                     
-                    new VenueDeletedHandler(repository, client).Handle(
+                    _ = new VenueDeletedHandler(repository, client).HandleAsync(
                         new VenueDeletedEvent(_venue.Id, _venue.Name, cm.Interaction.User.Id));
                 },
                 ComponentPersistence.ClearRow), ButtonStyle.Danger)

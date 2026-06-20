@@ -3,14 +3,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditDelete.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete.Commands;
 
 [DiscordCommand("massaudit delete preview", "See what venues would be deleted.")] 
 public class MassAuditDeletePreviewCommand(IAuthorizer authorizer, IMassAuditService massAuditService, UiConfiguration uiConfig) : ICommandHandler

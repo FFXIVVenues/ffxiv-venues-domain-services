@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     public class RollingCache<T> : IDisposable
     {

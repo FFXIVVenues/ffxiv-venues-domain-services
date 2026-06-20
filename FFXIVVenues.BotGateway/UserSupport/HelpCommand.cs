@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
 
-namespace FFXIVVenues.Veni.UserSupport
+namespace FFXIVVenues.BotGateway.UserSupport
 {
     public static class HelpCommand
     {

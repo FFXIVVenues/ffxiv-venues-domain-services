@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 
-namespace FFXIVVenues.Veni.Infrastructure.Components;
+namespace FFXIVVenues.BotGateway.Infrastructure.Components;
 
 public interface IComponentBroker
 {

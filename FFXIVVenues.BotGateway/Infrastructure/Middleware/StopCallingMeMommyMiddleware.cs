@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     class StopCallingMeMommyMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing.ComponentHandlers.AuditResponse;
+namespace FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers.AuditResponse;
 
 public abstract class BaseAuditHandler : IComponentHandler
 {

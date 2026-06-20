@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueControl;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
 
-namespace FFXIVVenues.Veni.VenueRendering.ComponentHandlers;
+namespace FFXIVVenues.BotGateway.VenueRendering.ComponentHandlers;
 
 public class DismissHandler : IComponentHandler
 {

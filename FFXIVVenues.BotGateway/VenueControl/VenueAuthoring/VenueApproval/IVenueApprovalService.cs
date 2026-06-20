@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueApproval
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval
 {
     public interface IVenueApprovalService
     {

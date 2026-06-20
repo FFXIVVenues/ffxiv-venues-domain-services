@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.VenueControl;
-using FFXIVVenues.Veni.VenueDiscovery.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueDiscovery.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueDiscovery.Intents
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents
 {
     internal class ShowForManager : IIntentHandler
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.AI.Clu.CluModels;
+using FFXIVVenues.BotGateway.AI.Clu.CluModels;
 
-namespace FFXIVVenues.Veni.AI.Luis
+namespace FFXIVVenues.BotGateway.AI.Clu
 {
     internal interface ICluClient
     {

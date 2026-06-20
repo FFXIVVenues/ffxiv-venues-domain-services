@@ -4,24 +4,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation.Blacklist;
-using FFXIVVenues.Veni.GuildEngagement;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Infrastructure.Middleware;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Infrastructure.Presence;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueApproval;
+using FFXIVVenues.BotGateway.Authorisation.Blacklist;
+using FFXIVVenues.BotGateway.GuildEngagement;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Middleware;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Presence;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval;
+using FFXIVVenues.BotGateway.Api;
 using Kana.Pipelines;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace FFXIVVenues.Veni.Infrastructure;
+namespace FFXIVVenues.BotGateway.Infrastructure;
 
 internal class DiscordHostedService : IHostedService
 {

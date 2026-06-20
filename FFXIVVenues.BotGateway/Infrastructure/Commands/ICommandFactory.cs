@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace FFXIVVenues.Veni.Infrastructure.Commands
+namespace FFXIVVenues.BotGateway.Infrastructure.Commands
 {
     public interface ICommandFactory
     {

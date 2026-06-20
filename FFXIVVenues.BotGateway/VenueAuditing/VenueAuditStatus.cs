@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public enum VenueAuditStatus
 {

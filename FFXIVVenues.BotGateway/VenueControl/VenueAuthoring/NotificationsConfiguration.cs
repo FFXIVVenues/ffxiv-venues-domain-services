@@ -1,8 +1,8 @@
 using System.Linq;
 using Discord;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
 public class NotificationsConfiguration
 {

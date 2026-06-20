@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Authorisation.Blacklist;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.Authorisation.Blacklist;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.Engineering;
+namespace FFXIVVenues.BotGateway.Engineering;
 
 [DiscordCommandRestrictToMasterGuild]
 [DiscordCommand("blacklist add", "Add a discord guild or user to the blacklist.")]

@@ -39,6 +39,9 @@ jobs:
           - name: ApiGateway
             path: FFXIVVenues.ApiGateway
             image: ffxivvenues.apigateway
+          - name: BotGateway
+            path: FFXIVVenues.BotGateway
+            image: ffxivvenues.BotGateway
           - name: FlagService
             path: FFXIVVenues.FlagService
             image: ffxivvenues.flagservice
@@ -75,13 +78,14 @@ jobs:
           -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.application.image }}:${{ inputs.tag }}-${{ matrix.platform.tag }} \
           -f ${{ matrix.application.path }}/Dockerfile .
 
-
   publish_multiplatform_manifest:
     strategy:
       matrix:
         include:
           - name: ApiGateway
             image: ffxivvenues.apigateway
+          - name: BotGateway
+            image: ffxivvenues.botgateway
           - name: FlagService
             image: ffxivvenues.flagservice
           - name: OGCardService
@@ -109,7 +113,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish_multiplatform_manifest
     steps:
-      
       - name: Notify Discord webhook
         uses: tsickert/discord-webhook@v7.0.0
         with:

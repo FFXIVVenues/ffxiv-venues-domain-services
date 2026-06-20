@@ -1,8 +1,8 @@
 ﻿using System;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.Infrastructure.Tasks;
+namespace FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
 public abstract class BaseTask : IEntity
 {

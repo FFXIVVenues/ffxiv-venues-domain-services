@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditNotice.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice.Commands;
 
 [DiscordCommand("massaudit notice cancel", "Cancel a currently executing notice.")]
 public class MassAuditNoticeCancelCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler

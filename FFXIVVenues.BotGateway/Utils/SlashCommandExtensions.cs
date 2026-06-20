@@ -1,9 +1,9 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Linq;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     internal static class SlashCommandExtensions
     {

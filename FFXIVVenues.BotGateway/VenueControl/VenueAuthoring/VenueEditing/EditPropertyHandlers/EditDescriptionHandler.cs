@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.PropertyEntrySessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.PropertyEntrySessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
 
 public class EditDescriptionHandler(IAuthorizer authorizer, IApiService apiService) : IComponentHandler
 {

@@ -4,17 +4,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Exporting;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
-using FFXIVVenues.Veni.VenueAuditing.MassAuditDelete;
-using FFXIVVenues.Veni.VenueAuditing.MassAuditNotice;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Exporting;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice;
 using FFXIVVenues.VenueModels;
 using Serilog;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 
 internal class MassAuditService(
     IApiService apiService,

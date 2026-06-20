@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Presence;
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Presence;
 
 public class PresenceConfiguration
 {

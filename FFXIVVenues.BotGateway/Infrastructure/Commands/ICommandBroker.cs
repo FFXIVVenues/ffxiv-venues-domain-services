@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 
-namespace FFXIVVenues.Veni.Infrastructure.Commands
+namespace FFXIVVenues.BotGateway.Infrastructure.Commands
 {
     public interface ICommandBroker
     {

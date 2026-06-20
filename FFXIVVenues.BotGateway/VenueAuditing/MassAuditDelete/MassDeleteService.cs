@@ -6,17 +6,15 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Infrastructure.Tasks;
-using FFXIVVenues.Veni.VenueEvents;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Tasks;
+using FFXIVVenues.BotGateway.VenueEvents;
 using FFXIVVenues.VenueModels;
-using FFXIVVenues.VenueService.Client.Events;
 using Serilog;
-using TaskStatus = FFXIVVenues.Veni.Infrastructure.Tasks.TaskStatus;
+using TaskStatus = FFXIVVenues.BotGateway.Infrastructure.Tasks.TaskStatus;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditDelete;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete;
 
 public class MassDeleteService(IRepository repository, IApiService apiService, IDiscordClient discordClient) : BaseTaskService<MassDeleteTask>(repository)
 {
@@ -83,7 +81,7 @@ public class MassDeleteService(IRepository repository, IApiService apiService, I
                 if (result.IsSuccessStatusCode)
                 {
                     var venue = await result.Content.ReadFromJsonAsync<Venue>(cancellationToken);
-                    new VenueDeletedHandler(repository, discordClient).Handle(
+                    _ = new VenueDeletedHandler(repository, discordClient).HandleAsync(
                         new VenueDeletedEvent(remainingVenue.VenueId, venue.Name, 2));
                 }
 

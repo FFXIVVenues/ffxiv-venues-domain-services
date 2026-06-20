@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.GuildEngagement;
+namespace FFXIVVenues.BotGateway.GuildEngagement;
 
 [DiscordCommand("server managerrole set", "Set role to assign to venue managers of the specified Data Center.", GuildPermission.ManageRoles, InteractionContextType.Guild)]
 [DiscordCommandOption("datacenter", "The data center to assign the given role to.", ApplicationCommandOptionType.String)]

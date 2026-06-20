@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
-namespace FFXIVVenues.Veni.Utils.Broadcasting
+namespace FFXIVVenues.BotGateway.Utils.Broadcasting
 {
     public record Broadcast(string Id, IDiscordClient Client)
     {

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 
 // todo: rename to MassAuditTask and inherit from BaseTask
 [Serializable]

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
+using FFXIVVenues.BotGateway.Api;
 
-namespace FFXIVVenues.Veni.Infrastructure.Presence;
+namespace FFXIVVenues.BotGateway.Infrastructure.Presence;
 
 public class ActivityManager(DiscordSocketClient client, PresenceConfiguration config, IApiService venuesApi) : IActivityManager
 {

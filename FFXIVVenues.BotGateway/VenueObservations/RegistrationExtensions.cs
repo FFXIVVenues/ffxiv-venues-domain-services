@@ -1,9 +1,9 @@
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.VenueObservations.CreatedWithoutSplash;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.VenueObservations.CreatedWithoutSplash;
 using FFXIVVenues.VenueModels.Observability;
 
-namespace FFXIVVenues.Veni.VenueObservations;
+namespace FFXIVVenues.BotGateway.VenueObservations;
 
 public static class RegistrationExtensions
 {

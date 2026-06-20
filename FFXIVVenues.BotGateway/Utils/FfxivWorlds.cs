@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FFXIVVenues.Veni.Utils;
+namespace FFXIVVenues.BotGateway.Utils;
 
 public static class FfxivWorlds
 {

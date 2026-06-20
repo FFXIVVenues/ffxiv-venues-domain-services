@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
 
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 [Serializable]
 public class VenueAuditRecord : IEntity

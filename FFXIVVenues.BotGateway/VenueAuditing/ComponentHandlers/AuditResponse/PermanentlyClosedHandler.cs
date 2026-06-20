@@ -1,14 +1,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.VenueControl;
-using FFXIVVenues.Veni.VenueControl.VenueDeletion.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueAuditing.ComponentHandlers.AuditResponse;
+namespace FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers.AuditResponse;
 
 public class PermanentlyClosedHandler(
     IRepository repository,

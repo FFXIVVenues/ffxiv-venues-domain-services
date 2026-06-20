@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueRendering;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ConversationalIntents;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ConversationalIntents;
 
 internal class EditIntentHandler(IApiService apiService, IVenueRenderer venueRenderer) : IntentHandler
 {

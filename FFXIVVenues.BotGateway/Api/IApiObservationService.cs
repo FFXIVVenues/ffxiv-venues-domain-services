@@ -10,7 +10,7 @@ using FFXIVVenues.VenueModels.Observability;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace FFXIVVenues.Veni.Api
+namespace FFXIVVenues.BotGateway.Api
 {
     public interface IApiObservationService
     {

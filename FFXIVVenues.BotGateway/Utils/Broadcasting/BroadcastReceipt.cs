@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.Utils.Broadcasting;
+namespace FFXIVVenues.BotGateway.Utils.Broadcasting;
 
 public class BroadcastReceipt : IEntity
 {

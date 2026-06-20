@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Authorisation.Blacklist;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Authorisation.Blacklist;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     class BlacklistMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

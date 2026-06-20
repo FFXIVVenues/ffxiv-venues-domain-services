@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Api
+﻿namespace FFXIVVenues.BotGateway.Api
 {
     public class ApiConfiguration
     {

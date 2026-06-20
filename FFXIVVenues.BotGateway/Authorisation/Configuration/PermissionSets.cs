@@ -1,6 +1,7 @@
+using FFXIVVenues.BotGateway.Authorisation;
 using System;
 
-namespace FFXIVVenues.Veni.Authorisation.Configuration;
+namespace FFXIVVenues.BotGateway.Authorisation.Configuration;
 
 public class PermissionSet
 {

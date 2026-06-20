@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     static class MessageRepository
     {

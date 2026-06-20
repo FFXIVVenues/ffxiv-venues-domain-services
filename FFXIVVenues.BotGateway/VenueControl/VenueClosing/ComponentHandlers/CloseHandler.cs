@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueClosing.ComponentHandlers;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueClosing.ComponentHandlers;
 
 public class CloseHandler(IAuthorizer authorizer, IApiService apiService) : IComponentHandler
 {

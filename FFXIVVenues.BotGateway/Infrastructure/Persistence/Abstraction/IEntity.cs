@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction
 {
     public interface IEntity
     {

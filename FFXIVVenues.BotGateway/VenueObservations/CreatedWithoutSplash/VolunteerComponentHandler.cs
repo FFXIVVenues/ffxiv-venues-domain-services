@@ -1,17 +1,17 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueAuditing;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.VenueAuditing;
 using OfficeOpenXml.ConditionalFormatting;
 
-namespace FFXIVVenues.Veni.VenueObservations.CreatedWithoutSplash;
+namespace FFXIVVenues.BotGateway.VenueObservations.CreatedWithoutSplash;
 
 public class VolunteerComponentHandler(
     IRepository repository,

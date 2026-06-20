@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 
-namespace FFXIVVenues.Veni.AI.Davinci
+namespace FFXIVVenues.BotGateway.AI.Davinci
 {
     internal class AIHandler : IAIHandler
     {

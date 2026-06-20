@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 using Serilog;
 
-namespace FFXIVVenues.Veni.Infrastructure.Tasks;
+namespace FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
 public abstract class BaseTaskService<T>(IRepository repository) : ITaskService<T> where T : BaseTask
 {

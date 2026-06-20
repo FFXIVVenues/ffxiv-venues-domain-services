@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Authorisation.Configuration;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.Authorisation.Configuration;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
 
-namespace FFXIVVenues.Veni.UserSupport
+namespace FFXIVVenues.BotGateway.UserSupport
 {
     internal class EscalateIntent : IntentHandler
     {

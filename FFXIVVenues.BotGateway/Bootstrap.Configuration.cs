@@ -1,13 +1,13 @@
-﻿using FFXIVVenues.Veni.AI.Davinci;
-using FFXIVVenues.Veni.AI.Luis;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation.Configuration;
-using FFXIVVenues.Veni.Infrastructure;
-using FFXIVVenues.Veni.Infrastructure.Persistence;
-using FFXIVVenues.Veni.Infrastructure.Presence;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring;
-using FFXIVVenues.Veni.VenueEvents;
-using FFXIVVenues.Veni.VenueRendering;
+﻿using FFXIVVenues.BotGateway.AI.Clu;
+using FFXIVVenues.BotGateway.AI.Davinci;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation.Configuration;
+using FFXIVVenues.BotGateway.Infrastructure;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence;
+using FFXIVVenues.BotGateway.Infrastructure.Presence;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.VenueEvents;
+using FFXIVVenues.BotGateway.VenueRendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

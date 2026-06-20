@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.Infrastructure.Persistence;
+namespace FFXIVVenues.BotGateway.Infrastructure.Persistence;
 
 public class InMemoryRepository : IRepository
 {

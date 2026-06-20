@@ -1,7 +1,8 @@
+using FFXIVVenues.BotGateway.Authorisation;
 using System;
 using System.Collections.Generic;
 
-namespace FFXIVVenues.Veni.Authorisation.Configuration;
+namespace FFXIVVenues.BotGateway.Authorisation.Configuration;
 
 public class AuthorisationConfiguration
 {

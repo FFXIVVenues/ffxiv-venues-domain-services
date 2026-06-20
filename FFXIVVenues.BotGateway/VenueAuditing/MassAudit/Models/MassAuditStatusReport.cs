@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
 
 public class MassAuditStatusReport
 {

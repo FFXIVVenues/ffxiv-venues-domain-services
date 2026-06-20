@@ -4,18 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.GuildEngagement;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueEvents;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.GuildEngagement;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.VenueEvents;
 using FFXIVVenues.VenueModels;
-using FFXIVVenues.VenueService.Client.Events;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueApproval;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval;
 
 public class VenueApprovalService(
     IRepository repository,
@@ -103,7 +102,7 @@ public class VenueApprovalService(
                 embed: (await venueRenderer.ValidateAndRenderAsync(venue)).Build());
         }
         
-        new VenueApprovedHandler(repository, client, apiService, uiConfiguration).Handle(
+        _ = new VenueApprovedHandler(repository, client, apiService, uiConfiguration).HandleAsync(
             new VenueApprovedEvent(venue.Id, approver));
 
         return true;
@@ -145,7 +144,7 @@ public class VenueApprovalService(
                 
             await rejectBic.Component.Channel.SendMessageAsync("Okay! Well, maybe the next one then. 😢");
             
-            new VenueDeletedHandler(repository, client).Handle(
+            _ = new VenueDeletedHandler(repository, client).HandleAsync(
                 new VenueDeletedEvent(venue.Id, venue.Name, confirmDeleteBic.CurrentUser.Id));
         });
 

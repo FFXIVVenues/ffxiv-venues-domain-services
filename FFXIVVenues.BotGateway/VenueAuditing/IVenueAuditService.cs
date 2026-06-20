@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public interface IVenueAuditService
 {

@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Context.InteractionWrappers;
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Context.InteractionWrappers;
 
 public interface IInteractionDataWrapper
 {

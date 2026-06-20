@@ -1,8 +1,8 @@
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers.AuditResponse;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers.AuditResponse;
+using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers;
 
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public static class RegistrationExtensions
 {

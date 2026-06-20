@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.AI.Clu.CluModels;
-using FFXIVVenues.Veni.AI.Luis;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.AI.Clu;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.AI.Clu.CluModels;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware;
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware;
 
 internal class CluPredictionMiddleware(ICluClient cluClient) : IMiddleware<MessageVeniInteractionContext>
 {

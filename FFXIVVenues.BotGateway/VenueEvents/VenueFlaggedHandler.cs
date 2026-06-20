@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.FlagService.Client.Events;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueRendering;
 using Serilog;
 
-namespace FFXIVVenues.Veni.VenueEvents;
+namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public class VenueFlaggedHandler(IRepository repository, IDiscordClient client, IApiService apiService, UiConfiguration uiConfig)
 {

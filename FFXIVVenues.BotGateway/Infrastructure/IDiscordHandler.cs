@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FFXIVVenues.Veni.Infrastructure;
+namespace FFXIVVenues.BotGateway.Infrastructure;
 //
 // internal interface IDiscordHandler
 // {

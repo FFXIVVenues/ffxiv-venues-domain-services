@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.SessionStates;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueOpening.SessionStates;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueOpening.SessionStates;
 
 internal class OpenEntryState : ISessionState
 {

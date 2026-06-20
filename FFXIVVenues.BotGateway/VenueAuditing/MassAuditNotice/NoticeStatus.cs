@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditNotice;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice;
 
 public enum NoticeStatus
 {  

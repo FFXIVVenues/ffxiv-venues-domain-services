@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace FFXIVVenues.Veni.Utils;
+namespace FFXIVVenues.BotGateway.Utils;
 
 public class RollingCacheSet
 {

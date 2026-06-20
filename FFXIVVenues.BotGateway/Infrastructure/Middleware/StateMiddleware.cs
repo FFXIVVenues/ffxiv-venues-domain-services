@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     class StateMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

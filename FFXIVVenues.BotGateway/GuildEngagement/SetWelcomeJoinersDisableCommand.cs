@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.GuildEngagement;
+namespace FFXIVVenues.BotGateway.GuildEngagement;
 
 [DiscordCommand("server welcomejoiners disable", "Set Veni not to welcome users who join this discord server.", GuildPermission.ManageRoles, InteractionContextType.Guild)]
 public class SetWelcomeJoinersDisableCommand(IRepository repository) : ICommandHandler

@@ -1,8 +1,8 @@
 using System.Linq;
-using FFXIVVenues.Veni.Authorisation.Configuration;
+using FFXIVVenues.BotGateway.Authorisation.Configuration;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.Authorisation;
+namespace FFXIVVenues.BotGateway.Authorisation;
 
 public class Authorizer(AuthorisationConfiguration configuration) : IAuthorizer
 {

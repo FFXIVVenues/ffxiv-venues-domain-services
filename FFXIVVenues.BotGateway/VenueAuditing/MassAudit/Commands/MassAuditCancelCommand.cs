@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Commands;
 
 [DiscordCommandRestrictToMasterGuild]
 [DiscordCommand("massaudit cancel", "Cancel a currently executing audit round.")] 

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.UserSupport;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueCreation.ConversationalIntent;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ConversationalIntents;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.ConversationalIntent;
-using FFXIVVenues.Veni.VenueControl.VenueOpening.ConversationalIntent;
-using FFXIVVenues.Veni.VenueDiscovery.Intents;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.UserSupport;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueCreation.ConversationalIntent;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ConversationalIntents;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.ConversationalIntent;
+using FFXIVVenues.BotGateway.VenueControl.VenueOpening.ConversationalIntent;
+using FFXIVVenues.BotGateway.VenueDiscovery.Intents;
 
-namespace FFXIVVenues.Veni.Infrastructure.Intent
+namespace FFXIVVenues.BotGateway.Infrastructure.Intent
 {
     internal class IntentHandlerProvider : IIntentHandlerProvider
     {

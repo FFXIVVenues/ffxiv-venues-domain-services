@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
 
-namespace FFXIVVenues.Veni.VenueDiscovery.Commands
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Commands
 {
     public static class ShowMineCommand
     {

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using FFXIVVenues.BotGateway.Infrastructure.Context.InteractionWrappers;
 
 
-namespace FFXIVVenues.Veni.Infrastructure.Context.InteractionWrappers;
+namespace FFXIVVenues.BotGateway.Infrastructure.Context.InteractionWrappers;
     
 public class SlashCommandWrapper : IInteractionWrapper
 {

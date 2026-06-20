@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueClosing.ConversationalIntent
+namespace FFXIVVenues.BotGateway.VenueControl.VenueClosing.ConversationalIntent
 {
     internal class CloseIntent(IApiService apiService) : IntentHandler
     {

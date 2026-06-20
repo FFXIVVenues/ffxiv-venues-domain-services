@@ -1,12 +1,13 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Commands;
 
 [DiscordCommandRestrictToMasterGuild]
 [DiscordCommand("massaudit status", "Get a brief update on the progress of a current audit round.")] 

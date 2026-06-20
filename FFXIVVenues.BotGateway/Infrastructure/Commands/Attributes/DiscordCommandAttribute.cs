@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Discord;
 
-namespace FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
+namespace FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 public class DiscordCommandAttribute(

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     internal class StartTypingMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

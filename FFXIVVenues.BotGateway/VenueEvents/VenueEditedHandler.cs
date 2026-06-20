@@ -3,19 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.FlagService.Client.Events;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueRendering;
-using FFXIVVenues.VenueService.Client.Events;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.VenueRendering;
 using Serilog;
 
-namespace FFXIVVenues.Veni.VenueEvents;
+namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public class VenueEditedHandler(IRepository repository, IDiscordClient client, IApiService apiService, UiConfiguration uiConfig)
 {
-    public async Task Handle(VenueEditEvent @event)
+    public async Task HandleAsync(VenueEditEvent @event)
     {
         var streams = await repository.GetWhereAsync<EventStreamChannel>(
             i => i.EventType == StreamableEvent.Edits);

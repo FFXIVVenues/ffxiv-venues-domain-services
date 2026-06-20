@@ -1,9 +1,9 @@
 ﻿using System;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context.Abstractions;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context.Abstractions;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.Infrastructure.Context.SessionHandling
+namespace FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling
 {
     internal class SessionProvider(IServiceProvider serviceProvider) : IDisposable, ISessionProvider
     {

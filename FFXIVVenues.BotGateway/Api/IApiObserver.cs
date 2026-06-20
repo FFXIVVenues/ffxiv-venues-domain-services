@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using FFXIVVenues.VenueModels.Observability;
 
-namespace FFXIVVenues.Veni.Api;
+namespace FFXIVVenues.BotGateway.Api;
 
 public interface IApiObserver
 {

@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueClosing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueDeletion.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueOpening.ComponentHandlers;
-using FFXIVVenues.Veni.VenueRendering.ComponentHandlers;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.EditPropertyHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueClosing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueOpening.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueRendering.ComponentHandlers;
 using FFXIVVenues.VenueModels;
-using moment.net;
+using MomentNet.Display;
 
-namespace FFXIVVenues.Veni.VenueRendering;
+namespace FFXIVVenues.BotGateway.VenueRendering;
 
 public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, IDiscordValidator discordValidator, ISiteValidator siteValidator) : IVenueRenderer
 {

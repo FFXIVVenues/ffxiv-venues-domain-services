@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
 
 public enum MassAuditStatus
 {

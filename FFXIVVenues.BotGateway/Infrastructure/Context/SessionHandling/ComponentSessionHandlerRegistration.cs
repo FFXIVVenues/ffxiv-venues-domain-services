@@ -1,7 +1,8 @@
-﻿using System;
+﻿using FFXIVVenues.BotGateway.Infrastructure.Context;
+using System;
 using System.Threading.Tasks;
 
-namespace FFXIVVenues.Veni.Infrastructure.Context.SessionHandling
+namespace FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling
 {
     internal class ComponentSessionHandlerRegistration
     {

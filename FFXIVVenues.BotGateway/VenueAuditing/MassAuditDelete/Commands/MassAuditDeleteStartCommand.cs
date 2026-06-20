@@ -2,14 +2,14 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditDelete.Commands;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete.Commands;
 
 [DiscordCommand("massaudit delete start", "Delete all venues that have no responded to the current mass audit.")]
 public class MassAuditDeleteStartCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler

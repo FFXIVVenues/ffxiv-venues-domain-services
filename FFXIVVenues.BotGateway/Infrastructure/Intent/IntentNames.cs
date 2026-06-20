@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Intent
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Intent
 {
     static class IntentNames
     {

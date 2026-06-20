@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.UserSupport
+namespace FFXIVVenues.BotGateway.UserSupport
 {
     internal class CancelIntent : IntentHandler
     {

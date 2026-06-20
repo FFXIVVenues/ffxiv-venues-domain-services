@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.VenueModels;
 using Serilog;
-using CheckReturn = (FFXIVVenues.Veni.VenueControl.VenueAuthoring.DiscordCheckResult Result, Discord.Rest.RestInviteMetadata Invite);
+using CheckReturn = (FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.DiscordCheckResult Result, Discord.Rest.RestInviteMetadata Invite);
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
 public interface IDiscordValidator
 {

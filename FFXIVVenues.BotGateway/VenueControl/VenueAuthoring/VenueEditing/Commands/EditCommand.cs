@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers.AuditResponse;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers.AuditResponse;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.Commands
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.Commands
 {
     public static class EditCommand
     {

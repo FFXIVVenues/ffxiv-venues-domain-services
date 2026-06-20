@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 
-namespace FFXIVVenues.Veni.Infrastructure.Context.SessionHandling
+namespace FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling
 {
     public class Session
     {
@@ -181,7 +182,15 @@ namespace FFXIVVenues.Veni.Infrastructure.Context.SessionHandling
                     var rowCleared = false;
                     var messageDeleted = false;
                     foreach (var component in actionRow.Components)
-                        if (this._componentHandlers.TryGetValue(component.CustomId, out var handler))
+                    {
+                        string customId = null;
+                        if (component is SelectMenuComponent selectMenuComponent)
+                            customId = selectMenuComponent.CustomId;
+                        if (component is ButtonComponent buttonComponent)
+                            customId = buttonComponent.CustomId;
+                        if (customId is null) continue;
+                        if (this._componentHandlers.TryGetValue(customId, out var handler))
+                        {
                             if (!rowCleared && handler.Persistence == ComponentPersistence.ClearRow)
                             {
                                 _ = channel.ModifyMessageAsync(message.Id, m => m.Components = new ComponentBuilder().Build());
@@ -191,9 +200,11 @@ namespace FFXIVVenues.Veni.Infrastructure.Context.SessionHandling
                             else if (handler.Persistence == ComponentPersistence.DeleteMessage)
                             {
                                 _ = channel.DeleteMessageAsync(message.Id);
-                                messageDeleted = true;  
+                                messageDeleted = true;
                                 break;
                             }
+                        }
+                    }
 
                     if (messageDeleted)
                         break;

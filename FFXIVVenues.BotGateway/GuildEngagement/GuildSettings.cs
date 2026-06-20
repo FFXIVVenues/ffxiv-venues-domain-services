@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 
-namespace FFXIVVenues.Veni.GuildEngagement
+namespace FFXIVVenues.BotGateway.GuildEngagement
 {
     public class GuildSettings : IEntity
     {

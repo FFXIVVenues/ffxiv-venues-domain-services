@@ -1,22 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.GuildEngagement;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Infrastructure.Presence;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.VenueAuditing;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueApproval;
-using FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
-using FFXIVVenues.Veni.VenueEvents;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.GuildEngagement;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Presence;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueAuditing;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval;
+using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.BotGateway.VenueEvents;
 using FFXIVVenues.VenueModels;
-using FFXIVVenues.VenueService.Client.Events;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
 class ConfirmVenueSessionState(
     IVenueRenderer venueRenderer,
@@ -107,12 +106,12 @@ class ConfirmVenueSessionState(
 
         if (isNewVenue)
         {
-            new VenueCreatedHandler(repository, discordClient, apiService, uiConfig).Handle(
+            _ = new VenueCreatedHandler(repository, discordClient, apiService, uiConfig).HandleAsync(
                 new VenueCreatedEvent(venue.Id, c.Interaction.User.Id));
         }
         else
         {
-            new VenueEditedHandler(repository, discordClient, apiService, uiConfig).Handle(
+            _ = new VenueEditedHandler(repository, discordClient, apiService, uiConfig).HandleAsync(
                 new VenueEditEvent(venue.Id, c.Interaction.User.Id));
         }
         

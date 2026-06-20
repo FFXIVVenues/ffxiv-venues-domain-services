@@ -4,13 +4,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
 using FFXIVVenues.VenueModels;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit.Exporting;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Exporting;
 
 public class MassAuditExporter : IMassAuditExporter
 {

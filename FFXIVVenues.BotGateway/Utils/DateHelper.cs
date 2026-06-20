@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FFXIVVenues.Veni.Utils;
+namespace FFXIVVenues.BotGateway.Utils;
 
 public static class DateHelper
 {

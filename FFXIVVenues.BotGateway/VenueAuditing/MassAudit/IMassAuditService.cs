@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit.Models;
-using FFXIVVenues.Veni.VenueAuditing.MassAuditDelete;
-using FFXIVVenues.Veni.VenueAuditing.MassAuditNotice;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Models;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAuditDelete;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAudit;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 
 public interface IMassAuditService
 {

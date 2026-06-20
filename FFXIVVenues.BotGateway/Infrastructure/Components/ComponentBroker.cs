@@ -3,10 +3,10 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.Infrastructure.Components;
+namespace FFXIVVenues.BotGateway.Infrastructure.Components;
 
 public class ComponentBroker : IComponentBroker
 {

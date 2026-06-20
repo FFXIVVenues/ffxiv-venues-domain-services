@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using LiteDB;
 
-namespace FFXIVVenues.Veni.Infrastructure.Persistence
+namespace FFXIVVenues.BotGateway.Infrastructure.Persistence
 {
 
     // This repository should remain singleton. While it will work fine none-singleton, LiteDb opens,

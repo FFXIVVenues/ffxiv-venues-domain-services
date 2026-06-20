@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 
-namespace FFXIVVenues.Veni.Infrastructure.Tasks;
+namespace FFXIVVenues.BotGateway.Infrastructure.Tasks;
 
 public interface ITaskService<T>
 {

@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace FFXIVVenues.Veni.AI.Davinci
+namespace FFXIVVenues.BotGateway.AI.Davinci
 {
     internal class DavinciService : IDavinciService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FFXIVVenues.Veni.AI.Clu.CluModels;
+namespace FFXIVVenues.BotGateway.AI.Clu.CluModels;
 
 public class CluResponse
 {

@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.AI.Luis
+﻿namespace FFXIVVenues.BotGateway.AI.Clu
 {
     public class CluConfiguration
     {

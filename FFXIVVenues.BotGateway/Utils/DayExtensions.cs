@@ -1,7 +1,7 @@
 ﻿using FFXIVVenues.VenueModels;
 using System;
 
-namespace FFXIVVenues.Veni.Utils
+namespace FFXIVVenues.BotGateway.Utils
 {
     internal static class DayExtensions
     {

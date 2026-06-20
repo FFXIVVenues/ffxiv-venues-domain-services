@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
 
-namespace FFXIVVenues.Veni.Infrastructure.Context.Abstractions
+namespace FFXIVVenues.BotGateway.Infrastructure.Context.Abstractions
 {
     public interface ISessionProvider
     {

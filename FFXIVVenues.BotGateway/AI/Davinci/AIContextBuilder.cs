@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 
-namespace FFXIVVenues.Veni.AI.Davinci;
+namespace FFXIVVenues.BotGateway.AI.Davinci;
 
 internal class AiContextBuilder : IAIContextBuilder
 {

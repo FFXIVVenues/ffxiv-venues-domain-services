@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueControl.VenueOpening.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueOpening.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueOpening.ComponentHandlers;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueOpening.ComponentHandlers;
 
 public class OpenHandler : IComponentHandler
 {

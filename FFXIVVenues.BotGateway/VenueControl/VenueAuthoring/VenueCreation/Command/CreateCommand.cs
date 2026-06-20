@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Intent;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Intent;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueAuthoring.VenueCreation.Command
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueCreation.Command
 {
     public static class CreateCommand
     {

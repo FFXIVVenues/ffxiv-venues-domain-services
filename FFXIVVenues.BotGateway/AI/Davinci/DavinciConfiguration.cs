@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.AI.Davinci
+﻿namespace FFXIVVenues.BotGateway.AI.Davinci
 {
     public class DavinciConfiguration
     {

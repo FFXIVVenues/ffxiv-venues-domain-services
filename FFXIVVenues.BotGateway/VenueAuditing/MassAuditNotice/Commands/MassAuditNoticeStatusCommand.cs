@@ -1,13 +1,13 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Commands;
-using FFXIVVenues.Veni.Infrastructure.Commands.Attributes;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditNotice.Commands
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice.Commands
 {
     [DiscordCommand("massaudit notice status", "Get a brief update on the progress of a current notice.")] 
     public class MassAuditNoticeStatusCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler

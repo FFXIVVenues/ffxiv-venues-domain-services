@@ -1,4 +1,4 @@
-namespace FFXIVVenues.Veni.Utils;
+namespace FFXIVVenues.BotGateway.Utils;
 
 public enum CacheResult
 {

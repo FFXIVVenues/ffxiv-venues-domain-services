@@ -5,12 +5,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.VenueModels;
 
 using Serilog;
 
-namespace FFXIVVenues.Veni.Api;
+namespace FFXIVVenues.BotGateway.Api;
 
 internal class ApiService(HttpClient httpClient) : IApiService
 {

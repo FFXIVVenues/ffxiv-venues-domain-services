@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.VenueControl;
+﻿namespace FFXIVVenues.BotGateway.VenueControl;
 
 public class SessionKeys
 {

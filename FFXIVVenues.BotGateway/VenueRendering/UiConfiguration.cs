@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.VenueRendering
+﻿namespace FFXIVVenues.BotGateway.VenueRendering
 {
     public class UiConfiguration
     {

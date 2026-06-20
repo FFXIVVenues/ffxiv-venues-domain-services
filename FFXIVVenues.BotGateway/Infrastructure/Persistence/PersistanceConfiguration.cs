@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Persistence;
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Persistence;
 
 public class PersistenceConfiguration
 {

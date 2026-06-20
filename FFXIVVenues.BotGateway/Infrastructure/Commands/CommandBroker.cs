@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 
-namespace FFXIVVenues.Veni.Infrastructure.Commands;
+namespace FFXIVVenues.BotGateway.Infrastructure.Commands;
 
 internal class CommandBroker(IServiceProvider serviceProvider, IConfiguration config) : ICommandBroker
 {

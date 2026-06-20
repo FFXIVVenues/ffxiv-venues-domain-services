@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction
+namespace FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction
 {
     public interface IRepository
     {

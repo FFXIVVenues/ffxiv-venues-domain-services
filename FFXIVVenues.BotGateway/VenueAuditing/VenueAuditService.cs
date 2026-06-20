@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public class VenueAuditService(
     IDiscordClient client,

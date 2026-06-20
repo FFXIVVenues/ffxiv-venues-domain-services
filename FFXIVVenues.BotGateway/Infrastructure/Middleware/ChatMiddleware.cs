@@ -1,12 +1,12 @@
-﻿using FFXIVVenues.Veni.Utils;
-using Kana.Pipelines;
+﻿using Kana.Pipelines;
 using System;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.AI.Davinci;
-using FFXIVVenues.Veni.Infrastructure.Context;
 using Serilog;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.AI.Davinci;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     internal class ChatMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

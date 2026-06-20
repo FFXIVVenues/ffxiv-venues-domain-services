@@ -1,6 +1,6 @@
 using FFXIVVenues.DomainData.Entities.Flags;
 
-namespace FFXIVVenues.VenueService.Client.Events;
+namespace FFXIVVenues.BotGateway.VenueEvents;
 
 public record VenueCreatedEvent(string VenueId, ulong UserId);
 public record VenueEditEvent(string VenueId, ulong UserId);

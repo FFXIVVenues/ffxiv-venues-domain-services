@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.VenueControl.VenueDeletion.SessionStates;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.VenueControl;
+using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.SessionStates;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueDeletion.ComponentHandlers;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueDeletion.ComponentHandlers;
 
 public class DeleteHandler(IAuthorizer authorizer, IApiService apiService) : IComponentHandler
 {

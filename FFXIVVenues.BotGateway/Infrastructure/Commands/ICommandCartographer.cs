@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Discord;
 
-namespace FFXIVVenues.Veni.Infrastructure.Commands;
+namespace FFXIVVenues.BotGateway.Infrastructure.Commands;
 
 public interface ICommandCartographer
 {

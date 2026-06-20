@@ -2,16 +2,15 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Components;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils.Broadcasting;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers;
-using FFXIVVenues.Veni.VenueAuditing.ComponentHandlers.AuditResponse;
-using FFXIVVenues.Veni.VenueControl;
-using FFXIVVenues.Veni.VenueRendering;
+using FFXIVVenues.BotGateway.Infrastructure.Components;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers.AuditResponse;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.Veni.VenueAuditing;
 using FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.Veni.VenueAuditing;
+namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public class VenueAudit
 {

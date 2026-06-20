@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Authorisation.Blacklist;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Utils;
+using FFXIVVenues.BotGateway.Authorisation.Blacklist;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Utils;
 using MongoDB.Driver;
 using Serilog;
 
-namespace FFXIVVenues.Veni.Infrastructure.Persistence;
+namespace FFXIVVenues.BotGateway.Infrastructure.Persistence;
 
 public class MongoDbRepository : IRepository, IDisposable
 {

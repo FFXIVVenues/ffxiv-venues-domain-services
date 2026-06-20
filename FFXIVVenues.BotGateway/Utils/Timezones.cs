@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using TimeZoneMap = (string TimeZoneKey, string TimeZoneLabel);
 
-namespace FFXIVVenues.Veni.Utils;
+namespace FFXIVVenues.BotGateway.Utils;
 
 public static class TimeZones
 {

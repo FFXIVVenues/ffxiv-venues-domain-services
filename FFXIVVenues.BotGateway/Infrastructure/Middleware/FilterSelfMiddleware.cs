@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using FFXIVVenues.Veni.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
 using Kana.Pipelines;
 
-namespace FFXIVVenues.Veni.Infrastructure.Middleware
+namespace FFXIVVenues.BotGateway.Infrastructure.Middleware
 {
     class FilterSelfMiddleware : IMiddleware<MessageVeniInteractionContext>
     {

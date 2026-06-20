@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using FFXIVVenues.Veni.Infrastructure.Persistence.Abstraction;
-using FFXIVVenues.Veni.Infrastructure.Tasks;
-using FFXIVVenues.Veni.Utils;
-using FFXIVVenues.Veni.Utils.Broadcasting;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.BotGateway.Infrastructure.Tasks;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.Utils.Broadcasting;
 using Serilog;
-using TaskStatus = FFXIVVenues.Veni.Infrastructure.Tasks.TaskStatus;
+using TaskStatus = FFXIVVenues.BotGateway.Infrastructure.Tasks.TaskStatus;
 
-namespace FFXIVVenues.Veni.VenueAuditing.MassAuditNotice;
+namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice;
 
 public class MassNoticeService(IRepository repository, IDiscordClient discordClient) 
     : BaseTaskService<MassNoticeTask>(repository)

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FFXIVVenues.Veni.Api;
-using FFXIVVenues.Veni.Authorisation;
-using FFXIVVenues.Veni.Infrastructure.Context;
-using FFXIVVenues.Veni.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.Api;
+using FFXIVVenues.BotGateway.Authorisation;
+using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Context.SessionHandling;
+using FFXIVVenues.BotGateway.VenueControl;
 
-namespace FFXIVVenues.Veni.VenueControl.VenueClosing.SessionStates;
+namespace FFXIVVenues.BotGateway.VenueControl.VenueClosing.SessionStates;
 
 internal class EndCurrentOpeningState(IApiService apiService, IAuthorizer authorizer) : ISessionState
 {

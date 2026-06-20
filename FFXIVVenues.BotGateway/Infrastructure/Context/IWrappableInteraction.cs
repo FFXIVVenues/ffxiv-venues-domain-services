@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.Veni.Infrastructure.Context
+﻿namespace FFXIVVenues.BotGateway.Infrastructure.Context
 {
     public interface IWrappableInteraction
     {
