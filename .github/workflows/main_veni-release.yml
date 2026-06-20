@@ -1,0 +1,15 @@
+name: "* Publish Production Veni"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_production_veni:
+    name: Publish Production Veni
+    uses: ./.github/workflows/publish-veni.yml
+    with:
+      branch: main
+      tag: latest
+    secrets: inherit

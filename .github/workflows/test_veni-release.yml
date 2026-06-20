@@ -1,0 +1,15 @@
+name: "* Publish Test Veni"
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  publish_test_veni:
+    name: Publish Test Veni
+    uses: ./.github/workflows/publish-veni.yml
+    with:
+      branch: test
+      tag: test
+    secrets: inherit
