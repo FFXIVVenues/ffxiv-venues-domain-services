@@ -1,0 +1,8 @@
+name: Local
+variables:
+  - name: base-url
+    value: localhost:5000
+  - secret: true
+    name: api-key
+  - name: scheme
+    value: http

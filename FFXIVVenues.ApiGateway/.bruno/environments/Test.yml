@@ -1,0 +1,8 @@
+name: Test
+variables:
+  - name: base-url
+    value: api.ffxivvenues.dev
+  - secret: true
+    name: api-key
+  - name: scheme
+    value: https

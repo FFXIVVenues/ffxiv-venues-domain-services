@@ -39,6 +39,15 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<int>("Resolution")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("ResolutionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("ResolvedBy")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SourceAddress")
                         .IsRequired()
                         .HasColumnType("text");

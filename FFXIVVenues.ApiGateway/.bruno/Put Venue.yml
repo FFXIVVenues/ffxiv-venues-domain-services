@@ -1,0 +1,115 @@
+info:
+  name: Put Venue
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: "{{scheme}}://{{base-url}}/v1.0/venue/{{?Venue Id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "id": "VKD3k2M7lkq0",
+        "name": "Nevermore",
+        "bannerUri": "https://images.ffxivvenues.com/VKD3k2M7lkq0/cjwWH0pPm4Tc",
+        "added": "2026-06-03T02:41:59.714385+00:00",
+        "description": [
+          "Nevermore is an 18+ RP friendly goth cyberpunk club with a focus on metal, pop punk, and alt rock music. Located in Jenova at The Goblet, Ward 18, Plot 11 and open Wednesday's from 6PM to 12AM EST."
+        ],
+        "location": {
+          "dataCenter": "Aether",
+          "world": "Jenova",
+          "district": "Goblet",
+          "ward": 18,
+          "plot": 11,
+          "apartment": 0,
+          "room": 0,
+          "subdivision": false,
+          "shard": null,
+          "override": null
+        },
+        "website": "https://nevermorexiv.carrd.co/#",
+        "discord": "https://discord.gg/KPc5gEkkhu",
+        "hiring": false,
+        "sfw": false,
+        "schedule": [
+          {
+            "commencing": null,
+            "day": 2,
+            "start": {
+              "hour": 18,
+              "minute": 0,
+              "timeZone": "America/New_York",
+              "nextDay": false
+            },
+            "end": {
+              "hour": 0,
+              "minute": 0,
+              "timeZone": "America/New_York",
+              "nextDay": true
+            },
+            "interval": {
+              "intervalType": 0,
+              "intervalArgument": 1
+            },
+            "location": null,
+            "resolution": {
+              "start": "2026-06-03T18:00:00-04:00",
+              "end": "2026-06-04T00:00:00-04:00",
+              "isNow": true,
+              "isWithinWeek": true
+            },
+            "utc": {
+              "from": null,
+              "day": 2,
+              "start": {
+                "hour": 22,
+                "minute": 0,
+                "timeZone": "UTC",
+                "nextDay": false
+              },
+              "end": {
+                "hour": 4,
+                "minute": 0,
+                "timeZone": "UTC",
+                "nextDay": true
+              },
+              "location": null
+            }
+          }
+        ],
+        "scheduleOverrides": [],
+        "notices": [],
+        "managers": [
+          "172173810798166016"
+        ],
+        "tags": [
+          "Nightclub",
+          "Other",
+          "Courtesans",
+          "Drink",
+          "Twitch DJ",
+          "Sync DJ",
+          "Bar",
+          "Photography",
+          "Syncshell available"
+        ],
+        "approved": true,
+        "lastModified": "2026-06-03T02:42:00.230486+00:00",
+        "mareCode": null,
+        "marePassword": null,
+        "resolution": {
+          "start": "2026-06-03T18:00:00-04:00",
+          "end": "2026-06-04T00:00:00-04:00",
+          "isNow": true,
+          "isWithinWeek": true
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

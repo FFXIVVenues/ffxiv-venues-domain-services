@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="SelectVenueToEdit" xml:space="preserve">
+        <value>Which venue would you like to edit? 🤔</value>
+    </data>
+    <data name="Dismissed" xml:space="preserve">
+        <value>Okay! Let me know if you need anything. 💕 </value>
+    </data>
+    <data name="AskForDescriptionMessage" xml:space="preserve">
+        <value>Could you give me an ad or **description** of the venue? Something for players to read when they click on your venue.</value>
+    </data>
+    <data name="AskForNameMessage" xml:space="preserve">
+        <value>Great, what is the **name**? 🙂</value>
+    </data>
+    <data name="AskIfHasMareMessage" xml:space="preserve">
+        <value>Does your venue have a public **Mare SyncShell**?</value>
+    </data>
+    <data name="AskForMareIdMessage" xml:space="preserve">
+        <value>Nicuu! 💕 What's the **SyncShell ID/Alias**?</value>
+    </data>
+    <data name="AskForMarePasswordMessage" xml:space="preserve">
+        <value>and the **SyncShell password**?</value>
+    </data>
+    <data name="AskForOpenTimeMessage" xml:space="preserve">
+        <value>What time do you **open**?</value>
+    </data>
+    <data name="AskForCloseTimeMessage" xml:space="preserve">
+        <value>What time do you **close**?</value>
+    </data>
+    <data name="AskForOpenTimeOnDayMessage" xml:space="preserve">
+        <value>What time do you **open** on **{0}**?</value>
+    </data>
+    <data name="AskForCloseTimeOnDayMessage" xml:space="preserve">
+        <value>What time do you **close** on **{0}**?</value>
+    </data>
+    <data name="AskIfHasSchedule" xml:space="preserve">
+        <value>Oki! Do you have a weekly opening schedule?</value>
+    </data>
+    <data name="DescriptionHasWeeklySchedule" xml:space="preserve">
+        <value>Yes, our openings are every week.</value>
+    </data>
+    <data name="DescriptionHasBiweeklySchedule" xml:space="preserve">
+        <value>Yes, our openings are every 2 weeks</value>
+    </data>
+    <data name="DescriptionHasNoSchedule" xml:space="preserve">
+        <value>No, we don't have a set schedule</value>
+    </data>
+    <data name="NoPermission" xml:space="preserve">
+        <value>Aaaah. You'll need to [create a ticket](https://discord.com/channels/942536163959406632/1188579990271434883) and ask staff in the FFXIV Venues discord to change this part of your venue information. 😊</value>
+    </data>
+    <data name="OpeningTooLong" xml:space="preserve">
+         <value>Aaaah, that's a long opening, max is **7 hours**. 😢 </value>
+    </data>
+    <data name="DescriptionHasMonthlySchedule" xml:space="preserve">
+        <value>Yes, our openings are on a particular day of every month.</value>
+    </data>
+    <data name="OptionWeekly" xml:space="preserve">
+        <value>Weekly</value>
+    </data>
+    <data name="OptionBiweekly" xml:space="preserve">
+        <value>Biweekly</value>
+    </data>
+    <data name="OptionMonthly" xml:space="preserve">
+        <value>Monthly</value>
+    </data>
+    <data name="OptionNoSchedule" xml:space="preserve">
+        <value>No schedule</value>
+    </data>
+    <data name="AskForCommencementMessage" xml:space="preserve">
+        <value>When is your next **{0}** opening?</value>
+    </data>
+    <data name="AskWhenInMonthMessage" xml:space="preserve">
+        <value>Which **{0}**s of the month are you open?</value>
+    </data>
+    <data name="AskForOpeningTimeZone" xml:space="preserve">
+        <value>What **timezone** is the opening in?</value>
+    </data>
+    <data name="AskForClosingTimeZone" xml:space="preserve">
+        <value>What **timezone** is the closing in?</value>
+    </data>
+    <data name="AskForTimeOfOpening" xml:space="preserve">
+        <value>What **time** is the opening from?</value>
+    </data>
+    <data name="AskForTimeOfClosing" xml:space="preserve">
+        <value>What **time** is the closing from?</value>
+    </data>
+    <data name="AskIfClosingIsNowOrLater" xml:space="preserve">
+        <value>When is your closing?</value>
+    </data>
+    <data name="AskIfOpeningIsNowOrLater" xml:space="preserve">
+        <value>When is your opening?</value>
+    </data>
+    <data name="AskForHowLongClosingFor" xml:space="preserve">
+        <value>And how long are we closing for? 🥹</value>
+    </data>
+    <data name="AskForHowLongOpeningFor" xml:space="preserve">
+        <value>Yay, how long are we opening for? 🥰</value>
+    </data>
+    <data name="AskForDayOfClosing" xml:space="preserve">
+        <value>Oki, what **day** is this closing from?</value>
+    </data>
+    
+    <data name="AskForDayOfOpening" xml:space="preserve">
+        <value>What **day** is this opening from? 🥰</value>
+    </data>
+    <data name="VenueNowClosed" xml:space="preserve">
+        <value>Okay! I'll lock up! I can't wait til we reopen. 🥰</value>
+    </data>
+    <data name="VenueOpenLater" xml:space="preserve">
+        <value>Wooo! We're all set. I can't wait! ♥️</value>
+    </data>
+    <data name="VenueNowOpen" xml:space="preserve">
+        <value>Yay! You're glowing pink on the index. Let's have fun today! ♥️</value>
+    </data>
+    <data name="VenueOpeningEnded" xml:space="preserve">
+        <value>Okay! All closed up, I hope you had fun! ♥️</value>
+    </data>
+    <data name="AskForOpeningToCancel" xml:space="preserve">
+        <value>Okay! Which opening do you want to cancel? 🥰</value>
+    </data>
+    <data name="VenueClosureEnded" xml:space="preserve">
+        <value>Yay! I've removed your closure status. Welcome back! ♥️</value>
+    </data>
+    <data name="AskForClosureToCancel" xml:space="preserve">
+        <value>Okay! Which closure do you wish to cancel? 🥰</value>
+    </data>
+    <data name="VenueClosureCancelled" xml:space="preserve">
+        <value>Yay! I've cancelled the closure! 🥰</value>
+    </data>
+    <data name="VenueOpeningCancelled" xml:space="preserve">
+        <value>Yay! I've cancelled the opening. 🥲</value>
+    </data>
+    <data name="AskForScenesMessage" xml:space="preserve">
+        <value>Oki! Select the **scenes** that best describe your venue (maximum 2). 🙂</value>
+    </data>
+    <data name="AskForFeaturesMessage" xml:space="preserve">
+        <value>Now, select all the **features** that apply to your venue. 😊</value>
+    </data>
+    <data name="AskForGamesMessage" xml:space="preserve">
+        <value>Select all the **games** your venue features. 👾</value>
+    </data>
+    <data name="TagLabel_TripleTriad" xml:space="preserve">
+        <value>Triple triad</value>
+    </data>
+    <data name="TagDescription_TripleTriad" xml:space="preserve">
+        <value>The venue offers individual or competitive games of Triple Triad via the game interface itself.</value>
+    </data>
+    <data name="TagLabel_TruthOrDare" xml:space="preserve">
+        <value>Truth or dare</value>
+    </data>
+    <data name="TagDescription_TruthOrDare" xml:space="preserve">
+        <value>The venue offers a game of Truth or Dare for whomever feels like joining.</value>
+    </data>
+    <data name="TagLabel_Blackjack" xml:space="preserve">
+        <value>Blackjack</value>
+    </data>
+    <data name="TagDescription_Blackjack" xml:space="preserve">
+        <value>The venue holds a table for players who wish to gamble gil in a game of 21.</value>
+    </data>
+    <data name="TagLabel_Deathroll" xml:space="preserve">
+        <value>Deathroll</value>
+    </data>
+    <data name="TagDescription_Deathroll" xml:space="preserve">
+        <value>The venue offers individual or competitive game of Deathroll usually with prizes involved.</value>
+    </data>
+    <data name="TagLabel_TexasHoldem" xml:space="preserve">
+        <value>Texas holdem</value>
+    </data>
+    <data name="TagDescription_TexasHoldem" xml:space="preserve">
+        <value>The venue holds a table for players who wish to gamble gil in a game of Texas holdem.</value>
+    </data>
+    <data name="TagLabel_Bingo" xml:space="preserve">
+        <value>Bingo</value>
+    </data>
+    <data name="TagDescription_Bingo" xml:space="preserve">
+        <value>The venue holds a venue wide bingo game, usually with prizes involved.</value>
+    </data>
+    <data name="TagLabel_Roulette" xml:space="preserve">
+        <value>Roulette</value>
+    </data>
+    <data name="TagDescription_Roulette" xml:space="preserve">
+        <value>The venue holds a table for players who wish to gamble gil in a game of Roulette.</value>
+    </data>
+    <data name="TagLabel_Courtesans" xml:space="preserve">
+        <value>Courtesans</value>
+    </data>
+    <data name="TagDescription_Courtesans" xml:space="preserve">
+        <value>The venue offers erotic role-play services in a consensual environment.</value>
+    </data>
+    <data name="TagLabel_Gambling" xml:space="preserve">
+        <value>Gambling</value>
+    </data>
+    <data name="TagDescription_Gambling" xml:space="preserve">
+        <value>The venue offers various games of chance with set amounts of gils and house rules.</value>
+    </data>
+    <data name="TagLabel_Artists" xml:space="preserve">
+        <value>Artists</value>
+    </data>
+    <data name="TagDescription_Artists" xml:space="preserve">
+        <value>Artists are present in the venue to offer various custom artwork.</value>
+    </data>
+    <data name="TagLabel_Dancers" xml:space="preserve">
+        <value>Dancers</value>
+    </data>
+    <data name="TagDescription_Dancers" xml:space="preserve">
+        <value>Dancers populate the venue to hype the party and/or host customers.</value>
+    </data>
+    <data name="TagLabel_Bards" xml:space="preserve">
+        <value>Bards</value>
+    </data>
+    <data name="TagDescription_Bards" xml:space="preserve">
+        <value>A bard provides theme-based or general music to entertain guests with a selection of songs.</value>
+    </data>
+    <data name="TagLabel_Food" xml:space="preserve">
+        <value>Food</value>
+    </data>
+    <data name="TagDescription_Food" xml:space="preserve">
+        <value>The venue offers food in their service.</value>
+    </data>
+    <data name="TagLabel_Drink" xml:space="preserve">
+        <value>Drink</value>
+    </data>
+    <data name="TagDescription_Drink" xml:space="preserve">
+        <value>The venue offers drinks in their service, this may be soft drinks or include alcohol.</value>
+    </data>
+    <data name="TagLabel_TwitchDJ" xml:space="preserve">
+        <value>Twitch DJ</value>
+    </data>
+    <data name="TagDescription_TwitchDJ" xml:space="preserve">
+        <value>The venue hosts a DJ who provides music in twitch streams and hype the venue.</value>
+    </data>
+    <data name="TagLabel_SyncDJ" xml:space="preserve">
+        <value>Sync DJ</value>
+    </data>
+    <data name="TagDescription_SyncDJ" xml:space="preserve">
+        <value>The venue hosts a sync DJ who offers music via a syncshell.</value>
+    </data>
+    <data name="TagLabel_Bar" xml:space="preserve">
+        <value>Bar</value>
+    </data>
+    <data name="TagDescription_Bar" xml:space="preserve">
+        <value>The venue offers a bar in the environment.</value>
+    </data>
+    <data name="TagLabel_Tarot" xml:space="preserve">
+        <value>Tarot</value>
+    </data>
+    <data name="TagDescription_Tarot" xml:space="preserve">
+        <value>A Tarot Reader offers to read drawn cards and provide insights about their possible meaning.</value>
+    </data>
+    <data name="TagLabel_PillowTalk" xml:space="preserve">
+        <value>Pillow talk</value>
+    </data>
+    <data name="TagDescription_PillowTalk" xml:space="preserve">
+        <value>Pillows provide a safe, confidential space to promote SFW companionship for a limited time.</value>
+    </data>
+    <data name="TagLabel_Photography" xml:space="preserve">
+        <value>Photography</value>
+    </data>
+    <data name="TagDescription_Photography" xml:space="preserve">
+        <value>Photographers take snapshots or complex gpose of guests to create memories.</value>
+    </data>
+    <data name="TagLabel_OpenStage" xml:space="preserve">
+        <value>Open stage</value>
+    </data>
+    <data name="TagDescription_OpenStage" xml:space="preserve">
+        <value>The venue offers the stage for a patron to perform to the audience.</value>
+    </data>
+    <data name="TagLabel_Void" xml:space="preserve">
+        <value>Void</value>
+    </data>
+    <data name="TagDescription_Void" xml:space="preserve">
+        <value>The venue is build in the void; created outside the walls of the house.</value>
+    </data>
+    <data name="TagLabel_Stylists" xml:space="preserve">
+        <value>Stylists</value>
+    </data>
+    <data name="TagDescription_Stylists" xml:space="preserve">
+        <value>Stylists offer various glamour services, including hair styling, makeup, and wardrobe assistance.</value>
+    </data>
+    <data name="TagLabel_NovelPerformances" xml:space="preserve">
+        <value>Novel performances</value>
+    </data>
+    <data name="TagDescription_NovelPerformances" xml:space="preserve">
+        <value>Unique scheduled performances, ranging from SFW (theater) to NSFW (voyeur shows, BDSM). </value>
+    </data>
+    <data name="TagLabel_Giveaways" xml:space="preserve">
+        <value>Giveaways</value>
+    </data>
+    <data name="TagDescription_Giveaways" xml:space="preserve">
+        <value>The venue offers giveaways through various channels, in chat, twitch stream or discord.</value>
+    </data>
+    <data name="TagLabel_SyncshellAvailable" xml:space="preserve">
+        <value>Syncshell available</value>
+    </data>
+    <data name="TagDescription_SyncshellAvailable" xml:space="preserve">
+        <value>This venue has a syncshell available for guests to join and see each other as they see themselves.</value>
+    </data>
+    <data name="TagLabel_VIPAvailable" xml:space="preserve">
+        <value>VIP available</value>
+    </data>
+    <data name="TagDescription_VIPAvailable" xml:space="preserve">
+        <value>Various perks through VIP tiers. This could include free drinks, gpose, gambling perks or more.</value>
+    </data>
+    <data name="TagLabel_LgbtqiaFocused" xml:space="preserve">
+        <value>LGBTQIA+ focused</value>
+    </data>
+    <data name="TagDescription_LgbtqiaFocused" xml:space="preserve">
+        <value>The venue is a safe space focused on LGBTQIA+.</value>
+    </data>
+    <data name="TagLabel_IcRpEncouraged" xml:space="preserve">
+        <value>IC RP encouraged</value>
+    </data>
+    <data name="TagDescription_IcRpEncouraged" xml:space="preserve">
+        <value>Encourages role play as characters, though interacting as themselves is allowed.</value>
+    </data>
+    <data name="TagLabel_IcRpOnly" xml:space="preserve">
+        <value>IC RP only</value>
+    </data>
+    <data name="TagDescription_IcRpOnly" xml:space="preserve">
+        <value>Environment for players to role play as their characters only; no open interaction as themselves.</value>
+    </data>
+    <data name="TagLabel_OpenHouse247" xml:space="preserve">
+        <value>24/7 open house</value>
+    </data>
+    <data name="TagDescription_OpenHouse247" xml:space="preserve">
+        <value>This venue allows anyone to visit at anytime, even outside of any scheduled hours.</value>
+    </data>
+    <data name="SceneLabel_Nightclub" xml:space="preserve">
+        <value>Nightclub</value>
+    </data>
+    <data name="SceneLabel_Den" xml:space="preserve">
+        <value>Den</value>
+    </data>
+    <data name="SceneLabel_Cafe" xml:space="preserve">
+        <value>Cafe</value>
+    </data>
+    <data name="SceneLabel_Tavern" xml:space="preserve">
+        <value>Tavern</value>
+    </data>
+    <data name="SceneLabel_Inn" xml:space="preserve">
+        <value>Inn</value>
+    </data>
+    <data name="SceneLabel_Lounge" xml:space="preserve">
+        <value>Lounge</value>
+    </data>
+    <data name="SceneLabel_BathHouse" xml:space="preserve">
+        <value>Bath house</value>
+    </data>
+    <data name="SceneLabel_Restaurant" xml:space="preserve">
+        <value>Restaurant</value>
+    </data>
+    <data name="SceneLabel_Fightclub" xml:space="preserve">
+        <value>Fightclub</value>
+    </data>
+    <data name="SceneLabel_Casino" xml:space="preserve">
+        <value>Casino</value>
+    </data>
+    <data name="SceneLabel_Shop" xml:space="preserve">
+        <value>Shop</value>
+    </data>
+    <data name="SceneLabel_MaidCafe" xml:space="preserve">
+        <value>Maid cafe / Host club</value>
+    </data>
+    <data name="SceneLabel_Other" xml:space="preserve">
+        <value>Other</value>
+    </data>
+    <data name="SfwLabel_True" xml:space="preserve">
+        <value>Yes, it's safe on entry</value>
+    </data>
+    <data name="SfwDescription_True" xml:space="preserve">
+        <value>The venue is SFW in the open area.</value>
+    </data>
+    <data name="SfwLabel_False" xml:space="preserve">
+        <value>No, we're openly NSFW</value>
+    </data>
+    <data name="SfwDescription_False" xml:space="preserve">
+        <value>The venue contains adult content in the open area.</value>
+    </data>
+    <data name="LocationTypeLabel_House" xml:space="preserve">
+        <value>A house</value>
+    </data>
+    <data name="LocationTypeLabel_Room" xml:space="preserve">
+        <value>A room in a house</value>
+    </data>
+    <data name="LocationTypeLabel_Apartment" xml:space="preserve">
+        <value>An apartment</value>
+    </data>
+    <data name="LocationTypeLabel_Other" xml:space="preserve">
+        <value>Other</value>
+    </data>
+    <data name="UnstaffedOpeningsNotSupported" xml:space="preserve">
+        <value>### Unstaffed openings are not supported
+
+We do not support 'always open houses' or unstaffed openings, please only list explicitly scheduled staffed openings; if you do so anyway the team may remove your schedule/venue following enough flags from the community. If you do have a regular staffed opening longer than 7 hours please [create a ticket](https://discord.com/channels/942536163959406632/1188579990271434883), staff can override this for you. </value>
+    </data>
+</root>
