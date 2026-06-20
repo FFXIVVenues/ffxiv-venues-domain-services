@@ -41,7 +41,7 @@ jobs:
             image: ffxivvenues.apigateway
           - name: BotGateway
             path: FFXIVVenues.BotGateway
-            image: ffxivvenues.BotGateway
+            image: ffxivvenues.botgateway
           - name: FlagService
             path: FFXIVVenues.FlagService
             image: ffxivvenues.flagservice
