@@ -1,26 +1,25 @@
-FROM ubuntu:latest AS base
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
+COPY ./FFXIVVenues.OGCardService /src/FFXIVVenues.OGCardService
+COPY ./FFXIVVenues.DomainData /src/FFXIVVenues.DomainData
+
+RUN dotnet publish /src/FFXIVVenues.OGCardService.csproj -c Release -o /src/build
+
+#-----
+
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS final
+
 ENV TZ=Etc/Utc
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update
-RUN apt install -y wget libcurl4 tzdata libicu74
-
-RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-RUN chmod +x dotnet-install.sh
-RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
-
-FROM base AS build
-COPY ./FFXIVVenues.OGCardService /src/FFXIVVenues.OGCardService
-COPY ./FFXIVVenues.DomainData /src/FFXIVVenues.DomainData
-RUN ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet
-RUN dotnet publish /src/FFXIVVenues.OGCardService/FFXIVVenues.OGCardService.csproj -c Release -o /src/build
-
-FROM base AS final
-
-RUN ./dotnet-install.sh --channel 10.0 --runtime aspnetcore --install-dir /usr/share/dotnet
-
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
+RUN apt install -y tzdata
+WORKDIR /app
 EXPOSE 80
 
-WORKDIR /appim g
+ENV ASPNETCORE_URLS=http://0.0.0.0:80
+ENV FFXIV_VENUES_API__HttpsOnly=False
+EXPOSE 80
+
+WORKDIR /app
 COPY --from=build /src/build .
 ENTRYPOINT ["dotnet", "FFXIVVenues.OGCardService.dll"]
