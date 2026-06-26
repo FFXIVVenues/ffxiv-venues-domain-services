@@ -7,7 +7,7 @@ RUN dotnet publish /src/FFXIVVenues.OGCardService/FFXIVVenues.OGCardService.cspr
 
 #-----
 
-FROM mcr.microsoft.com/dotnet/runtime:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 
 ENV TZ=Etc/Utc
 ENV DEBIAN_FRONTEND=noninteractive
