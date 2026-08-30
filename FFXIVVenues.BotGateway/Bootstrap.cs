@@ -7,7 +7,6 @@ using OfficeOpenXml;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
 using FFXIVVenues.BotGateway.AI.Clu;
 using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
-using FFXIVVenues.BotGateway.VenueObservations;
 using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.BotGateway.Infrastructure.Commands;
 using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
@@ -57,7 +56,6 @@ builder.Services.AddSingleton<ISessionProvider, SessionProvider>();
 builder.Services.AddSingleton<ICluClient, CluClient>();
 builder.Services.AddSingleton<IVenueAuditService, VenueAuditService>();
 builder.Services.AddSingleton<IVenueRenderer, VenueRenderer>();
-builder.Services.AddSingleton<IApiObservationService, ApiObservationService>();
 builder.Services.AddSingleton<IInteractionContextFactory, InteractionContextFactory>();
 builder.Services.AddSingleton<ICommandCartographer, CommandCartographer>();
 builder.Services.AddSingleton<IMassAuditService, MassAuditService>();
@@ -85,14 +83,9 @@ commandBroker.Add<ShowCountCommand.CommandFactory, ShowCountCommand.CommandHandl
 commandBroker.Add<GetUnapprovedCommand.CommandFactory, GetUnapprovedCommand.CommandHandler>(GetUnapprovedCommand.COMMAND_NAME, isMasterGuildCommand: false);
 
 app.Services.GetService<IComponentBroker>()
-    .AddVenueObservationHandlers()
     .AddVenueAuditingHandlers()
     .AddVenueControlHandlers()
     .AddVenueRenderingHandlers()
     .AddVenueFlagHandlers();
-
-_ = app.Services.GetService<IApiObservationService>()
-    .AddVenueObservers()
-    .ObserveAsync();
 
 await app.RunAsync();
