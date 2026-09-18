@@ -15,8 +15,12 @@ internal static partial class Bootstrap
             opts.UseRabbitMq(rabbitServiceUrl)
                 .DeclareExchange("FFXIVVenues.Flagging.Events", e => 
                     e.BindQueue("FFXIVVenues.Veni.EventsInbox.Flagging"))
+                .DeclareExchange("FFXIVVenues.Openings.Events", e =>
+                    e.BindQueue("FFXIVVenues.Veni.EventsInbox.Openings"))
                 .AutoProvision();
             opts.ListenToRabbitQueue("FFXIVVenues.Veni.EventsInbox.Flagging");
+            opts.ListenToRabbitQueue("FFXIVVenues.Veni.EventsInbox.Openings");
+
             opts.AddFlagServiceMessages();
         });
     }

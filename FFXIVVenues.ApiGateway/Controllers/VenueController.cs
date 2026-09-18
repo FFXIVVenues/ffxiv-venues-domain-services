@@ -15,7 +15,6 @@ using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
-using FFXIVVenues.DomainData.Entities.Metrics;
 using FFXIVVenues.DomainData.Mapping;
 using FFXIVVenues.VenueModels.Observability;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +75,6 @@ public class VenueController(
 
         if (recordView == null || recordView == true)
         {
-            domainData.VenueViews.Add(new VenueView(venue));
             domainData.SaveChanges();
         }
 

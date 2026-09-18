@@ -19,13 +19,30 @@ namespace FFXIVVenues.DomainData.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Venues")
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Favorites.Favorite", b =>
+                {
+                    b.Property<decimal>("UserId")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("VenueId")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "VenueId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VenueId");
+
+                    b.ToTable("Favorite", "Patronage");
+                });
 
             modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Flags.Flag", b =>
                 {
@@ -64,26 +81,6 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.HasIndex("VenueId");
 
                     b.ToTable("Flag", "VenueFlags");
-                });
-
-            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Metrics.VenueView", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("At")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("VenueId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VenueId");
-
-                    b.ToTable("VenueViews", "VenueMetrics");
                 });
 
             modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Venues.Location", b =>
@@ -153,6 +150,40 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.HasKey("VenueId", "Id");
 
                     b.ToTable("Notices", "Venues");
+                });
+
+            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Venues.Opening", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Broadcasted")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Source")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("VenueId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Start");
+
+                    b.HasIndex("VenueId");
+
+                    b.ToTable("Opening", "Venues");
                 });
 
             modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Venues.Schedule", b =>
@@ -276,10 +307,10 @@ namespace FFXIVVenues.DomainData.Migrations
                     b.ToTable("Venues", "Venues");
                 });
 
-            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Metrics.VenueView", b =>
+            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Favorites.Favorite", b =>
                 {
                     b.HasOne("FFXIVVenues.DomainData.Entities.Venues.Venue", "Venue")
-                        .WithMany()
+                        .WithMany("Favorites")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -291,6 +322,17 @@ namespace FFXIVVenues.DomainData.Migrations
                 {
                     b.HasOne("FFXIVVenues.DomainData.Entities.Venues.Venue", "Venue")
                         .WithMany("Notices")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Venues.Opening", b =>
+                {
+                    b.HasOne("FFXIVVenues.DomainData.Entities.Venues.Venue", "Venue")
+                        .WithMany()
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -336,6 +378,8 @@ namespace FFXIVVenues.DomainData.Migrations
 
             modelBuilder.Entity("FFXIVVenues.DomainData.Entities.Venues.Venue", b =>
                 {
+                    b.Navigation("Favorites");
+
                     b.Navigation("Notices");
 
                     b.Navigation("Schedule");

@@ -45,6 +45,9 @@ jobs:
           - name: FlagService
             path: FFXIVVenues.FlagService
             image: ffxivvenues.flagservice
+          - name: ScheduleService
+            path: FFXIVVenues.ScheduleService
+            image: ffxivvenues.scheduleservice
           - name: OGCardService
             path: FFXIVVenues.OGCardService
             image: ffxivvenues.ogcardservice
@@ -91,6 +94,8 @@ jobs:
             image: ffxivvenues.botgateway
           - name: FlagService
             image: ffxivvenues.flagservice
+          - name: ScheduleService
+            image: ffxivvenues.scheduleservice
           - name: OGCardService
             image: ffxivvenues.ogcardservice
           - name: WebHookService

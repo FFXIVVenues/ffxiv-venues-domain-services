@@ -15,9 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="NDependOut\**" />
-    <EmbeddedResource Remove="NDependOut\**" />
-    <None Remove="NDependOut\**" />
     <Compile Update="VenueAuditing\AuditStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -27,6 +24,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FlagStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="VenueEvents\VenueSubscribing\SubscriptionStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SubscriptionStrings.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Update="VenueAuditing\AuditStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -58,6 +60,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FlagStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="VenueEvents\VenueSubscribing\SubscriptionStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SubscriptionStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Compile Update="AI\Davinci\ContextStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -66,7 +72,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="count.json" />
     <None Remove="FFXIVVenues.VenueModels" />
     <None Remove="PrettyPrintNet" />
     <None Remove="SixLabors.ImageSharp" />
@@ -80,7 +85,20 @@
     <PackageReference Include="EPPlus" Version="8.6.1" />
     <PackageReference Include="Kana.Pipelines" Version="2.2.0" />
     <PackageReference Include="LiteDB" Version="5.0.21" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
     <PackageReference Include="moment.net" Version="2.0.0" />
@@ -97,7 +115,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FFXIVVenues.DomainData\FFXIVVenues.DomainData.csproj" />
     <ProjectReference Include="..\FFXIVVenues.FlagService.Client\FFXIVVenues.FlagService.Client.csproj" />
+    <ProjectReference Include="..\FFXIVVenues.ScheduleService.Client\FFXIVVenues.ScheduleService.Client.csproj" />
   </ItemGroup>
 
 

@@ -10,12 +10,13 @@ public static class ServicePoint
     
     public static IServiceCollection AddDomainData(this IServiceCollection services, 
         string connectionString, 
-        string mediaUriTemplate)
+        string mediaUriTemplate = null)
     {
         services.AddScoped<DomainDataContext>();
         services.AddSingleton(new DbContextOptionsBuilder<DomainDataContext>().UseNpgsql(connectionString).Options);
         services.AddSingleton(new DomainDataConnectionString(connectionString));
-        services.AddSingleton<IMapFactory>(new MapFactory(new(mediaUriTemplate)));
+        if (mediaUriTemplate is not null)
+            services.AddSingleton<IMapFactory>(new MapFactory(new(mediaUriTemplate)));
         return services;
     }
 

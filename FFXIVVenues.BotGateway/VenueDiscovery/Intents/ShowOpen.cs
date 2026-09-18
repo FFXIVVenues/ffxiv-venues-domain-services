@@ -67,9 +67,10 @@ namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents
             var selectedVenueId = context.Interaction.Data.Values.Single();
             var asker = context.Interaction.User.Id;
             var venue = this._venues.FirstOrDefault(v => v.Id == selectedVenueId);
+            var actions = await this._venueRenderer.RenderActionComponentsAsync(context, venue, asker);
 
             await context.Interaction.Channel.SendMessageAsync(embed: this._venueRenderer.Render(venue).Build(),
-                components: this._venueRenderer.RenderActionComponents(context, venue, asker).Build());
+                components: actions.Build());
         }
     }
 }

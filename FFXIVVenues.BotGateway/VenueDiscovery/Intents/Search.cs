@@ -37,8 +37,8 @@ internal class Search(IApiService apiService, IVenueRenderer venueRenderer) : In
         {
             var venue = venues.Single();
             var render = await venueRenderer.ValidateAndRenderAsync(venue);
-            await context.Interaction.RespondAsync(embed: render.Build(),
-                component: venueRenderer.RenderActionComponents(context, venue, asker).Build());
+            var actions = await venueRenderer.RenderActionComponentsAsync(context, venue, asker);
+            await context.Interaction.RespondAsync(embed: render.Build(), component: actions.Build());
         }
     }
 

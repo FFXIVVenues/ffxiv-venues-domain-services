@@ -36,7 +36,8 @@ internal static partial class Bootstrap
             AuthorisationConfig = config.GetSection("Authorisation").Get<AuthorisationConfiguration>() ?? new(),
             DavinciConfig = config.GetSection("Davinci3").Get<DavinciConfiguration>() ?? new(),
             PresenceConfig = config.GetSection("Presence").Get<PresenceConfiguration>() ?? new(),
-            RabbitConfig = config.GetSection("Rabbit").Get<RabbitConfiguration>() ?? new()
+            RabbitConfig = config.GetSection("Rabbit").Get<RabbitConfiguration>() ?? new(),
+            ConnectionString = config.GetConnectionString("FFXIVVenues")
         };
 
         serviceCollection.AddSingleton<IConfiguration>(config);
@@ -67,4 +68,5 @@ internal class Configurations
     public DavinciConfiguration DavinciConfig { get; set; }
     public PresenceConfiguration PresenceConfig { get; set; }
     public RabbitConfiguration RabbitConfig { get; set; }
+    public string ConnectionString { get; set; }
 }

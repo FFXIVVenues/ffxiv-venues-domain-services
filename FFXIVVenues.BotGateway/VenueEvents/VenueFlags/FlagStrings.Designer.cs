@@ -61,24 +61,6 @@ namespace FFXIVVenues.BotGateway.VenueEvents.VenueFlags {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Close Venue.
-        /// </summary>
-        internal static string CloseVenue {
-            get {
-                return ResourceManager.GetString("CloseVenue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Put this venue on a hiatus for up to 3 months..
-        /// </summary>
-        internal static string CloseVenueDescription {
-            get {
-                return ResourceManager.GetString("CloseVenueDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to I couldn&apos;t forward the flag to any managers. 🥲.
         /// </summary>
         internal static string CouldNotForward {
@@ -228,6 +210,24 @@ namespace FFXIVVenues.BotGateway.VenueEvents.VenueFlags {
         internal static string SelectResponse {
             get {
                 return ResourceManager.GetString("SelectResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporarily Close Venue.
+        /// </summary>
+        internal static string TemporarilyCloseVenue {
+            get {
+                return ResourceManager.GetString("TemporarilyCloseVenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put this venue on a hiatus for up to 3 months..
+        /// </summary>
+        internal static string TemporarilyCloseVenueDescription {
+            get {
+                return ResourceManager.GetString("TemporarilyCloseVenueDescription", resourceCulture);
             }
         }
         

@@ -42,7 +42,7 @@ namespace FFXIVVenues.BotGateway.VenueDiscovery.Commands
             {
                 var venue = venues.Single();
                 await context.Interaction.RespondAsync(embed: (await venueRenderer.ValidateAndRenderAsync(venue)).Build(),
-                    components: venueRenderer.RenderActionComponents(context, venue, asker).Build());
+                    components: (await venueRenderer.RenderActionComponentsAsync(context, venue, asker)).Build());
             }
         }
 

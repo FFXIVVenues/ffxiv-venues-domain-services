@@ -30,17 +30,20 @@ using FFXIVVenues.BotGateway.UserSupport;
 using FFXIVVenues.BotGateway.VenueDiscovery.Commands;
 using FFXIVVenues.BotGateway.VenueEvents.VenueFlags;
 using FFXIVVenues.FlagService.Client;
+using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing;
+using FFXIVVenues.DomainData;
+using Serilog;
+
+ExcelPackage.License.SetNonCommercialOrganization("FFXIV Venues");
 
 var builder = Host.CreateApplicationBuilder(args);
 
 var config = Bootstrap.LoadConfiguration(builder.Services);
 Bootstrap.ConfigureLogging(builder, config);
 Bootstrap.ConfigureApiClient(builder.Services, config);
-Bootstrap.ConfigureRepository(builder.Services, config);
+Bootstrap.ConfigureData(builder.Services, config);
 Bootstrap.ConfigureDiscordClient(builder.Services, config);
 Bootstrap.ConfigureRabbit(builder, config);
-
-ExcelPackage.License.SetNonCommercialOrganization("FFXIV Venues");
 
 builder.Services.AddSingleton<ICommandBroker, CommandBroker>();
 builder.Services.AddSingleton<IComponentBroker, ComponentBroker>();
@@ -86,6 +89,11 @@ app.Services.GetService<IComponentBroker>()
     .AddVenueAuditingHandlers()
     .AddVenueControlHandlers()
     .AddVenueRenderingHandlers()
-    .AddVenueFlagHandlers();
+    .AddVenueFlagHandlers()
+    .AddVenueSubscriptionHandlers();
+
+Log.Information("Starting migrations");
+await app.Services.MigrateDomainDataAsync();
+Log.Information("Migrations complete");
 
 await app.RunAsync();

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FFXIVVenues.DomainData.Entities.Favorites;
 using Microsoft.EntityFrameworkCore;
 
 namespace FFXIVVenues.DomainData.Entities.Venues;
@@ -28,6 +29,8 @@ public class Venue
     public DateTimeOffset? Deleted { get; set; }
     public bool Approved { get; set; }
     public string? ScopeKey { get; set; }
+    [DeleteBehavior(DeleteBehavior.Cascade)] public virtual List<Favorite> Favorites { get; set; } = new();
+
 
     public Venue()
     {

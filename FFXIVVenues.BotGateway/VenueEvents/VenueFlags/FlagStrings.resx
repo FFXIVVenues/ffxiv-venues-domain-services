@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CloseVenue" xml:space="preserve">
-    <value>Close Venue</value>
+  <data name="TemporarilyCloseVenue" xml:space="preserve">
+    <value>Temporarily Close Venue</value>
   </data>
-  <data name="CloseVenueDescription" xml:space="preserve">
+  <data name="TemporarilyCloseVenueDescription" xml:space="preserve">
     <value>Put this venue on a hiatus for up to 3 months.</value>
   </data>
   <data name="CouldNotForward" xml:space="preserve">

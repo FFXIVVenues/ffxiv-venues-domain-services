@@ -29,8 +29,9 @@ internal class Show(IApiService apiService, IVenueRenderer venueRenderer) : Inte
         {
             var venue = venues.Single();
             var render = await venueRenderer.ValidateAndRenderAsync(venue);
+            var actions = await venueRenderer.RenderActionComponentsAsync(context, venue, asker);
             await context.Interaction.RespondAsync(embed: render.Build(),
-                component: venueRenderer.RenderActionComponents(context, venue, asker).Build());
+                component: actions.Build());
         }
     }
 

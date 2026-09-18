@@ -28,5 +28,11 @@ namespace FFXIVVenues.BotGateway.Utils
         public static string Fmt(this string message, params object[] args) =>
             string.Format(message, args);
 
+        public static string ToDiscordRelative(this DateTimeOffset value)
+            => $"<t:{value.ToUnixTimeSeconds()}:R>";
+
+        public static string ToDiscordShortTime(this DateTimeOffset value)
+            => $"<t:{value.ToUnixTimeSeconds()}:t>";
+
     }
 }

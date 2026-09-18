@@ -1,6 +1,6 @@
 ﻿using FFXIVVenues.DomainData.Entities;
+using FFXIVVenues.DomainData.Entities.Favorites;
 using FFXIVVenues.DomainData.Entities.Flags;
-using FFXIVVenues.DomainData.Entities.Metrics;
 using FFXIVVenues.DomainData.Entities.Venues;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -12,8 +12,9 @@ namespace FFXIVVenues.DomainData.Context;
 public class DomainDataContext(DbContextOptions<DomainDataContext> options) : DbContext(options)
 {
     public DbSet<Venue> Venues { get; set; }
-    public DbSet<VenueView> VenueViews { get; set; }
     public DbSet<Flag> Flags { get; set; }
+    public DbSet<Favorite> Favorites { get; set; }
+    public DbSet<Opening> Openings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.BotGateway.Infrastructure.Components;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
+using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
@@ -15,13 +11,21 @@ using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.EditProper
 using FFXIVVenues.BotGateway.VenueControl.VenueClosing.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueOpening.ComponentHandlers;
+using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing.Handlers;
+using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing.Models;
 using FFXIVVenues.BotGateway.VenueRendering.ComponentHandlers;
+using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.VenueModels;
 using MomentNet.Display;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FFXIVVenues.BotGateway.VenueRendering;
 
-public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, IDiscordValidator discordValidator, ISiteValidator siteValidator) : IVenueRenderer
+public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, DomainDataContext db, IDiscordValidator discordValidator, ISiteValidator siteValidator) : IVenueRenderer
 {
 
     public async Task<EmbedBuilder> ValidateAndRenderAsync(Venue venue, string bannerUrl = null,
@@ -260,12 +264,27 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, IDi
         return builder;
     }
 
-    public ComponentBuilder RenderActionComponents(IVeniInteractionContext context, Venue venue, ulong user)
+    public async Task<ComponentBuilder> RenderActionComponentsAsync(IVeniInteractionContext context, Venue venue, ulong user)
     {
+        var subscription = await db.Favorites.FindAsync(user, venue.Id);
+
         var builder = new ComponentBuilder();
         var dropDown = new SelectMenuBuilder()
             .WithValueHandlers()
             .WithPlaceholder("What would you like to do?");
+
+        if (subscription is null)
+            dropDown.AddOption(new SelectMenuOptionBuilder()
+                .WithLabel("Subscribe")
+                .WithEmote(new Emoji("🔔"))
+                .WithDescription("Get notified when this venue is scheduled to open soon")
+                .WithStaticHandler(SubscribeHandler.Key, venue.Id));
+        else
+            dropDown.AddOption(new SelectMenuOptionBuilder()
+                .WithLabel("Unsubscribe")
+                .WithEmote(new Emoji("🔔"))
+                .WithDescription("Stop notifications when this venue is scheduled to open soon")
+                .WithStaticHandler(UnsubscribeHandler.Key, venue.Id));
 
         if (authorizer.Authorize(user, Permission.OpenVenue, venue).Authorized)
             dropDown.AddOption(new SelectMenuOptionBuilder()
@@ -418,7 +437,46 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, IDi
 
         return componentBuilder;
     }
-        
+
+    public string RenderLocationString(DomainData.Entities.Venues.Location location)
+    {
+        if (!string.IsNullOrWhiteSpace(location.Override))
+        {
+            return location.Override;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append(location.DataCenter);
+        stringBuilder.Append(", ");
+        stringBuilder.Append(location.World);
+        stringBuilder.Append(", ");
+        stringBuilder.Append(location.District);
+        stringBuilder.Append(", Ward ");
+        stringBuilder.Append(location.Ward);
+        if (location.Apartment != 0 && location.Subdivision)
+        {
+            stringBuilder.Append(" Sub");
+        }
+
+        if (location.Plot != 0)
+        {
+            stringBuilder.Append(", Plot ");
+            stringBuilder.Append(location.Plot);
+            if (location.Room != 0)
+            {
+                stringBuilder.Append(", Room ");
+                stringBuilder.Append(location.Room);
+            }
+        }
+        else
+        {
+            stringBuilder.Append(", Apt ");
+            stringBuilder.Append(location.Apartment);
+        }
+
+        return stringBuilder.ToString();
+    }
+
     private static string Nth(int d)
     {
         if (d is > 3 and < 21) return "th";
@@ -467,11 +525,13 @@ public interface IVenueRenderer
     
     EmbedBuilder Render(Venue venue, string bannerUrl = null, VenueRenderFlags renderFlags = VenueRenderFlags.None);
 
-    ComponentBuilder RenderActionComponents(IVeniInteractionContext context, Venue venue, ulong user);
+    Task<ComponentBuilder> RenderActionComponentsAsync(IVeniInteractionContext context, Venue venue, ulong user);
 
     ComponentBuilder RenderEditComponents(Venue venue, ulong user);
 
     ComponentBuilder RenderVenueSelection(IEnumerable<Venue> venues, string handlerKey);
+
+    string RenderLocationString(DomainData.Entities.Venues.Location location);
 }
 
 [Flags]

@@ -48,8 +48,9 @@ namespace FFXIVVenues.BotGateway.VenueDiscovery.SessionStates
             await context.Session.ClearStateAsync(context);
 
             var render = await venueRenderer.ValidateAndRenderAsync(venue);
+            var actions = await venueRenderer.RenderActionComponentsAsync(context, venue, asker);
             await context.Interaction.FollowupAsync(embed: render.Build(),
-                components: venueRenderer.RenderActionComponents(context, venue, asker).Build());
+                components: actions.Build());
         }
 
         
