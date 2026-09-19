@@ -12,7 +12,6 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="16.1.1" />
       <PackageReference Include="FFXIVVenues.VenueModels" Version="14.2.0" />
-      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
         <PrivateAssets>all</PrivateAssets>
