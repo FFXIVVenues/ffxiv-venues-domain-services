@@ -2,12 +2,13 @@
 using FFXIVVenues.DomainData.Entities.Venues;
 using FFXIVVenues.ScheduleService.Client.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Wolverine;
 using Timer = System.Timers.Timer;
 
-internal class ScheduledOpeningSoonService(DomainDataContext db, IMessageBus bus) : IHostedService, IDisposable
+internal class ScheduledOpeningSoonService(IDbContextFactory<DomainDataContext> dbFactory, IMessageBus bus) : IHostedService, IDisposable
 {
     private Timer _timer = new Timer(TimeSpan.FromMinutes(5));
 
@@ -27,6 +28,7 @@ internal class ScheduledOpeningSoonService(DomainDataContext db, IMessageBus bus
 
     public async Task RunSearch()
     {
+        var db = await dbFactory.CreateDbContextAsync();
         Log.Information("Running scheduled broadcast for venues opening soon");
         var maxStart = DateTime.UtcNow.AddMinutes(30);
         var minEnd = DateTime.UtcNow.AddHours(1);

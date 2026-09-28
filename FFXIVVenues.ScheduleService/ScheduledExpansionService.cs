@@ -7,7 +7,7 @@ using Serilog;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-internal class ScheduledExpansionService(DomainDataContext db, ScheduleExpander expander, IServiceProvider serviceProvider) : IHostedService, IDisposable
+internal class ScheduledExpansionService(IDbContextFactory<DomainDataContext> dbFactory, ScheduleExpander expander, IServiceProvider serviceProvider) : IHostedService, IDisposable
 {
     private Timer _timer = new Timer(TimeSpan.FromHours(1));
 
@@ -27,6 +27,7 @@ internal class ScheduledExpansionService(DomainDataContext db, ScheduleExpander 
 
     public async Task RunExpansion()
     {
+        var db = await dbFactory.CreateDbContextAsync();
         Log.Information("Running scheduled expansion of all venues");
         foreach (var venue in await db.Venues.ToListAsync())
             try
