@@ -12,8 +12,8 @@ public static class ServicePoint
         string connectionString, 
         string mediaUriTemplate = null)
     {
-        services.AddScoped<DomainDataContext>();
         services.AddSingleton(new DbContextOptionsBuilder<DomainDataContext>().UseNpgsql(connectionString).Options);
+        services.AddDbContextFactory<DomainDataContext>();
         services.AddSingleton(new DomainDataConnectionString(connectionString));
         if (mediaUriTemplate is not null)
             services.AddSingleton<IMapFactory>(new MapFactory(new(mediaUriTemplate)));
