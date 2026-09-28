@@ -1,4 +1,5 @@
 ﻿using FFXIVVenues.DomainData;
+using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.VenueService.Client.Events;
 using FFXIVVenues.WebHookService;
 using Microsoft.Extensions.Configuration;
@@ -35,11 +36,15 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDomainData(connectionString, bannerUriTemplate);
 builder.Services.AddSingleton(config);
-builder.Services.AddSingleton<Signer>();
 builder.Services.AddSingleton<IEnumerable<WebHook>>(webHooks);
 builder.Services.AddSingleton<WebHookEventDistributor>();
+builder.Services.AddDomainData(connectionString, bannerUriTemplate);
+builder.Services.AddSecurityServices(o =>
+{
+    o.SigningPrivateKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PrivateKeyPath") ?? o.SigningPrivateKeyPath;
+    o.SigningPublicKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PublicKeyPath") ?? o.SigningPublicKeyPath;
+});
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>

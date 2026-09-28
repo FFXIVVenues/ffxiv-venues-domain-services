@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.VenueModels.Observability;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Dto = FFXIVVenues.VenueModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Domain = FFXIVVenues.DomainData.Entities.Venues;
+using Dto = FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.ApiGateway.Controllers;
+namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
 /// <summary>
 /// Venue approval endpoints.
@@ -21,6 +21,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue")]
 [ApiExplorerSettings(IgnoreApi = true)]
+[AllowAnonymous]
 public class MetadataController(
     IAuthorizationManager authorizationManager,
     IChangeBroker changeBroker,

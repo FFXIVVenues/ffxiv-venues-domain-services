@@ -1,3 +1,4 @@
+using FFXIVVenues.DomainSecurity;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 

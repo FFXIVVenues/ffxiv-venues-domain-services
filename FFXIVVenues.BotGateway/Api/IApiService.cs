@@ -25,5 +25,6 @@ namespace FFXIVVenues.BotGateway.Api
         Task<HttpResponseMessage> CloseVenueAsync(string id, DateTimeOffset from, DateTimeOffset to);
         Task<HttpResponseMessage> RemoveOverridesAsync(string id, DateTimeOffset from, DateTimeOffset to);
         Task<HttpResponseMessage> ApproveAsync(string id, bool approval = true);
+        string GetSsoUrl(ulong id, string redirectPath);
     }
 }

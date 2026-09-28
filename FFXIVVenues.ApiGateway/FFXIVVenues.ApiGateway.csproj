@@ -22,6 +22,7 @@
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
     <PackageReference Include="FFXIVVenues.VenueModels" Version="14.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
@@ -37,6 +38,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.9" />
+    <PackageReference Include="ScottBrady.IdentityModel" Version="4.1.0" />
     <PackageReference Include="Serilog" Version="4.3.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
@@ -52,6 +54,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FFXIVVenues.DomainData\FFXIVVenues.DomainData.csproj" />
+    <ProjectReference Include="..\FFXIVVenues.DomainSecurity\FFXIVVenues.DomainSecurity.csproj" />
     <ProjectReference Include="..\FFXIVVenues.FlagService.Client\FFXIVVenues.FlagService.Client.csproj" />
     <ProjectReference Include="..\FFXIVVenues.VenueService.Client\FFXIVVenues.VenueService.Client.csproj" />
   </ItemGroup>

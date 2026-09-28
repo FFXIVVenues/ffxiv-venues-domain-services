@@ -5,9 +5,11 @@ using FFXIVVenues.BotGateway.Authorisation.Configuration;
 using FFXIVVenues.BotGateway.Infrastructure;
 using FFXIVVenues.BotGateway.Infrastructure.Persistence;
 using FFXIVVenues.BotGateway.Infrastructure.Presence;
+using FFXIVVenues.BotGateway.Infrastructure.Security;
 using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 using FFXIVVenues.BotGateway.VenueEvents;
 using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.DomainSecurity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +25,7 @@ internal static partial class Bootstrap
             .AddEnvironmentVariables("FFXIV_VENUES_")
             .AddEnvironmentVariables("FFXIV_VENUES_VENI_")
             .Build();
-        
+
         var allConfig = new Configurations
         {
             DiscordToken = config.GetValue<string>("DiscordBotToken"),
@@ -37,6 +39,8 @@ internal static partial class Bootstrap
             DavinciConfig = config.GetSection("Davinci3").Get<DavinciConfiguration>() ?? new(),
             PresenceConfig = config.GetSection("Presence").Get<PresenceConfiguration>() ?? new(),
             RabbitConfig = config.GetSection("Rabbit").Get<RabbitConfiguration>() ?? new(),
+            SecurityConfig = config.GetSection("Security").Get<SecurityConfiguration>() ?? new(),
+
             ConnectionString = config.GetConnectionString("FFXIVVenues")
         };
 
@@ -68,5 +72,6 @@ internal class Configurations
     public DavinciConfiguration DavinciConfig { get; set; }
     public PresenceConfiguration PresenceConfig { get; set; }
     public RabbitConfiguration RabbitConfig { get; set; }
+    public SecurityConfiguration SecurityConfig { get; set; }
     public string ConnectionString { get; set; }
 }

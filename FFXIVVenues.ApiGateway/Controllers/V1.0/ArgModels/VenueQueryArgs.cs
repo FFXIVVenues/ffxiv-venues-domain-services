@@ -3,7 +3,7 @@ using System.Linq;
 using Domain = FFXIVVenues.DomainData.Entities.Venues;
 using Dto = FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.ApiGateway.Controllers.ArgModels;
+namespace FFXIVVenues.ApiGateway.Controllers.V1._0.ArgModels;
 
 public class VenueQueryArgs
 {

@@ -1,18 +1,23 @@
-﻿using System;
+﻿using Azure;
+using FFXIVVenues.BotGateway.Utils;
+using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.DomainSecurity;
+using FFXIVVenues.VenueModels;
+using Serilog;
+using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
-using FFXIVVenues.BotGateway.Utils;
-using FFXIVVenues.VenueModels;
-
-using Serilog;
 
 namespace FFXIVVenues.BotGateway.Api;
 
-internal class ApiService(HttpClient httpClient) : IApiService
+internal class ApiService(HttpClient httpClient, Signer signer, UiConfiguration uiConfiguration) : IApiService
 {
     private readonly RollingCache<Venue> _venueCache = new(60*1000, 10 * 60 * 1_000);
     private readonly RollingCache<Venue[]> _venuesCache = new(60*1000, 10 * 60 * 1_000);
@@ -201,4 +206,27 @@ internal class ApiService(HttpClient httpClient) : IApiService
         return response;
     }
 
+    public string GetSsoUrl(ulong userId, string redirectPath)
+    {
+        Log.Debug("Generating SSO URL for user {UserId} with redirect path {RedirectPath}", userId, redirectPath);
+        if (!redirectPath.StartsWith("/"))
+            redirectPath = "/" + redirectPath;
+        var fullRedirect = uiConfiguration.BaseUrl + redirectPath;
+        var nonce = Guid.CreateVersion7().ToString("N");
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        var signature = signer.Sign(httpClient.BaseAddress.Authority + HttpMethod.Get
+             + "/login/sso" + userId + fullRedirect + nonce + timestamp);
+
+        var uri = new UriBuilder(httpClient.BaseAddress) { Path = "/login/sso" }.ToString();
+        var query = new Dictionary<string, string>
+        {
+            ["userId"] = userId.ToString(),
+            ["nonce"] = nonce,
+            ["timestamp"] = timestamp.ToString(),
+            ["signature"] = signature,
+            ["redirect"] = fullRedirect
+        };
+        return QueryHelpers.AddQueryString(uri.ToString(), query);
+    }
 }

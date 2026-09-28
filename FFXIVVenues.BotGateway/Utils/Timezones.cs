@@ -7,7 +7,7 @@ public static class TimeZones
 {
     // ReSharper disable once CollectionNeverUpdated.Global
     public static readonly ReadOnlyCollection<TimeZoneMap> SupportedTimeZones = new ([
-        ("America/New_York", "Eastern Standard Time (EST)" ),
+        ( "America/New_York", "Eastern Standard Time (EST)" ),
         ( "America/Chicago", "Central Standard Time (CST)" ),
         ( "America/Denver", "Mountain Standard Time (MST)" ),
         ( "America/Los_Angeles", "Pacific Standard Time (PST)" ),

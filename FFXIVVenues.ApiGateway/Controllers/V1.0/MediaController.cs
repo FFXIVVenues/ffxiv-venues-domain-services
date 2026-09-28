@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using FFXIVVenues.ApiGateway.Helpers;
+﻿using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.VenueModels.Observability;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace FFXIVVenues.ApiGateway.Controllers;
+namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
 /// <summary>
 /// Venue image endpoints
@@ -18,6 +19,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue/{id}/media")]
+[AllowAnonymous]
 public class MediaController(
     IMediaRepository mediaManager,
     IAuthorizationManager authorizationManager,

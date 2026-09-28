@@ -1,8 +1,9 @@
 using FFXIVVenues.DomainData.Entities.Flags;
 using FFXIVVenues.FlagService.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FFXIVVenues.ApiGateway.Controllers;
+namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
 /// <summary>
 /// Venue flagging endpoints.
@@ -11,6 +12,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue/{id}/flag")]
+[AllowAnonymous]
 public class FlagController(IFlagServiceClient flagServiceClient): ControllerBase
 {
     /// <summary>

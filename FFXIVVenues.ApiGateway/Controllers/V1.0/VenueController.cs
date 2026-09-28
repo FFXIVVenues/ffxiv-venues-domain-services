@@ -1,15 +1,4 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Text;
-using System.Threading;
-using System.Net.WebSockets;
-using System.Threading.Tasks;
-using System.Reflection;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using FFXIVVenues.ApiGateway.Controllers.ArgModels;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Observability;
@@ -17,11 +6,23 @@ using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Mapping;
 using FFXIVVenues.VenueModels.Observability;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Dto = FFXIVVenues.VenueModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.WebSockets;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Domain = FFXIVVenues.DomainData.Entities.Venues;
+using Dto = FFXIVVenues.VenueModels;
 
-namespace FFXIVVenues.ApiGateway.Controllers;
+namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
 /// <summary>
 /// Venue querying and authoring endpoints
@@ -29,6 +30,7 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue")]
+[AllowAnonymous]
 public class VenueController(
     IAuthorizationManager authorizationManager,
     IMapFactory mapFactory,

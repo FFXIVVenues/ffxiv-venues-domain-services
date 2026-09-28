@@ -1,11 +1,13 @@
 
 
+using Amazon.Runtime.Internal;
 using FFXIVVenues.ApiGateway.Bootstrap;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData;
+using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.FlagService.Client.Events;
 using FFXIVVenues.VenueModels;
@@ -79,7 +81,12 @@ else if (mediaStorageProvider.ToLower() == "azure")
 else
     builder.Services.AddSingleton<IMediaRepository, LocalMediaRepository>();
 
+builder.ConfigureAuthorization();
 builder.Services.AddDomainData(connectionString, mediaUriTemplate);
+builder.Services.AddSecurityServices(o => {
+    o.SigningPrivateKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PrivateKeyPath") ?? o.SigningPrivateKeyPath;
+    o.SigningPublicKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PublicKeyPath") ?? o.SigningPublicKeyPath;
+});
 builder.Services.AddSingleton(venueCache);
 builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
@@ -124,6 +131,8 @@ app .UseWebSockets()
             .SetPreflightMaxAge(TimeSpan.FromHours(1)));
 
 await app.ConfigureForwardHeaders(config.GetSection("Security:KnownProxies"));
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.MapOpenApi();
 app.UseApiVersioning();

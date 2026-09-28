@@ -32,6 +32,7 @@ using FFXIVVenues.BotGateway.VenueEvents.VenueFlags;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing;
 using FFXIVVenues.DomainData;
+using FFXIVVenues.DomainSecurity;
 using Serilog;
 
 ExcelPackage.License.SetNonCommercialOrganization("FFXIV Venues");
@@ -44,6 +45,11 @@ Bootstrap.ConfigureApiClient(builder.Services, config);
 Bootstrap.ConfigureData(builder.Services, config);
 Bootstrap.ConfigureDiscordClient(builder.Services, config);
 Bootstrap.ConfigureRabbit(builder, config);
+
+builder.Services.AddSecurityServices(o => {
+    o.SigningPrivateKeyPath = config.SecurityConfig.Signing.Ed25519.PrivateKeyPath ?? o.SigningPrivateKeyPath;
+    o.SigningPublicKeyPath = config.SecurityConfig.Signing.Ed25519.PublicKeyPath ?? o.SigningPublicKeyPath;
+});
 
 builder.Services.AddSingleton<ICommandBroker, CommandBroker>();
 builder.Services.AddSingleton<IComponentBroker, ComponentBroker>();
