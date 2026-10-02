@@ -1,5 +1,5 @@
 using AutoMapper;
-using FFXIVVenues.ApiGateway.Controllers.ArgModels;
+using FFXIVVenues.ApiGateway.Controllers.V1._0.ArgModels;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;

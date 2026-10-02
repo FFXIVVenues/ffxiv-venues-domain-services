@@ -1,15 +1,16 @@
 ﻿using Azure;
+using Discord;
 using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.VenueModels;
+using Microsoft.AspNetCore.WebUtilities;
 using Serilog;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Cryptography.Xml;
@@ -206,22 +207,31 @@ internal class ApiService(HttpClient httpClient, Signer signer, UiConfiguration 
         return response;
     }
 
-    public string GetSsoUrl(ulong userId, string redirectPath)
+    public string GetSsoUrl(IUser user, string redirectPath)
     {
-        Log.Debug("Generating SSO URL for user {UserId} with redirect path {RedirectPath}", userId, redirectPath);
+        Log.Debug("Generating SSO URL for user {UserId} with redirect path {RedirectPath}", user, redirectPath);
         if (!redirectPath.StartsWith("/"))
             redirectPath = "/" + redirectPath;
         var fullRedirect = uiConfiguration.BaseUrl + redirectPath;
         var nonce = Guid.CreateVersion7().ToString("N");
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
+        var userId = user.Id.ToString();
+        var username = user.Username;
+        var displayName = user.GlobalName;
+        var avatarUrl = user.GetAvatarUrl();
+
         var signature = signer.Sign(httpClient.BaseAddress.Authority + HttpMethod.Get
-             + "/login/sso" + userId + fullRedirect + nonce + timestamp);
+             + "/login/sso" + userId + username + displayName + avatarUrl + fullRedirect + nonce + timestamp);
 
         var uri = new UriBuilder(httpClient.BaseAddress) { Path = "/login/sso" }.ToString();
         var query = new Dictionary<string, string>
         {
-            ["userId"] = userId.ToString(),
+            ["user_id"] = userId,
+            ["user_username"] = username,
+            ["user_nickname"] = displayName,
+            ["user_picture"] = avatarUrl,
+
             ["nonce"] = nonce,
             ["timestamp"] = timestamp.ToString(),
             ["signature"] = signature,

@@ -16,7 +16,7 @@ public class LoginCommand(IApiService apiService) : ICommandHandler
     public Task HandleAsync(SlashCommandVeniInteractionContext slashCommand)
     {
         var redirectPath = "/venue/manage";
-        var url = apiService.GetSsoUrl(slashCommand.Interaction.User.Id, redirectPath);
+        var url = apiService.GetSsoUrl(slashCommand.Interaction.User, redirectPath);
 
         return slashCommand.Interaction.RespondAsync(components: new ComponentBuilder()
             .WithButton("Login to FFXIV Venues", style: ButtonStyle.Link, url: url)

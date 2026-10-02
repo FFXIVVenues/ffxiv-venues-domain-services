@@ -13,6 +13,7 @@ using ScottBrady.IdentityModel.Crypto;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 
 namespace FFXIVVenues.ApiGateway.Controllers;
@@ -25,25 +26,32 @@ public class LoginController(Signer signer, IConfiguration config) : ControllerB
     private static MemoryCache nonceCache = new(new MemoryCacheOptions());
 
     [HttpGet("whoami")]
-    public ActionResult Index()
+    public LoggedInUser Index()
     {
-        return Ok("Logged in as " + this.HttpContext.User.Identity?.Name ?? "nobody");
+        var userId = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+        var username = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.PreferredUsername);
+        var nickname = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Nickname);
+        var avatarUrl = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture);
+        return new (userId?.Value, username?.Value, nickname?.Value, avatarUrl?.Value);
     }
 
     [HttpGet("sso")]
     [AllowAnonymous]
     public ActionResult Sso(
-        [FromQuery] long userId,
+        [FromQuery(Name="user_id")] long userId,
+        [FromQuery(Name = "user_username")] string username,
+        [FromQuery(Name = "user_nickname")] string nickname,
+        [FromQuery(Name = "user_picture")] string avatarUrl,
         [FromQuery] string redirect,
         [FromQuery] string nonce,
         [FromQuery] long timestamp,
         [FromQuery] string signature)
     {
-        var expectedSignature = signer.Sign(this.Request.Host + this.Request.Method + this.Request.Path + userId + redirect + nonce + timestamp);
+        var expectedSignature = signer.Sign(this.Request.Host + this.Request.Method + this.Request.Path + userId + username + nickname + avatarUrl + redirect + nonce + timestamp);
         if (expectedSignature != signature)
             return BadRequest();
 
-        var expiry = DateTimeOffset.FromUnixTimeSeconds(timestamp).AddMinutes(1);
+        var expiry = DateTimeOffset.FromUnixTimeSeconds(timestamp).AddMinutes(3);
         if (expiry < DateTimeOffset.UtcNow)
             return BadRequest();
 
@@ -61,17 +69,20 @@ public class LoginController(Signer signer, IConfiguration config) : ControllerB
         if (userId == 0)
             return BadRequest();
 
-        this.Login(userId);
+        this.Login(userId, username, nickname, avatarUrl);
 
         return Redirect(redirectUri.ToString());
     }
 
-    private void Login(long userId)
+    private void Login(long userId, string username, string nickname, string avatarUrl)
     {
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.PreferredUsername, username),
+            new Claim(JwtRegisteredClaimNames.Nickname, nickname),
+            new Claim(JwtRegisteredClaimNames.Picture, avatarUrl)
         };
 
         var token = new JwtSecurityToken(
@@ -94,3 +105,5 @@ public class LoginController(Signer signer, IConfiguration config) : ControllerB
         });
     }
 }
+
+public record LoggedInUser(string userid, string username, string nickname, string avatarUrl);

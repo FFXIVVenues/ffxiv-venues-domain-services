@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Discord;
+using FFXIVVenues.VenueModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using FFXIVVenues.VenueModels;
 
 namespace FFXIVVenues.BotGateway.Api
 {
@@ -25,6 +26,6 @@ namespace FFXIVVenues.BotGateway.Api
         Task<HttpResponseMessage> CloseVenueAsync(string id, DateTimeOffset from, DateTimeOffset to);
         Task<HttpResponseMessage> RemoveOverridesAsync(string id, DateTimeOffset from, DateTimeOffset to);
         Task<HttpResponseMessage> ApproveAsync(string id, bool approval = true);
-        string GetSsoUrl(ulong id, string redirectPath);
+        string GetSsoUrl(IUser id, string redirectPath);
     }
 }
