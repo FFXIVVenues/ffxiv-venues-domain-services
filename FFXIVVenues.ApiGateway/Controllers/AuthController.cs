@@ -19,20 +19,21 @@ using System.Security.Claims;
 namespace FFXIVVenues.ApiGateway.Controllers;
 
 [ApiController]
-[Route("login")]
+[Route("auth")]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class LoginController(Signer signer, IConfiguration config) : ControllerBase
+public class AuthController(Signer signer, IConfiguration config) : ControllerBase
 {
     private static MemoryCache nonceCache = new(new MemoryCacheOptions());
 
     [HttpGet("whoami")]
     public LoggedInUser Index()
     {
-        var userId = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
-        var username = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.PreferredUsername);
-        var nickname = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Nickname);
-        var avatarUrl = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture);
-        return new (userId?.Value, username?.Value, nickname?.Value, avatarUrl?.Value);
+        var userIdStr = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+        var userId = long.Parse(userIdStr);
+        var username = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.PreferredUsername)?.Value;
+        var nickname = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Nickname)?.Value;
+        var avatarUrl = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture)?.Value;
+        return new (userId, username, nickname, avatarUrl);
     }
 
     [HttpGet("sso")]
@@ -106,4 +107,4 @@ public class LoginController(Signer signer, IConfiguration config) : ControllerB
     }
 }
 
-public record LoggedInUser(string userid, string username, string nickname, string avatarUrl);
+public record LoggedInUser(long userid, string username, string nickname, string avatarUrl);

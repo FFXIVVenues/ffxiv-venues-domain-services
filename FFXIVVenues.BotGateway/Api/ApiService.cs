@@ -222,9 +222,9 @@ internal class ApiService(HttpClient httpClient, Signer signer, UiConfiguration 
         var avatarUrl = user.GetAvatarUrl();
 
         var signature = signer.Sign(httpClient.BaseAddress.Authority + HttpMethod.Get
-             + "/login/sso" + userId + username + displayName + avatarUrl + fullRedirect + nonce + timestamp);
+             + "/auth/sso" + userId + username + displayName + avatarUrl + fullRedirect + nonce + timestamp);
 
-        var uri = new UriBuilder(httpClient.BaseAddress) { Path = "/login/sso" }.ToString();
+        var uri = new UriBuilder(httpClient.BaseAddress) { Path = "/auth/sso" }.ToString();
         var query = new Dictionary<string, string>
         {
             ["user_id"] = userId,
