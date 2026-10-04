@@ -111,9 +111,7 @@ public class VenueController(
             if (authorizationManager.Check().CanNot(Operation.Create))
                 return Unauthorized();
 
-            var owningKey = authorizationManager.GetKeyString();
             var newInternalVenue = this._modelMapper.Map<Domain.Venue>(venue);
-            newInternalVenue.ScopeKey = owningKey;
             domainData.Venues.Add(newInternalVenue);
             await domainData.SaveChangesAsync();
 

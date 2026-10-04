@@ -14,6 +14,5 @@ public class ScheduleOverride
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
     
-    [Required]
     public virtual Venue Venue { get; set; }
 }

@@ -18,6 +18,5 @@ public class Notice
     public NoticeType Type { get; set; }
     public string Message { get; set; }
     
-    [Required]
     public virtual Venue Venue { get; set; }
 }

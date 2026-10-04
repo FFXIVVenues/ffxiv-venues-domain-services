@@ -20,23 +20,9 @@ public class AuthorizationCheck(AuthorizationKey key) : IAuthorizationCheck
         if (venue == null)
             return false;
             
-        if (op == Operation.Read && venue.Approved)
-            return true;
-            
-        if (key.Scope == "all" || (key.Scope == "approved" && venue.Approved))
-            return op switch
-            {
-                Operation.Read => true,
-                Operation.Approve => key.Approve,
-                Operation.Create => key.Create,
-                Operation.Update => key.Update,
-                Operation.Delete => key.Delete,
-                _ => false
-            };
-
-        return venue.ScopeKey == key.Key && op switch
+        return op switch
         {
-            Operation.Read => true,
+            Operation.Read => venue.Approved || key.ReadUnapproved,
             Operation.Approve => key.Approve,
             Operation.Create => key.Create,
             Operation.Update => key.Update,
@@ -48,7 +34,7 @@ public class AuthorizationCheck(AuthorizationKey key) : IAuthorizationCheck
     public IQueryable<Venue> Can(Operation op, IQueryable<Venue> queryable)
     {
         if (op == Operation.Create)
-            throw new InvalidOperationException("Cannot items venues on Create permission.");
+            throw new InvalidOperationException("Cannot query venues on Create permission.");
             
         var opAuthorised = op switch
         {
@@ -63,13 +49,10 @@ public class AuthorizationCheck(AuthorizationKey key) : IAuthorizationCheck
         if (!opAuthorised)
             return new List<Venue>().AsQueryable();
 
-        if (key.Scope == "all")
-            return queryable;
-            
-        if (op == Operation.Read || key.Scope == "approved")
-            return queryable.Where(i => i.Approved || i.ScopeKey == key.Key);
-            
-        return queryable.Where(i => i.ScopeKey == key.Key);
+        if (!key.ReadUnapproved)
+            return queryable.Where(i => i.Approved);
+
+        return queryable;
     }
         
         

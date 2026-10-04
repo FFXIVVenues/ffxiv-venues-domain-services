@@ -1,12 +1,15 @@
 
 
 using Amazon.Runtime.Internal;
+using Castle.Core.Resource;
 using FFXIVVenues.ApiGateway.Bootstrap;
+using FFXIVVenues.ApiGateway.Controllers.OData;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData;
+using FFXIVVenues.DomainData.Entities.Venues;
 using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.FlagService.Client.Events;
@@ -15,10 +18,15 @@ using FFXIVVenues.VenueModels.Observability;
 using FFXIVVenues.VenueService.Client.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Scalar.AspNetCore;
 using Serilog;
 using System;
@@ -47,7 +55,7 @@ config.GetSection("Security:AuthorizationKeys").Bind(authorizationKeys);
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
     .WriteTo.Console()
-    .Destructure.ByTransforming<Venue>(
+    .Destructure.ByTransforming<FFXIVVenues.VenueModels.Venue>(
         v => new { VenueId = v.Id, VenueName = v.Name })
     .Destructure.ByTransforming<FFXIVVenues.DomainData.Entities.Venues.Venue>(
         v => new { VenueId = v.Id, VenueName = v.Name })
@@ -72,7 +80,7 @@ builder.Host.UseWolverine(opts =>
 });
 
 // Configure services
-var venueCache = new RollingCache<IEnumerable<Venue>>(3*60*1000, 30*60*1000);
+var venueCache = new RollingCache<IEnumerable<FFXIVVenues.VenueModels.Venue>>(3*60*1000, 30*60*1000);
 
 if (mediaStorageProvider.ToLower() == "s3")
     builder.Services.AddSingleton<IMediaRepository, S3MediaRepository>();
@@ -92,9 +100,16 @@ builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
 builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
-builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddControllers().AddOData(o => 
+{
+    
+    o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
+    var modelBuilder = new ODataModelBuilder();
+    modelBuilder.AddVenuesEdm();
+    o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), (IServiceCollection s) => s.AddVenuesSerializer(mediaUriTemplate));
+});
 builder.Services.AddApiVersioning(o =>
 {
     o.DefaultApiVersion = new ApiVersion(1, 0);

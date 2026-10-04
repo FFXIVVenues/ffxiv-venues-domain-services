@@ -43,6 +43,8 @@ public class MapFactory : IMapFactory
             cfg.CreateMap<Entities.Venues.Notice, VenueModels.Notice>().ReverseMap();
             cfg.CreateMap<Entities.Venues.Day, VenueModels.Day>().ReverseMap();
             cfg.CreateMap<Entities.Venues.Venue, FFXIVVenues.VenueModels.Venue>()
+                .ForMember(d => d.Website, o => o.MapFrom(o => o.Website != null ? new Uri(o.Website) : null))
+                .ForMember(d => d.Discord, o => o.MapFrom(o => o.Discord != null ? new Uri(o.Discord) : null))
                 .ForMember(d => d.BannerUri, o => o.MapFrom(o => 
                     o.Banner != null 
                         ? new Uri(uriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 
@@ -50,13 +52,14 @@ public class MapFactory : IMapFactory
             cfg.CreateMap<VenueModels.Venue, Entities.Venues.Venue>()
                 .ForMember(d => d.Added, ex => ex.Ignore())
                 .ForMember(d => d.LastModified, ex => ex.Ignore())
-                .ForMember(d => d.Approved, ex => ex.Ignore())
-                .ForMember(d => d.ScopeKey, ex => ex.Ignore());
+                .ForMember(d => d.Approved, ex => ex.Ignore());
         }, new NullLoggerFactory());
         
         this._projectionConfiguration = new MapperConfiguration(cfg =>
         {
            cfg.CreateProjection<Entities.Venues.Venue, VenueModels.Venue>()
+                .ForMember(d => d.Website, o => o.MapFrom(o => o.Website != null ? new Uri(o.Website) : null))
+                .ForMember(d => d.Discord, o => o.MapFrom(o => o.Discord != null ? new Uri(o.Discord) : null))
                 .ForMember(dto => dto.BannerUri, conf => conf.MapFrom(o => 
                     o.Banner != null 
                         ? new Uri(uriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 

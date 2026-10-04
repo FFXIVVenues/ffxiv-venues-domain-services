@@ -14,9 +14,10 @@ public class Venue
     public DateTimeOffset Added { get; set; }
     public DateTimeOffset? LastModified { get; set; }
     public virtual List<string>? Description { get; set; } = new ();
-    public virtual Location Location { get; set; } = new ();
-    public Uri? Website { get; set; }
-    public Uri? Discord { get; set; }
+    public virtual Location? Location { get; set; }
+    public string? LocationId { get; set; }
+    public string? Website { get; set; }
+    public string? Discord { get; set; }
     public bool Hiring { get; set; }
     public bool Sfw { get; set; }
     [DeleteBehavior(DeleteBehavior.Cascade)] public virtual List<Schedule> Schedule { get; set; } = new ();
@@ -28,7 +29,6 @@ public class Venue
     public string? MarePassword { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public bool Approved { get; set; }
-    public string? ScopeKey { get; set; }
     [DeleteBehavior(DeleteBehavior.Cascade)] public virtual List<Favorite> Favorites { get; set; } = new();
 
 
