@@ -22,5 +22,5 @@ public class Schedule
     public ushort? EndHour { get; set; }
     public ushort? EndMinute { get; set; }
     public string TimeZone { get; set; }
-    public virtual Venue Venue { get; set; }
+    public virtual Venue? Venue { get; set; }
 }

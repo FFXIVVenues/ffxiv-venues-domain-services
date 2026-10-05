@@ -35,8 +35,7 @@ public class VenueController(
     IAuthorizationManager authorizationManager,
     IMapFactory mapFactory,
     IChangeBroker changeBroker,
-    DomainDataContext domainData,
-    RollingCache<IEnumerable<Dto.Venue>> cache)
+    DomainDataContext domainData)
     : ControllerBase, IDisposable
 {
     private readonly IMapper _modelMapper = mapFactory.GetModelMapper();
@@ -116,8 +115,6 @@ public class VenueController(
             await domainData.SaveChangesAsync();
 
             changeBroker.Queue(ObservableOperation.Create, newInternalVenue);
-            cache.Clear();
-
             return Ok(this._modelMapper.Map<VenueModels.Venue>(newInternalVenue));
         }
 
@@ -133,7 +130,6 @@ public class VenueController(
         await domainData.SaveChangesAsync();
 
         changeBroker.Queue(ObservableOperation.Update, existingVenue);
-        cache.Clear();
 
         return Ok(this._modelMapper.Map<Dto.Venue>(existingVenue));
     }
@@ -161,7 +157,6 @@ public class VenueController(
         domainData.SaveChanges();
 
         changeBroker.Queue(ObservableOperation.Delete, venue);
-        cache.Clear();
 
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
     }
@@ -201,7 +196,6 @@ public class VenueController(
         domainData.SaveChanges();
 
         changeBroker.Queue(ObservableOperation.Update, venue);
-        cache.Clear();
 
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
     }
@@ -241,7 +235,6 @@ public class VenueController(
         domainData.SaveChanges();
 
         changeBroker.Queue(ObservableOperation.Update, venue);
-        cache.Clear();
 
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
     }

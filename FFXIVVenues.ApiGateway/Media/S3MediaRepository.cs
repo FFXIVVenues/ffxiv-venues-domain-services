@@ -7,6 +7,7 @@ using Amazon.S3.Model;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.DomainData.Helpers;
 using Microsoft.Extensions.Configuration;
+using IdHelper = FFXIVVenues.DomainData.Helpers.IdHelper;
 
 namespace FFXIVVenues.ApiGateway.Media;
 

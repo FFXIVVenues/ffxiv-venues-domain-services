@@ -101,14 +101,16 @@ builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
 builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddOData(o => 
 {
     
     o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
     var modelBuilder = new ODataModelBuilder();
-    modelBuilder.AddVenuesEdm();
-    o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), (IServiceCollection s) => s.AddVenuesSerializer(mediaUriTemplate));
+    modelBuilder.AddVenuesEdm(mediaUriTemplate);
+    o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), 
+        s => s.AddVenuesSerializer());
 });
 builder.Services.AddApiVersioning(o =>
 {
@@ -157,6 +159,9 @@ app.MapScalarApiReference(o =>
     o.Title = "FFXIV Venues API Gateway {documentName}";
 });
 
+// Remove this observer and the WebSocket endpoint
+// Veni requires fully moving over to subscribing to events
+// via Message Queues beforehand
 var venueEventsObserver = new Observer([ObservableOperation.Create, ObservableOperation.Update, ObservableOperation.Delete], null, null);
 venueEventsObserver.ObserverAction += async (o, e) => {
     using (var serviceScope = app.Services.CreateScope())

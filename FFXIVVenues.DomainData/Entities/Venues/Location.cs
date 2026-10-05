@@ -26,7 +26,7 @@ namespace FFXIVVenues.DomainData.Entities.Venues;
 [Index(nameof(Override), Name ="Override")] 
 public class Location
 {
-    public string Id { get; set; } = IdHelper.GenerateId(8);
+    public string Id { get; init; } = IdHelper.GenerateId(8);
     public string? DataCenter { get; set; }
     public string? World { get; set; }
     public string? District { get; set; }
@@ -37,5 +37,5 @@ public class Location
     public bool Subdivision { get; set; }
     public string? Override { get; set; }
     
-    public virtual List<Venue> Venues { get; set; }
+    public virtual List<Venue>? Venues { get; set; }
 }

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FFXIVVenues.DomainData.Entities.Favorites;
+using FFXIVVenues.DomainData.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace FFXIVVenues.DomainData.Entities.Venues;
@@ -8,10 +9,10 @@ namespace FFXIVVenues.DomainData.Entities.Venues;
 [Table("Venues", Schema = nameof(Entities.Venues))]
 public class Venue
 {
-    [Key] public string Id { get; init; }
+    [Key] public string Id { get; set; } = IdHelper.GenerateId();
     public string Name { get; set; }
     public string? Banner { get; set; }
-    public DateTimeOffset Added { get; set; }
+    public DateTimeOffset Added { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? LastModified { get; set; }
     public virtual List<string>? Description { get; set; } = new ();
     public virtual Location? Location { get; set; }
@@ -36,5 +37,4 @@ public class Venue
     {
         this.Added = DateTimeOffset.UtcNow;
     }
-    
 }

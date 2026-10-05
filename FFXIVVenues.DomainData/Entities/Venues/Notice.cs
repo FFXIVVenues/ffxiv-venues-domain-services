@@ -12,7 +12,7 @@ namespace FFXIVVenues.DomainData.Entities.Venues;
 public class Notice
 {
     [ForeignKey(nameof(Venue))] protected string VenueId { get; set; }
-    public string Id { get; set; } = IdHelper.GenerateId(3);
+    public string Id { get; init; } = IdHelper.GenerateId(3);
     public DateTimeOffset? Start { get; set; }
     public DateTimeOffset? End { get; set; }
     public NoticeType Type { get; set; }

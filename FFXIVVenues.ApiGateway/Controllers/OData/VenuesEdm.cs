@@ -1,40 +1,51 @@
-﻿using FFXIVVenues.DomainData.Entities.Venues;
+﻿using FFXIVVenues.ApiGateway.Helpers.Edm;
+using FFXIVVenues.DomainData.Entities.Venues;
 using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Formatter.Deserialization;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
+using System;
+using System.Reflection;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
 internal static class VenuesEdm
 {
 
-    public static ODataModelBuilder AddVenuesEdm(this ODataModelBuilder builder)
+    public static ODataModelBuilder AddVenuesEdm(this ODataModelBuilder builder, string bannerUriTemplate)
     {
         var venueSet = builder.EntitySet<Venue>("Venues");
 
         var venue = venueSet.EntityType;
         venue.HasKey(v => v.Id);
+        venue.Property(v => v.Id).Computed();
         venue.Property(v => v.Name);
-        venue.Property(v => v.Banner);
-        venue.Property(v => v.Added);
-        venue.Property(v => v.LastModified);
+        venue.Property(v => v.Banner).Computed((prop, c) =>
+        {
+            var bannerKey = c.GetPropertyValue("Banner") as string;
+            var venueId = c.GetPropertyValue("Id") as string;
+            return bannerKey is null ? null
+                : bannerUriTemplate.Replace("{venueId}", venueId).Replace("{bannerKey}", bannerKey);
+        });
+        venue.Property(v => v.Added).Computed();
+        venue.Property(v => v.LastModified).Computed();
         venue.CollectionProperty(v => v.Description);
         venue.ContainsOptional(v => v.Location).AutomaticallyExpand(true);
         venue.Property(v => v.Website);
         venue.Property(v => v.Discord);
-        venue.Property(v => v.Hiring);
         venue.Property(v => v.Sfw);
         venue.ContainsMany(v => v.Schedule);
         venue.ContainsMany(v => v.ScheduleOverrides);
         venue.ContainsMany(v => v.Notices);
-        venue.CollectionProperty(v => v.Managers);
+        venue.CollectionProperty(v => v.Managers).Computed();
         venue.CollectionProperty(v => v.Tags);
 
         var location = builder.EntityType<Location>();
         location.HasKey(l => l.Id);
+        location.Property(l => l.Id).Computed();
         location.Property(l => l.DataCenter);
         location.Property(l => l.World);
         location.Property(l => l.District);
@@ -83,37 +94,19 @@ internal static class VenuesEdm
 
         var notice = builder.EntityType<Notice>();
         notice.HasKey(n => n.Id);
+        notice.Property(n => n.Id).Computed();
         notice.Property(n => n.Start);
         notice.Property(n => n.End);
         notice.EnumProperty(n => n.Type);
         notice.Property(n => n.Message);
 
-        
         return builder;
     }
 
-    public static IServiceCollection AddVenuesSerializer(this IServiceCollection services, string bannerUriTemplate)
-    {
-        
+    public static IServiceCollection AddVenuesSerializer(this IServiceCollection services) =>
+        services.AddSingleton<ODataResourceSerializer, EdmComputedSerializer>()
+                .AddSingleton<ODataResourceDeserializer, EdmComputedDeserializer>();
 
-        services.AddSingleton<ODataResourceSerializer>(provider => 
-            new VenueSerializer(provider.GetRequiredService<IODataSerializerProvider>(), bannerUriTemplate));
-        return services;
-    }
 }
 
-internal class VenueSerializer(IODataSerializerProvider provider, string bannerUriTemplate)
-    : ODataResourceSerializer(provider)
-{
-    public override ODataProperty CreateStructuralProperty(IEdmStructuralProperty property, ResourceContext context)
-    {
-        if (property.Name != "Banner" || property.DeclaringType.FullTypeName() != typeof(Venue).FullName)
-            return base.CreateStructuralProperty(property, context);
 
-        var bannerKey = context.GetPropertyValue("Banner") as string;
-        var venueId = context.GetPropertyValue("Id") as string;
-        var uri = bannerKey is null ? null
-            : bannerUriTemplate.Replace("{venueId}", venueId).Replace("{bannerKey}", bannerKey);
-        return new ODataProperty { Name = property.Name, Value = uri };
-    }
-}

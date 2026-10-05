@@ -21,20 +21,13 @@ namespace FFXIVVenues.ApiGateway.Controllers;
 [ApiController]
 [Route("auth")]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class AuthController(Signer signer, IConfiguration config) : ControllerBase
+public class AuthController(Signer signer, ICurrentUser user, IConfiguration config) : ControllerBase
 {
     private static MemoryCache nonceCache = new(new MemoryCacheOptions());
 
     [HttpGet("whoami")]
-    public LoggedInUser Index()
-    {
-        var userIdStr = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
-        var userId = long.Parse(userIdStr);
-        var username = this.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.PreferredUsername)?.Value;
-        var nickname = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Nickname)?.Value;
-        var avatarUrl = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture)?.Value;
-        return new (userId, username, nickname, avatarUrl);
-    }
+    public LoggedInUser WhoAmI() =>
+        new (user.Id, user.Username, user.Nickname, user.Claim(JwtRegisteredClaimNames.Picture));
 
     [HttpGet("sso")]
     [AllowAnonymous]

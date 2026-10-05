@@ -9,6 +9,7 @@ using Azure.Storage.Blobs.Models;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.DomainData.Helpers;
 using Microsoft.Extensions.Configuration;
+using IdHelper = FFXIVVenues.DomainData.Helpers.IdHelper;
 using Uri = System.Uri;
 
 namespace FFXIVVenues.ApiGateway.Media;
