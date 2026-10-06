@@ -109,6 +109,7 @@ builder.Services.AddControllers().AddOData(o =>
     o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
     var modelBuilder = new ODataModelBuilder();
     modelBuilder.AddVenuesEdm(mediaUriTemplate);
+    modelBuilder.EnableLowerCamelCase();
     o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), 
         s => s.AddVenuesSerializer());
 });

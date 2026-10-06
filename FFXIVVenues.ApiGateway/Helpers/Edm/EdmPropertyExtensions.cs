@@ -4,6 +4,8 @@ using Microsoft.OData.ModelBuilder;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace FFXIVVenues.ApiGateway.Helpers.Edm;
@@ -22,13 +24,13 @@ internal static class EdmPropertyExtensions
     public static T Computed<T>(this T prop, Func<IEdmStructuralProperty, ResourceContext, object> valueFactory) where T: StructuralPropertyConfiguration
     {
         prop.HasComputed().IsComputed(true);
-        var meta = _propertyMeta.GetOrAdd($"{prop.DeclaringType.FullName}.{prop.Name}", (_) => new());
+        var meta = _propertyMeta.GetOrAdd($"{prop.DeclaringType.FullName}.{prop.PropertyInfo.Name}", (_) => new());
         meta.ValueFactory = valueFactory;
         return prop;
     }
 
-    public static EdmPropertyMetaData? GetMetaData(this IEdmStructuralProperty property) =>
-        _propertyMeta.GetValueOrDefault($"{property.DeclaringType.FullTypeName()}.{property.Name}");
+    public static EdmPropertyMetaData? GetEdmPropertyMetaData(this PropertyInfo property) =>
+        _propertyMeta.GetValueOrDefault($"{property.DeclaringType.FullName}.{property.Name}");
 
 }
 

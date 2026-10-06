@@ -94,10 +94,10 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTimeOffset.UtcNow.AddHours(8),
+            Expires = DateTimeOffset.UtcNow.AddDays(7),
             Path = "/"
         });
     }
 }
 
-public record LoggedInUser(long userid, string username, string nickname, string avatarUrl);
+public record LoggedInUser(long userId, string username, string nickname, string avatarUrl);

@@ -22,7 +22,7 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
 
     [EnableQuery]
     public ActionResult<IQueryable<Venue>> Get() =>
-        Ok(db.Venues.AsNoTracking().Where(v => v.Approved));
+        Ok(db.Venues.AsNoTracking().Where(v => v.Approved && v.Deleted == null));
 
     [EnableQuery]
     public async Task<ActionResult<Venue>> Get([FromRoute] string key)
@@ -44,13 +44,6 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
         if (venuesCreatedInLast24Hours >= 3)
             return Forbid("You have reached the limit of 3 venues created in the last 24 hours.");
 
-        // What if someone doesn't own but manages many venues...
-        var venuesOwnedByManager = await db.Venues.CountAsync(
-            v => v.Deleted == null 
-              && v.Managers.Contains(user.Id.ToString()));
-        if (venuesOwnedByManager >= 6)  
-            return Forbid("You have reached the limit of 6 venues owned.");
-
         venue.Id = IdHelper.GenerateId();
         venue.Banner = null;
         venue.Approved = false;
@@ -67,39 +60,33 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var existingVenue = await db.Venues.SingleOrDefaultAsync(d => d.Id == key);
-        if (existingVenue == null)
+        var existingVenue = await db.Venues.FindAsync(key);
+        if (existingVenue == null || existingVenue.Deleted != null)
             return NotFound();
-
-        if (existingVenue.Managers == null || !existingVenue.Managers.Contains(user.Id.ToString()))
+        
+        if (existingVenue.Managers?.Contains(user.Id.ToString()) != null)
             return Forbid();
-
-        // Do we need this anymore??
-        var allowedChangableProps = new List<string>
-        {
-            nameof(Venue.Name),
-            nameof(Venue.Description),
-            nameof(Venue.Location),
-            nameof(Venue.Website),
-            nameof(Venue.Discord),
-            nameof(Venue.Sfw),
-            nameof(Venue.Schedule),
-            nameof(Venue.ScheduleOverrides),
-            nameof(Venue.Notices),
-            nameof(Venue.Managers),
-            nameof(Venue.Tags),
-        };
-
-        var changedProps = venue.GetChangedPropertyNames();
-        var disallowedProps = changedProps.Except(allowedChangableProps).ToList();
-        if (disallowedProps.Any())
-            return Forbid($"The following fields could not be changed: {string.Join(", ", disallowedProps)}.");
 
         venue.CopyChangedValues(existingVenue);
         await db.SaveChangesAsync();
 
         changeBroker.Queue(ObservableOperation.Update, existingVenue);
         return Ok(existingVenue);
+    }
+
+    public async Task<ActionResult<Venue>> Delete([FromRoute] string key)
+    {
+        var venue = await db.Venues.FindAsync(key);
+        if (venue == null || venue.Deleted != null)
+            return NotFound();
+
+        if (venue.Managers?.Contains(user.Id.ToString()) != true)
+            return Forbid();
+
+        venue.Deleted = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync();
+
+        return venue;
     }
 
 }

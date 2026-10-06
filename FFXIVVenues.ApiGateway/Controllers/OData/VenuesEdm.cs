@@ -1,14 +1,10 @@
 ﻿using FFXIVVenues.ApiGateway.Helpers.Edm;
 using FFXIVVenues.DomainData.Entities.Venues;
-using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Formatter.Deserialization;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using System;
-using System.Reflection;
+using System.Text.Json;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
@@ -25,8 +21,8 @@ internal static class VenuesEdm
         venue.Property(v => v.Name);
         venue.Property(v => v.Banner).Computed((prop, c) =>
         {
-            var bannerKey = c.GetPropertyValue("Banner") as string;
-            var venueId = c.GetPropertyValue("Id") as string;
+            var bannerKey = c.GetPropertyValue("banner") as string;
+            var venueId = c.GetPropertyValue("id") as string;
             return bannerKey is null ? null
                 : bannerUriTemplate.Replace("{venueId}", venueId).Replace("{bannerKey}", bannerKey);
         });
@@ -106,6 +102,14 @@ internal static class VenuesEdm
     public static IServiceCollection AddVenuesSerializer(this IServiceCollection services) =>
         services.AddSingleton<ODataResourceSerializer, EdmComputedSerializer>()
                 .AddSingleton<ODataResourceDeserializer, EdmComputedDeserializer>();
+
+    public static ODataModelBuilder EnableLowerCamelCase(this ODataModelBuilder builder)
+    {
+        foreach (var type in builder.StructuralTypes)
+            foreach (var prop in type.Properties)
+                prop.Name = JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
+        return builder;
+    }
 
 }
 
