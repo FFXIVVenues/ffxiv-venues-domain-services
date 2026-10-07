@@ -68,8 +68,6 @@ builder.Host.UseWolverine(opts =>
 });
 
 // Configure services
-var venueCache = new RollingCache<IEnumerable<FFXIVVenues.VenueModels.Venue>>(3*60*1000, 30*60*1000);
-
 if (mediaStorageProvider.ToLower() == "s3")
     builder.Services.AddSingleton<IMediaRepository, S3MediaRepository>();
 else if (mediaStorageProvider.ToLower() == "azure")
@@ -83,7 +81,6 @@ builder.Services.AddSecurityServices(o => {
     o.SigningPrivateKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PrivateKeyPath") ?? o.SigningPrivateKeyPath;
     o.SigningPublicKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PublicKeyPath") ?? o.SigningPublicKeyPath;
 });
-builder.Services.AddSingleton(venueCache);
 builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
@@ -92,7 +89,6 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddOData(o => 
 {
-    
     o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
     var modelBuilder = new ODataModelBuilder();
     modelBuilder.AddVenuesEdm(mediaUriTemplate);

@@ -5,6 +5,7 @@ using FFXIVVenues.DomainData.Entities.Venues;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,7 +31,8 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
             return NotFound();
         return Ok(venue);
     }
-
+    
+    [EnableQuery]
     public async Task<ActionResult<Venue>> Post([FromBody] Venue venue)
     {
         if (!ModelState.IsValid)
@@ -53,6 +55,7 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
         return Created(venue);
     }
 
+    [EnableQuery]
     public async Task<ActionResult<Venue>> Patch([FromRoute] string key, [FromBody] Delta<Venue> venue)
     {
         if (!ModelState.IsValid)
@@ -65,6 +68,7 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
         if (existingVenue.Managers?.Contains(user.Id.ToString()) != true)
             return Forbid();
 
+        await db.LoadChangedNavigationsAsync(existingVenue, venue);
         venue.CopyChangedValues(existingVenue);
         await db.SaveChangesAsync();
 
