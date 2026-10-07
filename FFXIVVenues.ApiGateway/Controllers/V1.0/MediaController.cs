@@ -1,15 +1,13 @@
-﻿using FFXIVVenues.ApiGateway.Helpers;
-using FFXIVVenues.ApiGateway.Media;
-using FFXIVVenues.ApiGateway.Observability;
+﻿using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
-using FFXIVVenues.VenueModels.Observability;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using FFXIVVenues.VenueService.Client.Events;
+using Wolverine;
 
 namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
@@ -23,9 +21,8 @@ namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 public class MediaController(
     IMediaRepository mediaManager,
     IAuthorizationManager authorizationManager,
-    IChangeBroker changeBroker,
-    DomainDataContext domainData,
-    RollingCache<IEnumerable<VenueModels.Venue>> cache)
+    IMessageBus bus,
+    DomainDataContext domainData)
     : ControllerBase, IDisposable
 {
 
@@ -89,9 +86,7 @@ public class MediaController(
         domainData.Venues.Update(venue);
         await domainData.SaveChangesAsync();
 
-        cache.Clear();
-        changeBroker.Queue(ObservableOperation.Update, venue);
-
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return NoContent();
     }
 
@@ -123,9 +118,7 @@ public class MediaController(
         domainData.Venues.Update(venue);
         await domainData.SaveChangesAsync();
 
-        cache.Clear();
-        changeBroker.Queue(ObservableOperation.Update, venue);
-
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return NoContent();
     }
 

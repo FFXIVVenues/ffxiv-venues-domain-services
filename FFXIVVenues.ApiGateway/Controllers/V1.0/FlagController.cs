@@ -13,7 +13,7 @@ namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 [ApiVersion("1.0")]
 [Route("v{apiVersion:ApiVersion}/venue/{id}/flag")]
 [AllowAnonymous]
-public class FlagController(IFlagServiceClient flagServiceClient): ControllerBase
+public class FlagController(FlagServiceClient flagServiceClient): ControllerBase
 {
     /// <summary>
     /// Flag a venue

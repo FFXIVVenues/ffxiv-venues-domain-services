@@ -1,19 +1,16 @@
-﻿using Azure;
-using Discord;
+﻿using Discord;
 using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.VenueModels;
 using Microsoft.AspNetCore.WebUtilities;
 using Serilog;
-using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 
 namespace FFXIVVenues.BotGateway.Api;

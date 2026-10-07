@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FFXIVVenues.BotGateway.VenueEvents.VenueFlags.Responses;
 
-public class ResolveFlagHandler(IFlagServiceClient flagServiceClient, IRepository repository, IApiService apiService, IAuthorizer authorizer) : IComponentHandler
+public class ResolveFlagHandler(FlagServiceClient flagServiceClient, IRepository repository, IApiService apiService, IAuthorizer authorizer) : IComponentHandler
 {
     public static string Key => "FLAG_RESPONSE_RESOLVE";
 

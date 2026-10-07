@@ -15,7 +15,7 @@ namespace FFXIVVenues.BotGateway.VenueAuditing;
 
 public class VenueAuditService(
     IDiscordClient client,
-    IVenueRenderer venueRenderer,
+    DtoVenueRenderer venueRenderer,
     IRepository repository,
     IApiService apiService)
     : IVenueAuditService

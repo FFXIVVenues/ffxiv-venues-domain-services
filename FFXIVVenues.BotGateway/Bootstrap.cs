@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Threading;
-using System.Threading.Tasks;
 using FFXIVVenues.Veni;
 using Microsoft.Extensions.Hosting;
 using OfficeOpenXml;
@@ -26,8 +24,6 @@ using FFXIVVenues.BotGateway.GuildEngagement;
 using FFXIVVenues.BotGateway.Api;
 using FFXIVVenues.BotGateway.Infrastructure.Intent;
 using FFXIVVenues.BotGateway.Infrastructure.Presence;
-using FFXIVVenues.BotGateway.UserSupport;
-using FFXIVVenues.BotGateway.VenueDiscovery.Commands;
 using FFXIVVenues.BotGateway.VenueEvents.VenueFlags;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing;
@@ -38,6 +34,11 @@ using Serilog;
 ExcelPackage.License.SetNonCommercialOrganization("FFXIV Venues");
 
 var builder = Host.CreateApplicationBuilder(args);
+builder.ConfigureContainer(new DefaultServiceProviderFactory(new ServiceProviderOptions
+{
+    ValidateScopes = true,
+    ValidateOnBuild = true
+}));
 
 var config = Bootstrap.LoadConfiguration(builder.Services);
 Bootstrap.ConfigureLogging(builder, config);
@@ -55,8 +56,8 @@ builder.Services.AddSingleton<ICommandBroker, CommandBroker>();
 builder.Services.AddSingleton<IComponentBroker, ComponentBroker>();
 builder.Services.AddSingleton<IApiService, ApiService>();
 builder.Services.AddSingleton<IAuthorizer, Authorizer>();
-builder.Services.AddSingleton<IGuildManager, GuildManager>();
-builder.Services.AddSingleton<IVenueApprovalService, VenueApprovalService>();
+builder.Services.AddSingleton<GuildManager>();
+builder.Services.AddSingleton<VenueApprovalService>();
 builder.Services.AddSingleton<IAIHandler, AIHandler>();
 builder.Services.AddSingleton<IDavinciService, DavinciService>();
 builder.Services.AddSingleton<IAIContextBuilder, AiContextBuilder>();
@@ -64,18 +65,19 @@ builder.Services.AddSingleton<IIntentHandlerProvider, IntentHandlerProvider>();
 builder.Services.AddSingleton<ISessionProvider, SessionProvider>();
 builder.Services.AddSingleton<ICluClient, CluClient>();
 builder.Services.AddSingleton<IVenueAuditService, VenueAuditService>();
-builder.Services.AddSingleton<IVenueRenderer, VenueRenderer>();
+builder.Services.AddSingleton<DtoVenueRenderer>();
+builder.Services.AddSingleton<DomainVenueRenderer>();
 builder.Services.AddSingleton<IInteractionContextFactory, InteractionContextFactory>();
 builder.Services.AddSingleton<ICommandCartographer, CommandCartographer>();
 builder.Services.AddSingleton<IMassAuditService, MassAuditService>();
 builder.Services.AddSingleton<IMassAuditExporter, MassAuditExporter>();
 builder.Services.AddSingleton<MassNoticeService>();
 builder.Services.AddSingleton<MassDeleteService>();
-builder.Services.AddSingleton<IDiscordValidator, DiscordValidator>();
-builder.Services.AddSingleton<ISiteValidator, SiteValidator>();
+builder.Services.AddSingleton<DiscordValidator>();
+builder.Services.AddSingleton<SiteValidator>();
 builder.Services.AddSingleton<IActivityManager, ActivityManager>();
 builder.Services.AddSingleton<IVenueFlagRenderer, VenueFlagRenderer>();
-builder.Services.AddSingleton<IFlagServiceClient, FlagServiceClient>();
+builder.Services.AddSingleton<FlagServiceClient>();
 
 builder.Services.AddHostedService<DiscordHostedService>();
 
@@ -83,13 +85,6 @@ var app = builder.Build();
 
 var commandBroker = app.Services.GetService<ICommandBroker>();
 commandBroker.AddFromAssembly();
-commandBroker.AddVenueControlCommands();
-commandBroker.Add<HelpCommand.CommandFactory, HelpCommand.CommandHandler>(HelpCommand.COMMAND_NAME, isMasterGuildCommand: false);
-commandBroker.Add<ShowOpenCommand.CommandFactory, ShowOpenCommand.CommandHandler>(ShowOpenCommand.COMMAND_NAME, isMasterGuildCommand: false);
-commandBroker.Add<ShowForCommand.CommandFactory, ShowForCommand.CommandHandler>(ShowForCommand.COMMAND_NAME, isMasterGuildCommand: false);
-commandBroker.Add<ShowMineCommand.CommandFactory, ShowMineCommand.CommandHandler>(ShowMineCommand.COMMAND_NAME, isMasterGuildCommand: false);
-commandBroker.Add<ShowCountCommand.CommandFactory, ShowCountCommand.CommandHandler>(ShowCountCommand.COMMAND_NAME, isMasterGuildCommand: false);
-commandBroker.Add<GetUnapprovedCommand.CommandFactory, GetUnapprovedCommand.CommandHandler>(GetUnapprovedCommand.COMMAND_NAME, isMasterGuildCommand: false);
 
 app.Services.GetService<IComponentBroker>()
     .AddVenueAuditingHandlers()

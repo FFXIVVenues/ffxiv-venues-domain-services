@@ -9,7 +9,7 @@ public static class BuilderExtensions
 {
     public static IServiceCollection AddFlagService(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IFlagServiceClient, FlagServiceClient>();
+        serviceCollection.AddScoped<FlagServiceClient>();
         return serviceCollection;
     }
     

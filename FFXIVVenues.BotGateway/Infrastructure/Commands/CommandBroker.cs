@@ -72,11 +72,11 @@ internal class CommandBroker(IServiceProvider serviceProvider, IConfiguration co
 
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var handler = this._handlers.Activate(context.Interaction.CommandName);
+        var handler = this._handlers.Activate(context.Interaction.CommandName, ActivateResolve.NewServiceScope);
         if (handler == null)
         {
-            var commandPath = this.GetCommandName(context);
-            handler = this._handlers.Activate(commandPath);
+            var commandName = this.GetCommandName(context);
+            handler = this._handlers.Activate(commandName, ActivateResolve.NewServiceScope);
         }
 
         if (handler != null)

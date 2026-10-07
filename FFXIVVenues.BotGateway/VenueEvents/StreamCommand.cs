@@ -22,7 +22,7 @@ public class StreamCommand(IAuthorizer authorizer, IRepository repository) : ICo
 {
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.StreamEvents, null);
+        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.StreamEvents);
         if (!authorized.Authorized)
         {
             await context.Interaction.RespondAsync("Sorry, I can't let you do that. 👀", ephemeral: true);

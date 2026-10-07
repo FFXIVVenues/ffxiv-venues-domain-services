@@ -9,25 +9,18 @@ using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using FFXIVVenues.BotGateway.Infrastructure.Presence;
 using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueAuditing;
-using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval;
 using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
 using FFXIVVenues.BotGateway.VenueRendering;
-using FFXIVVenues.BotGateway.VenueEvents;
-using FFXIVVenues.VenueModels;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
 class ConfirmVenueSessionState(
-    IVenueRenderer venueRenderer,
+    DtoVenueRenderer venueRenderer,
     IApiService apiService,
-    IVenueApprovalService indexersService,
-    IGuildManager guildManager,
+    GuildManager guildManager,
     IAuthorizer authorizer,
-    IRepository repository,
-    IDiscordClient discordClient,
     IVenueAuditService auditService,
-    IActivityManager activityManager,
-    UiConfiguration uiConfig)
+    IActivityManager activityManager)
     : ISessionState
 {
     private static string[] _preexisingResponse = new[]
@@ -86,7 +79,8 @@ class ConfirmVenueSessionState(
         var isApprover = authorizer
             .Authorize(c.Interaction.User.Id, Permission.ApproveVenue, venue)
             .Authorized;
-            
+
+        venue.Approved = isApprover;
         var uploadVenueResponse = await apiService.PutVenueAsync(venue);
         if (!uploadVenueResponse.IsSuccessStatusCode)
         {
@@ -104,41 +98,20 @@ class ConfirmVenueSessionState(
         if (bannerUrl != null) // changed
             await apiService.PutVenueBannerAsync(venue.Id, bannerUrl);
 
-        if (isNewVenue)
-        {
-            _ = new VenueCreatedHandler(repository, discordClient, apiService, uiConfig).HandleAsync(
-                new VenueCreatedEvent(venue.Id, c.Interaction.User.Id));
-        }
-        else
-        {
-            _ = new VenueEditedHandler(repository, discordClient, apiService, uiConfig).HandleAsync(
-                new VenueEditEvent(venue.Id, c.Interaction.User.Id));
-        }
-        
         if (!isNewVenue)
         {
-            _ = guildManager.SyncRolesForVenueAsync(venue);
-            _ = guildManager.FormatDisplayNamesForVenueAsync(venue);
+            _ = guildManager.SyncRolesForDtoVenueAsync(venue);
+            _ = guildManager.FormatDisplayNamesForDtoVenueAsync(venue);
             await c.Interaction.Channel.SendMessageAsync(_preexisingResponse.PickRandom());
             var latestAudit = await auditService.GetLatestRecordFor(venue);
             if (latestAudit?.Status is VenueAuditStatus.Failed or VenueAuditStatus.Pending or VenueAuditStatus.AwaitingResponse)
                 await auditService.UpdateAuditStatus(latestAudit, venue, c.Interaction.User.Id, VenueAuditStatus.EditedLater);
         }
         else if (isApprover)
-        {
-            var success = await indexersService.ApproveVenueAsync(venue, c.Interaction.User.Id);
-            if (success)
-                await c.Interaction.Channel.SendMessageAsync("All done and auto-approved for you. :heart:");
-            else
-                await c.Interaction.Channel.SendMessageAsync("Something, went wrong while trying to auto-approve it for you. 😢");
-        }
+            await c.Interaction.Channel.SendMessageAsync("All done and auto-approved for you. :heart:");
         else
-        {
             await c.Interaction.Channel.SendMessageAsync(_successfulNewResponse.PickRandom());
-            await SendToApprovers(venue, bannerUrl);
-        }
 
-       
         _ = c.Session.ClearStateAsync(c);
         _ = activityManager.UpdateActivityAsync();
     }
@@ -151,8 +124,5 @@ class ConfirmVenueSessionState(
         _ = c.Session.ClearStateAsync(c);
         return c.Interaction.Channel.SendMessageAsync("It's as if it never happened! 😅");
     }
-
-    private Task SendToApprovers(Venue venue, string bannerUrl) =>
-        indexersService.SendForApproval(venue, bannerUrl);
 
 }

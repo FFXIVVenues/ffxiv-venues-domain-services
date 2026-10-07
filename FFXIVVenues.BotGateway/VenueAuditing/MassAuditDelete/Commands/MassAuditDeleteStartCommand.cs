@@ -16,8 +16,8 @@ public class MassAuditDeleteStartCommand(IAuthorizer authorizer, IMassAuditServi
 {
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var authorizedToControlMassAudit = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit, null);
-        var authorizedToDelete = authorizer.Authorize(context.Interaction.User.Id, Permission.DeleteVenue, null);
+        var authorizedToControlMassAudit = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit);
+        var authorizedToDelete = authorizer.Authorize(context.Interaction.User.Id, Permission.DeleteVenue);
         var authorized = authorizedToControlMassAudit.Authorized && authorizedToDelete.Authorized;
         if (!authorized)
         {

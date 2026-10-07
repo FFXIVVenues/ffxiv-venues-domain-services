@@ -6,11 +6,13 @@ using Discord.WebSocket;
 using FFXIVVenues.BotGateway.Api;
 using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using FFXIVVenues.BotGateway.VenueRendering;
+using FFXIVVenues.DomainData.Context;
 using Serilog;
 
 namespace FFXIVVenues.BotGateway.VenueEvents;
 
-public class VenueApprovedHandler(IRepository repository, IDiscordClient client, IApiService apiService, UiConfiguration uiConfig)
+// THIS IS AN INTERNAL EVENT
+public class VenueApprovedHandler(IRepository repository, IDiscordClient client, DomainDataContext db, UiConfiguration uiConfig)
 {
     public async Task HandleAsync(VenueApprovedEvent @event)
     {
@@ -19,7 +21,7 @@ public class VenueApprovedHandler(IRepository repository, IDiscordClient client,
         if (!streams.Any()) 
             return;
         
-        var venue = await apiService.GetVenueAsync(@event.VenueId);
+        var venue = await db.Venues.FindAsync(@event.VenueId);
         if (venue == null) return;
         var embed = new EmbedBuilder()
             .WithTitle(venue.Name)
@@ -49,5 +51,7 @@ public class VenueApprovedHandler(IRepository repository, IDiscordClient client,
         }
     }
 }
+
+public record VenueApprovedEvent(string VenueId, ulong UserId);
 
 

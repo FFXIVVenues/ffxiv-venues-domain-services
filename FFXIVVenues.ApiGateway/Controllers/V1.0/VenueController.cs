@@ -1,24 +1,17 @@
 using AutoMapper;
 using FFXIVVenues.ApiGateway.Controllers.V1._0.ArgModels;
-using FFXIVVenues.ApiGateway.Helpers;
-using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Mapping;
-using FFXIVVenues.VenueModels.Observability;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
+using FFXIVVenues.VenueService.Client.Events;
+using Wolverine;
 using Domain = FFXIVVenues.DomainData.Entities.Venues;
 using Dto = FFXIVVenues.VenueModels;
 
@@ -34,9 +27,9 @@ namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 public class VenueController(
     IAuthorizationManager authorizationManager,
     IMapFactory mapFactory,
-    IChangeBroker changeBroker,
+    IMessageBus bus,
     DomainDataContext domainData)
-    : ControllerBase, IDisposable
+    : ControllerBase
 {
     private readonly IMapper _modelMapper = mapFactory.GetModelMapper();
     private readonly IMapper _modelProjector = mapFactory.GetModelProjector();
@@ -114,7 +107,7 @@ public class VenueController(
             domainData.Venues.Add(newInternalVenue);
             await domainData.SaveChangesAsync();
 
-            changeBroker.Queue(ObservableOperation.Create, newInternalVenue);
+            await bus.SendAsync(new VenueCreatedEvent(newInternalVenue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
             return Ok(this._modelMapper.Map<VenueModels.Venue>(newInternalVenue));
         }
 
@@ -129,8 +122,7 @@ public class VenueController(
         domainData.Venues.Update(existingVenue);
         await domainData.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Update, existingVenue);
-
+        await bus.SendAsync(new VenueUpdatedEvent(existingVenue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(this._modelMapper.Map<Dto.Venue>(existingVenue));
     }
 
@@ -144,9 +136,9 @@ public class VenueController(
     /// <param name="id">The Id of the venue.</param>
     /// <returns>The deleted venue if successful.</returns>
     [HttpDelete("{id}")]
-    public ActionResult<VenueModels.Venue> Delete(string id)
+    public async Task<ActionResult<VenueModels.Venue>> Delete(string id)
     {
-        var venue = domainData.Venues.Find(id);
+        var venue = await domainData.Venues.FindAsync(id);
         if (venue is null || venue.Deleted is not null)
             return NotFound();
         if (authorizationManager.Check().CanNot(Operation.Delete, venue))
@@ -154,10 +146,9 @@ public class VenueController(
 
         venue.Deleted = DateTimeOffset.UtcNow;
         domainData.Venues.Update(venue);
-        domainData.SaveChanges();
+        await domainData.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Delete, venue);
-
+        await bus.SendAsync(new VenueDeletedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
     }
 
@@ -174,9 +165,9 @@ public class VenueController(
     /// <returns>The updated venue if successful.</returns>
     [HttpPut("{id}/scheduleoverride")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public ActionResult PutScheduleOveride(string id, [FromBody] Dto.ScheduleOverride @override)
+    public async Task<ActionResult> PutScheduleOveride(string id, [FromBody] Dto.ScheduleOverride @override)
     {
-        var venue = domainData.Venues.Find(id);
+        var venue = await domainData.Venues.FindAsync(id);
         if (venue == null || venue.Deleted != null)
             return NotFound();
 
@@ -193,10 +184,9 @@ public class VenueController(
         venue.ScheduleOverrides = newOverrides;
 
         domainData.Venues.Update(venue);
-        domainData.SaveChanges();
+        await domainData.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Update, venue);
-
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
     }
 
@@ -214,10 +204,12 @@ public class VenueController(
     /// <returns>The updated venue if successful.</returns>
     [HttpDelete("{id}/scheduleoverride")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public ActionResult DeleteScheduleOveride(string id, [FromQuery] DateTimeOffset? from,
+    public async Task<ActionResult> DeleteScheduleOveride(string id, [FromQuery] DateTimeOffset? from,
         [FromQuery] DateTimeOffset? to)
     {
-        var venue = domainData.Venues.Find(id);
+        var venue = await domainData.Venues
+            .Include(v => v.ScheduleOverrides)
+            .FirstOrDefaultAsync(v => v.Id == id);
         if (venue == null || venue.Deleted != null)
             return NotFound();
 
@@ -232,130 +224,9 @@ public class VenueController(
         venue.ScheduleOverrides = newOverrides;
 
         domainData.Venues.Update(venue);
-        domainData.SaveChanges();
+        await domainData.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Update, venue);
-
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(this._modelMapper.Map<Dto.Venue>(venue));
-    }
-
-    /// <summary>
-    /// Observe venue changes
-    /// </summary>
-    /// <remarks>
-    /// This is a websocket connection endpoint.
-    /// 
-    /// Before events will be piped into the websocket connection an Observation Request
-    /// must be sent on the connection. Subsequent Observation Requests superseed previous
-    /// requests.
-    /// 
-    /// An observation request is a Json formatted object with an 'OperationCriteria' field,
-    /// the value being an Operation; being either 'Create', 'Update' or 'Delete'.
-    /// 
-    /// <code>
-    /// { OperationCriteria = "Create" }
-    /// </code>
-    /// 
-    /// ## Operations
-    /// **Create**
-    /// 
-    /// Any venue created after this Observation Request for the lifetime
-    /// of the connection will be piped to the client.
-    /// 
-    /// **Update**
-    /// 
-    /// Any venue that already exists and updated after this Observation Request
-    /// for the lifetime of the connection will be piped to the client.
-    /// 
-    /// **Delete**
-    /// 
-    /// Any venue deleted after this Observation Request for the lifetime
-    /// of the connection will be piped to the client.
-    /// 
-    /// ## Response
-    /// 
-    /// Venues are piped to the client in a Json formatted object with the following fields:
-    /// 
-    /// **Operation**
-    /// 
-    /// Create or Update or Delete
-    /// 
-    /// **SubjectId**
-    /// 
-    /// The id of the venue
-    /// 
-    /// **SubjectName**
-    /// 
-    /// The name of the venue
-    /// 
-    /// **Approved**
-    /// 
-    /// The approved state of the venue
-    /// 
-    /// **DataCenter**
-    /// 
-    /// The data center the venue is in
-    /// 
-    /// **World**
-    /// 
-    /// The world the venue is in
-    /// 
-    /// **Manager**
-    /// 
-    /// The id of the managers on the venue
-    /// </remarks>
-    [HttpGet("observe")]
-    public async Task Observe()
-    {
-        if (!this.HttpContext.WebSockets.IsWebSocketRequest)
-        {
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            return;
-        }
-
-        var webSocket = await this.ControllerContext.HttpContext.WebSockets.AcceptWebSocketAsync();
-
-        Action removeExistingObserver = null;
-
-        var buffer = new byte[1024 * 4];
-        while (true)
-        {
-            WebSocketReceiveResult result = null;
-            try
-            {
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
-            catch (WebSocketException)
-            {
-                removeExistingObserver?.Invoke();
-                return;
-            }
-
-            if (result.CloseStatus.HasValue)
-            {
-                removeExistingObserver?.Invoke();
-                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
-                break;
-            }
-
-            var message = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(buffer, 0, result.Count));
-            var observer = JsonSerializer.Deserialize<Observer>(message);
-            if (observer == null)
-                continue;
-
-            observer.ObserverAction = (op, venue) =>
-            {
-                var change = Observability.VenueObservation.FromVenue(op, venue);
-                var payload = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(change));
-                return webSocket.SendAsync(payload, WebSocketMessageType.Text, true, CancellationToken.None);
-            };
-            removeExistingObserver?.Invoke();
-            removeExistingObserver = changeBroker.Observe(observer, InvocationKind.Delayed);
-        }
-    }
-
-    public void Dispose()
-    {
-        domainData?.Dispose();
     }
 }

@@ -9,8 +9,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Wolverine;
 using Wolverine.RabbitMQ;
-using Wolverine.Tracking;
-
 
 var config = new ConfigurationBuilder()
     .AddEnvironmentVariables("FFXIV_VENUES_SCHEDULESERVICE__")

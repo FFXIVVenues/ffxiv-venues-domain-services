@@ -24,11 +24,8 @@ using System.Threading.Tasks;
 namespace FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing.InteractionHandlers;
 
 [DiscordCommand("subscriptions", "See your venue subscriptions.")]
-internal class SubscriptionsCommandHandler(DomainDataContext db, IMapFactory mapFactory, IVenueRenderer venueRenderer) : ICommandHandler
+internal class SubscriptionsCommandHandler(DomainDataContext db, IMapFactory mapFactory, DomainVenueRenderer venueRenderer) : ICommandHandler
 {
-
-    private IEnumerable<Venue> _subscribedVenues;
-
     public async Task HandleAsync(SlashCommandVeniInteractionContext interactionContext)
     {
         var userId = interactionContext.Interaction.User.Id;
@@ -57,7 +54,6 @@ internal class SubscriptionsCommandHandler(DomainDataContext db, IMapFactory map
         await interactionContext.Interaction.RespondAsync(SubscriptionStrings.SubscribedVenues, components: componentBuilder.Build());
     }
 
-
     public async Task HandleSelection(ComponentVeniInteractionContext context)
     {
         _ = context.Interaction.ModifyOriginalResponseAsync(props =>
@@ -66,13 +62,11 @@ internal class SubscriptionsCommandHandler(DomainDataContext db, IMapFactory map
         var selectedVenueId = context.Interaction.Data.Values.Single();
         var user = context.Interaction.User.Id;
         var venue = await db.Venues.FindAsync(selectedVenueId);
-        var venueDto = mapFactory.GetModelMapper().Map<Venue>(venue);
 
         await context.Session.ClearStateAsync(context);
 
-        var render = await venueRenderer.ValidateAndRenderAsync(venueDto);
-        var actions = await venueRenderer.RenderActionComponentsAsync(context, venueDto, user);
+        var render = await venueRenderer.ValidateAndRenderAsync(venue);
+        var actions = await venueRenderer.RenderActionComponentsAsync(context, venue, user);
         await context.Interaction.FollowupAsync(embed: render.Build(), components: actions.Build());
     }
-
 }

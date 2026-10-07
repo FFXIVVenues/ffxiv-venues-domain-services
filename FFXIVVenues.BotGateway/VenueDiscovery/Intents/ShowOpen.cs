@@ -12,65 +12,54 @@ using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.VenueModels;
 using MomentNet.Display;
 
-namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents
+namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents;
+
+internal class ShowOpen(IApiService apiService, DtoVenueRenderer venueRenderer) : IntentHandler
 {
-    internal class ShowOpen : IntentHandler
+    private IEnumerable<Venue> _venues;
+
+    // todo: change to stateless handlers (like edit)
+    public override async Task Handle(VeniInteractionContext c)
     {
+        var asker = c.Interaction.User.Id;
+        this._venues = await apiService.GetOpenVenuesAsync();
 
-        private readonly IApiService _apiService;
-        private readonly IVenueRenderer _venueRenderer;
-        private IEnumerable<Venue> _venues;
-
-        public ShowOpen(IApiService apiService,
-                        IVenueRenderer venueRenderer)
+        if (this._venues == null || !this._venues.Any())
         {
-            this._apiService = apiService;
-            this._venueRenderer = venueRenderer;
+            await c.Interaction.RespondAsync("There are no venues open at the moment. 🤔");
+            return;
         }
 
-        // todo: change to stateless handlers (like edit)
-        public override async Task Handle(VeniInteractionContext c)
-        {
-            var asker = c.Interaction.User.Id;
-            this._venues = await this._apiService.GetOpenVenuesAsync();
+        var venueModels = this._venues
+            .OrderBy(v => v.Resolution.Start)
+            .Take(25);
 
-            if (this._venues == null || !this._venues.Any())
+        var selectMenuKey = c.Session.RegisterComponentHandler(this.HandleVenueSelection, ComponentPersistence.PersistRow);
+        var componentBuilder = new ComponentBuilder();
+        var selectMenuBuilder = new SelectMenuBuilder() { CustomId = selectMenuKey };
+        foreach (var venue in venueModels)
+        {
+            var selectMenuOption = new SelectMenuOptionBuilder
             {
-                await c.Interaction.RespondAsync("There are no venues open at the moment. 🤔");
-                return;
-            }
-
-            var venueModels = this._venues
-                .OrderBy(v => v.Resolution.Start)
-                .Take(25);
-
-            var selectMenuKey = c.Session.RegisterComponentHandler(this.HandleVenueSelection, ComponentPersistence.PersistRow);
-            var componentBuilder = new ComponentBuilder();
-            var selectMenuBuilder = new SelectMenuBuilder() { CustomId = selectMenuKey };
-            foreach (var venue in venueModels)
-            {
-                var selectMenuOption = new SelectMenuOptionBuilder
-                {
-                    Label = venue.Name,
-                    Description = $"Open for the next {venue.Resolution!.End.UtcDateTime.ToNow()[3..]}",
-                    Value = venue.Id
-                };
-                selectMenuBuilder.AddOption(selectMenuOption);
-            }
-            componentBuilder.WithSelectMenu(selectMenuBuilder);
-
-            await c.Interaction.RespondAsync(MessageRepository.WhatsOpenMessage.PickRandom(), componentBuilder.Build());
+                Label = venue.Name,
+                Description = $"Open for the next {venue.Resolution!.End.UtcDateTime.ToNow()[3..]}",
+                Value = venue.Id
+            };
+            selectMenuBuilder.AddOption(selectMenuOption);
         }
+        componentBuilder.WithSelectMenu(selectMenuBuilder);
 
-        private async Task HandleVenueSelection(ComponentVeniInteractionContext context)
-        {
-            var selectedVenueId = context.Interaction.Data.Values.Single();
-            var asker = context.Interaction.User.Id;
-            var venue = this._venues.FirstOrDefault(v => v.Id == selectedVenueId);
-            var actions = await this._venueRenderer.RenderActionComponentsAsync(context, venue, asker);
+        await c.Interaction.RespondAsync(MessageRepository.WhatsOpenMessage.PickRandom(), componentBuilder.Build());
+    }
 
-            await context.Interaction.Channel.SendMessageAsync(embed: this._venueRenderer.Render(venue).Build(),
-                components: actions.Build());
-        }
+    private async Task HandleVenueSelection(ComponentVeniInteractionContext context)
+    {
+        var selectedVenueId = context.Interaction.Data.Values.Single();
+        var asker = context.Interaction.User.Id;
+        var venue = this._venues.FirstOrDefault(v => v.Id == selectedVenueId);
+        var actions = await venueRenderer.RenderActionComponentsAsync(context, venue, asker);
+
+        await context.Interaction.Channel.SendMessageAsync(embed: venueRenderer.Render(venue).Build(),
+            components: actions.Build());
     }
 }

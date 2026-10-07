@@ -1,43 +1,15 @@
 ﻿using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using FFXIVVenues.BotGateway.Infrastructure.Commands;
+using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
 using FFXIVVenues.BotGateway.Infrastructure.Intent;
 
-namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueCreation.Command
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueCreation.Command;
+
+[DiscordCommand("create", "Create a new venue! 🥰")]
+internal class CreateCommand(IIntentHandlerProvider intentProvider) : ICommandHandler
 {
-    public static class CreateCommand
-    {
+    public Task HandleAsync(SlashCommandVeniInteractionContext slashCommand) =>
+        intentProvider.HandleIntent(IntentNames.Operation.Create, slashCommand);
 
-        public const string COMMAND_NAME = "create";
-
-        internal class Factory : ICommandFactory
-        {
-
-            public SlashCommandProperties GetSlashCommand()
-            {
-                return new SlashCommandBuilder()
-                    .WithName(COMMAND_NAME)
-                    .WithDescription("Create a new venue! 🥰")
-                    .Build();
-            }
-
-        }
-
-        internal class Handler : ICommandHandler
-        {
-            private readonly IIntentHandlerProvider _intentProvider;
-
-            public Handler(IIntentHandlerProvider intentProvider)
-            {
-                this._intentProvider = intentProvider;
-            }
-
-            public Task HandleAsync(SlashCommandVeniInteractionContext slashCommand) =>
-                this._intentProvider.HandleIntent(IntentNames.Operation.Create, slashCommand);
-
-        }
-
-    }
 }

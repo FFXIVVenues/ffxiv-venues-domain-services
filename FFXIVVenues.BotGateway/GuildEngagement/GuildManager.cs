@@ -7,13 +7,14 @@ using Discord.WebSocket;
 using FFXIVVenues.BotGateway.Api;
 using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using FFXIVVenues.BotGateway.Utils;
-using FFXIVVenues.VenueModels;
 using Serilog;
+
+using DtoVenue = FFXIVVenues.VenueModels.Venue;
+using DomainVenue = FFXIVVenues.DomainData.Entities.Venues.Venue;
 
 namespace FFXIVVenues.BotGateway.GuildEngagement;
 
-internal class GuildManager(DiscordSocketClient client, IRepository repository, IApiService apiService, ILogger logger)
-    : IGuildManager
+public class GuildManager(DiscordSocketClient client, IRepository repository, IApiService apiService, ILogger logger)
 {
     private IReadOnlyCollection<IGuild> _guildsCache;
 
@@ -30,7 +31,81 @@ internal class GuildManager(DiscordSocketClient client, IRepository repository, 
     /// Returns <c>true</c> when a role has been 
     /// assigned to any manager in any guild.
     /// </returns>
-    public async Task<bool> AssignRolesForVenueAsync(Venue venue)
+    public async Task<bool> AssignRolesForDtoVenueAsync(DtoVenue venue)
+    {
+        logger.Debug("Assigning roles for venue {VenueName}", venue.Name);
+        var guilds = this.GetVenisGuilds();
+        var guildIds = guilds.Select(guild => guild.Id.ToString());
+        var guildSettings = await repository.GetWhereAsync<GuildSettings>(c => guildIds.Contains(c.id));
+        var rolesAdded = false;
+
+        foreach (var guildSetting in guildSettings)
+        {
+            var guild = guilds.FirstOrDefault(g => g.Id == guildSetting.GuildId);
+            if (guild == null)
+            {
+                logger.Debug("Veni is longer in guild {GuildName}", guildSetting.GuildId);
+                continue;
+            }
+
+            logger.Debug("Checking guild configuration for {DataCenter} in guild {GuildName}", venue.Location.DataCenter, guild.Name);
+            if (!guildSetting.DataCenterRoleMap.TryGetValue(venue.Location.DataCenter, out var roleId))
+            {
+                logger.Debug("There is no guild configuration for {DataCenter} in guild {GuildName}", venue.Location.DataCenter, guild.Name);
+                continue;
+            }
+
+            var role = guild.GetRole(roleId);
+            if (role == null)
+            {
+                logger.Debug("Role {RoleId} not found in guild {GuildName}", roleId, guild.Name);
+                continue;
+            }
+
+            foreach (var managerId in venue.Managers)
+            {
+                var manager = await guild.GetUserAsync(ulong.Parse(managerId));
+                if (manager == null)
+                {
+                    logger.Debug("Manager {ManagerId} not found in guild {GuildName}", managerId, guild.Name);
+                    continue;
+                }
+
+                if (!manager.RoleIds.Contains(roleId))
+                {
+                    logger.Debug("Adding role {RoleId} to manager {ManagerId} in guild {GuildName}", roleId, managerId, guild.Name);
+                    await manager.AddRoleAsync(roleId);
+                    rolesAdded = true;
+                }
+                else
+                {
+                    logger.Debug("Manager {ManagerId} already has role {RoleId} in guild {GuildName}", managerId, roleId, guild.Name);
+                }
+            }
+        }
+
+        if (rolesAdded)
+            logger.Debug("Roles assigned for venue {VenueName}", venue.Name);
+        else
+            logger.Debug("No roles assigned for venue {VenueName}", venue.Name);
+
+        return rolesAdded;
+    }
+    
+     /// <summary>
+    /// For all guilds for which Veni is a member check for
+    /// roles mapped to the given venue's Data Center and assign
+    /// them to the venue's managers if they are a member of that
+    /// guild. 
+    /// </summary>
+    /// <param name="venue">
+    /// The venue with managers to which assign roles in all guilds.
+    /// </param>
+    /// <returns>
+    /// Returns <c>true</c> when a role has been 
+    /// assigned to any manager in any guild.
+    /// </returns>
+    public async Task<bool> AssignRolesForDomainVenueAsync(DomainVenue venue)
     {
         logger.Debug("Assigning roles for venue {VenueName}", venue.Name);
         var guilds = this.GetVenisGuilds();
@@ -103,7 +178,7 @@ internal class GuildManager(DiscordSocketClient client, IRepository repository, 
     /// Returns <c>true</c> when a role has been 
     /// assigned to or removed from the guild user.
     /// </returns>
-    public async Task<bool> SyncRolesForVenueAsync(Venue venue)
+    public async Task<bool> SyncRolesForDtoVenueAsync(DtoVenue venue)
     {
         logger.Debug("Syncing roles for venue {VenueName}", venue.Name);
         var guilds = this.GetVenisGuilds();
@@ -119,7 +194,7 @@ internal class GuildManager(DiscordSocketClient client, IRepository repository, 
             logger.Debug("Syncing roles in guild {Guild}", guild.Name);
 
             
-            foreach (var managerId in venue.Managers)
+            foreach (var managerId in venue.Managers ?? [])
             {
                 try
                 {
@@ -254,7 +329,7 @@ internal class GuildManager(DiscordSocketClient client, IRepository repository, 
     /// <returns>
     /// Returns <c>true</c> when a Welcome has been sent. 
     /// </returns>
-    public async Task<bool> FormatDisplayNamesForVenueAsync(Venue venue)
+    public async Task<bool> FormatDisplayNamesForDtoVenueAsync(DtoVenue venue)
     {
         var guilds = this.GetVenisGuilds();
         var guildIds = guilds.Select(guild => guild.Id.ToString());
@@ -269,7 +344,44 @@ internal class GuildManager(DiscordSocketClient client, IRepository repository, 
             {
                 var manager = await guild.GetUserAsync(ulong.Parse(managerId));
                 if (manager == null) continue;
-                await this.FormatDisplayNameForGuildUserAsync(manager, guildSetting);
+                var formatted = await this.FormatDisplayNameForGuildUserAsync(manager, guildSetting);
+                if (formatted) namesFormatted = true;
+            }
+        }
+        return namesFormatted;
+    }
+    
+    /// <summary>
+    /// For all guilds veni is a member, changes the Display Names
+    /// of the managers of the given venue to format of 
+    /// Name | Venue Name. Where the combination is too long, 
+    /// the venue name is stripped of conjunctions, then 
+    /// the display name is trim to one word, and then the
+    /// venue name is trimmed until it will fit.
+    /// </summary>
+    /// <param name="user">
+    /// The guild user to rename.
+    /// </param>
+    /// <returns>
+    /// Returns <c>true</c> when a Welcome has been sent. 
+    /// </returns>
+    public async Task<bool> FormatDisplayNamesForDomainVenueAsync(DomainVenue venue)
+    {
+        var guilds = this.GetVenisGuilds();
+        var guildIds = guilds.Select(guild => guild.Id.ToString());
+        var guildSettings = await repository.GetWhereAsync<GuildSettings>(c => guildIds.Contains(c.id));
+        var namesFormatted = false;
+        foreach (var guildSetting in guildSettings)
+        {
+            var guild = guilds.FirstOrDefault(g => g.Id == guildSetting.GuildId);
+            if (guild == null) continue;
+
+            foreach (var managerId in venue.Managers ?? [])
+            {
+                var manager = await guild.GetUserAsync(ulong.Parse(managerId));
+                if (manager == null) continue;
+                var formatted = await this.FormatDisplayNameForGuildUserAsync(manager, guildSetting);
+                if (formatted) namesFormatted = true;
             }
         }
         return namesFormatted;

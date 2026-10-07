@@ -12,7 +12,7 @@ using FFXIVVenues.VenueModels;
 namespace FFXIVVenues.BotGateway.VenueDiscovery.SessionStates
 {
     class SelectVenueToShowSessionState(
-        IVenueRenderer venueRenderer)
+        DtoVenueRenderer venueRenderer)
         : ISessionState
     {
         

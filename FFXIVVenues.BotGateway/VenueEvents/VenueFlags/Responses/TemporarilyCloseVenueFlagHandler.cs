@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FFXIVVenues.BotGateway.VenueEvents.VenueFlags.Responses;
 
-public class TemporarilyCloseVenueFlagHandler(IFlagServiceClient flagServiceClient, IRepository repository, IApiService apiService, IAuthorizer authorizer) : IComponentHandler
+public class TemporarilyCloseVenueFlagHandler(FlagServiceClient flagServiceClient, IRepository repository, IApiService apiService, IAuthorizer authorizer) : IComponentHandler
 {
     public static string Key => "FLAG_RESPONSE_TEMP_CLOSE_VENUE";
 

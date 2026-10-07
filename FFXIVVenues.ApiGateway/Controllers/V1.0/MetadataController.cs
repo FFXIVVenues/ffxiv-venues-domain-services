@@ -1,15 +1,11 @@
-using FFXIVVenues.ApiGateway.Helpers;
-using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
-using FFXIVVenues.VenueModels.Observability;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain = FFXIVVenues.DomainData.Entities.Venues;
-using Dto = FFXIVVenues.VenueModels;
+using FFXIVVenues.VenueService.Client.Events;
+using Wolverine;
 
 namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 
@@ -24,9 +20,8 @@ namespace FFXIVVenues.ApiGateway.Controllers.V1._0;
 [AllowAnonymous]
 public class MetadataController(
     IAuthorizationManager authorizationManager,
-    IChangeBroker changeBroker,
-    DomainDataContext domainData,
-    RollingCache<IEnumerable<Dto.Venue>> cache)
+    IMessageBus bus,
+    DomainDataContext domainData)
     : ControllerBase
 {
     /// <summary>
@@ -44,7 +39,6 @@ public class MetadataController(
         if (authorizationManager.Check().CanNot(Operation.Approve, venue))
             return Unauthorized();
 
-        cache.Clear();
         return Ok(venue.Approved);
     }
 
@@ -69,15 +63,13 @@ public class MetadataController(
         if (authorizationManager.Check().CanNot(Operation.Approve, venue))
             return Unauthorized();
 
-        if (venue.Approved != approved)
-        {
-            venue.Approved = approved;
-            domainData.Venues.Update(venue);
-            await domainData.SaveChangesAsync();
-
-            cache.Clear();
-            changeBroker.Queue(ObservableOperation.Update, venue);
-        }
+        if (venue.Approved == approved) 
+            return Ok(venue.Approved);
+        
+        venue.Approved = approved;
+        domainData.Venues.Update(venue);
+        await domainData.SaveChangesAsync();
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
 
         return Ok(venue.Approved);
     }
@@ -94,7 +86,7 @@ public class MetadataController(
     /// <param name="added">The added date to be set.</param>
     /// <returns>A new Added date for the venue.</returns>
     [HttpPut("{id}/added")]
-    public ActionResult Added(string id, [FromBody] DateTime added)
+    public async Task<ActionResult> Added(string id, [FromBody] DateTime added)
     {
         var venue = domainData.Venues.Find(id);
         if (venue == null || venue.Deleted != null)
@@ -107,8 +99,7 @@ public class MetadataController(
         domainData.Venues.Update(venue);
         domainData.SaveChanges();
 
-        changeBroker.Queue(ObservableOperation.Update, venue);
-        cache.Clear();
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(venue.Added);
     }
 
@@ -124,9 +115,9 @@ public class MetadataController(
     /// <param name="lastModified">The last modified date to be set.</param>
     /// <returns>The new Last Modified date for the venue.</returns>
     [HttpPut("{id}/lastmodified")]
-    public ActionResult LastModified(string id, [FromBody] DateTime? lastModified)
+    public async Task<ActionResult> LastModified(string id, [FromBody] DateTime? lastModified)
     {
-        var venue = domainData.Venues.Find(id);
+        var venue = await domainData.Venues.FindAsync(id);
         if (venue == null || venue.Deleted != null)
             return NotFound();
 
@@ -138,10 +129,9 @@ public class MetadataController(
         else 
             venue.LastModified = new DateTimeOffset(lastModified.Value.ToUniversalTime());
         domainData.Venues.Update(venue);
-        domainData.SaveChanges();
+        await domainData.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Update, venue);
-        cache.Clear();
+        await bus.SendAsync(new VenueUpdatedEvent(venue.Id, 0), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(venue.LastModified);
     }
 }

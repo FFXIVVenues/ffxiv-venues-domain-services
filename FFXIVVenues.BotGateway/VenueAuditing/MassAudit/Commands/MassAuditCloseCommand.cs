@@ -1,29 +1,18 @@
-using System;
 using System.Threading.Tasks;
 using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.BotGateway.Infrastructure.Commands;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
-using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
 namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Commands;
 
 [DiscordCommandRestrictToMasterGuild]
 [DiscordCommand("massaudit close", "Closes the last mass audit, disabling all but reporting commands from thereon.")]
-public class MassAuditCloseCommand : ICommandHandler
+public class MassAuditCloseCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler
 {
-    private readonly IAuthorizer _authorizer;
-    private readonly IMassAuditService _massAuditService;
-
-    public MassAuditCloseCommand(IAuthorizer authorizer, IMassAuditService massAuditService)
-    {
-        _authorizer = authorizer;
-        _massAuditService = massAuditService;
-    }
-
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var authorized = this._authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit, null);
+        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit);
         if (!authorized.Authorized)
         {
             await context.Interaction.RespondAsync("Sorry, I can't let you do that. 👀", ephemeral: true);
@@ -31,7 +20,7 @@ public class MassAuditCloseCommand : ICommandHandler
         }
 
         await context.Interaction.DeferAsync();
-        var result = await this._massAuditService.CloseMassAudit();
+        var result = await massAuditService.CloseMassAudit();
         switch (result)
         {
             case CloseResult.AlreadyClosed:

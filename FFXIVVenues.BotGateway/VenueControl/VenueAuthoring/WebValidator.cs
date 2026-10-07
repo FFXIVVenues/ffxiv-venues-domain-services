@@ -8,42 +8,39 @@ using Serilog;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
-public interface ISiteValidator
-{
-    Task<SiteCheckResult> CheckUrlAsync(Venue venue);
-}
-
-public class SiteValidator(HttpClient client) : ISiteValidator
+public class SiteValidator(HttpClient client)
 {
 
-    private RollingCache<SiteCheckResult> _cache = new(TimeSpan.FromMinutes(5), TimeSpan.FromHours(1));
+    private readonly RollingCache<SiteCheckResult> _cache = new(TimeSpan.FromMinutes(5), TimeSpan.FromHours(1));
+
+    public Task<SiteCheckResult> CheckUrlAsync(Uri website) =>
+        this.CheckUrlAsync(website?.ToString());
     
-    public async Task<SiteCheckResult> CheckUrlAsync(Venue venue)
+    public async Task<SiteCheckResult> CheckUrlAsync(string website)
     {
-        if (venue.Website is null)
+        if (website is null)
             return SiteCheckResult.Unset;
         
-        var cached = _cache.Get(venue.Website.ToString());
+        var cached = _cache.Get(website);
         if (cached.Result is CacheResult.CacheHit)
             return cached.Value;
 
         try
         {
-            var response = await client.GetAsync(venue.Website, HttpCompletionOption.ResponseHeadersRead);
+            var response = await client.GetAsync(website, HttpCompletionOption.ResponseHeadersRead);
             if (response.IsSuccessStatusCode || response.StatusCode is HttpStatusCode.TooManyRequests)
             {
-                _cache.Set(venue.Website.ToString(), SiteCheckResult.Valid);
+                _cache.Set(website, SiteCheckResult.Valid);
                 return SiteCheckResult.Valid;
             }
 
-            Log.Debug("{Venue} has invalid site Url ({Url}). Status code was {StatusCode}.", venue, venue.Website,
-                response.StatusCode);
+            Log.Debug("{Url} is invalid site Url. Status code was {StatusCode}", website, response.StatusCode);
         }
         catch (Exception e)
         {
-            Log.Debug(e, "{VenueId} has invalid site Url ({Url}).", venue.Id, venue.Website);
+            Log.Debug(e, "{Url} is invalid site Url", website);
         }
-        _cache.Set(venue.Website.ToString(), SiteCheckResult.Invalid);
+        _cache.Set(website, SiteCheckResult.Invalid);
         return SiteCheckResult.Invalid;
     }
 }

@@ -8,7 +8,7 @@ using FFXIVVenues.BotGateway.VenueRendering;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ConversationalIntents;
 
-internal class EditIntentHandler(IApiService apiService, IVenueRenderer venueRenderer) : IntentHandler
+internal class EditIntentHandler(IApiService apiService, DtoVenueRenderer venueRenderer) : IntentHandler
 {
     public override async Task Handle(VeniInteractionContext context)
     {

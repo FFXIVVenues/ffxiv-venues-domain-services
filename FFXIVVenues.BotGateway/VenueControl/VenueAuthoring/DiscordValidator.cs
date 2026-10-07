@@ -13,20 +13,16 @@ using CheckReturn = (FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.DiscordC
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
 
-public interface IDiscordValidator
-{
-    Task<CheckReturn> CheckInviteAsync(Uri rawDiscordString);
-    
-    Task<CheckReturn> CheckInviteAsync(Venue venue);
-}
-
-public class DiscordValidator(DiscordSocketClient client) : IDiscordValidator
+public class DiscordValidator(DiscordSocketClient client)
 {
     
     private RollingCache<CheckReturn> _cache = new(TimeSpan.FromMinutes(5), TimeSpan.FromHours(1));
     private static readonly Regex _discordPattern = new(@"^(https?:\/\/)?(www\.)?((discord(app)?(\.com|\.io)(\/invite)?)|(discord\.gg))\/([\w-]+)$");
+
+    public Task<CheckReturn> CheckInviteAsync(Uri discordUri) =>
+        this.CheckInviteAsync(discordUri?.ToString());
     
-    public async Task<CheckReturn> CheckInviteAsync(Uri rawDiscordString)
+    public async Task<CheckReturn> CheckInviteAsync(string rawDiscordString)
     {
         CheckReturn result;
         
@@ -55,16 +51,10 @@ public class DiscordValidator(DiscordSocketClient client) : IDiscordValidator
         else
             result = (DiscordCheckResult.Valid, invite);
         
-        _cache.Set(rawDiscordString.ToString(), result);
-        return result;
-    }
-
-    public async Task<CheckReturn> CheckInviteAsync(Venue venue)
-    {
-        var result = await this.CheckInviteAsync(venue.Discord);
         if (result.Result is not DiscordCheckResult.Valid and not DiscordCheckResult.Unset)
-            Log.Debug("{VenueId} has invalid discord invite ({Url}); {Status}.", venue.Id, venue.Discord, result.Result);
-
+            Log.Debug("{Url} is an invalid discord invite ; {Status}", rawDiscordString, result.Result);
+        
+        _cache.Set(rawDiscordString.ToString(), result);
         return result;
     }
 }

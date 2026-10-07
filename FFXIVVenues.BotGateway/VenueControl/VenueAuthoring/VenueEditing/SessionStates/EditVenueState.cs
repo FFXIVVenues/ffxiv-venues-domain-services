@@ -7,27 +7,19 @@ using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueControl;
 using FFXIVVenues.BotGateway.VenueRendering;
 
-namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates
+namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.SessionStates;
+
+class EditVenueSessionState(IAuthorizer authorizer, DtoVenueRenderer venueRenderer) : ISessionState
 {
-    class EditVenueSessionState : ISessionState
+    private readonly IAuthorizer _authorizer = authorizer;
+
+    public Task Enter(VeniInteractionContext c)
     {
-        private readonly IAuthorizer _authorizer;
-        private readonly IVenueRenderer _venueRenderer;
+        c.Session.SetEditing(true);
+        var venue = c.Session.GetVenue();
 
-        public EditVenueSessionState(IAuthorizer authorizer, IVenueRenderer venueRenderer)
-        {
-            this._authorizer = authorizer;
-            this._venueRenderer = venueRenderer;
-        }
-
-        public Task Enter(VeniInteractionContext c)
-        {
-            c.Session.SetEditing(true);
-            var venue = c.Session.GetVenue();
-
-            return c.Interaction.RespondAsync(MessageRepository.EditVenueMessage.PickRandom(),
-              component: this._venueRenderer.RenderEditComponents(venue, c.Interaction.User.Id).Build());
-        }
-
+        return c.Interaction.RespondAsync(MessageRepository.EditVenueMessage.PickRandom(),
+            component: venueRenderer.RenderEditComponents(venue, c.Interaction.User.Id).Build());
     }
+
 }

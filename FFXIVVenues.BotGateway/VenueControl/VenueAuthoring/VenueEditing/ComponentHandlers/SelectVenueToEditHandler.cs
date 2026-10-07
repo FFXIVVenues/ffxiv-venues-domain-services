@@ -11,12 +11,10 @@ using FFXIVVenues.BotGateway.VenueRendering;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
 
-public class SelectVenueToEditHandler(IAuthorizer authorizer, IApiService apiService, IVenueRenderer venueRenderer)
+public class SelectVenueToEditHandler(IAuthorizer authorizer, IApiService apiService, DtoVenueRenderer venueRenderer)
     : IComponentHandler
 {
     public static string Key => "CONTROL_SELECT_EDIT";
-
-    private readonly IVenueRenderer _venueRenderer = venueRenderer;
 
     public async Task HandleAsync(ComponentVeniInteractionContext context, string[] args)
     {
@@ -32,5 +30,4 @@ public class SelectVenueToEditHandler(IAuthorizer authorizer, IApiService apiSer
         context.Session.SetVenue(venue);
         await context.Session.MoveStateAsync<EditVenueSessionState>(context);
     }
-    
 }

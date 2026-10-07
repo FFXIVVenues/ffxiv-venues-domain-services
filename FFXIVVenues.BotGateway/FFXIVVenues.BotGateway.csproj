@@ -119,6 +119,7 @@
     <ProjectReference Include="..\FFXIVVenues.DomainSecurity\FFXIVVenues.DomainSecurity.csproj" />
     <ProjectReference Include="..\FFXIVVenues.FlagService.Client\FFXIVVenues.FlagService.Client.csproj" />
     <ProjectReference Include="..\FFXIVVenues.ScheduleService.Client\FFXIVVenues.ScheduleService.Client.csproj" />
+    <ProjectReference Include="..\FFXIVVenues.VenueService.Client\FFXIVVenues.VenueService.Client.csproj" />
   </ItemGroup>
 
 

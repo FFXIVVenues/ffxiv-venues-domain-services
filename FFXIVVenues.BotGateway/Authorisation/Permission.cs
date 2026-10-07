@@ -69,11 +69,11 @@ public enum Permission
 
 public static class PermissionExtensions
 {
-    public static Permission? ToLocalPermission(this Permission permission, Venue venue) =>
+    public static Permission? ToLocalPermission(this Permission permission, string dataCenter) =>
         permission switch
         {
             Permission.AuditVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.AuditNaVenue,  
                     FfxivWorlds.REGION_EU => Permission.AuditEuVenue,  
@@ -82,7 +82,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.ViewAuditHistory => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.ViewNaAuditHistory,  
                     FfxivWorlds.REGION_EU => Permission.ViewEuAuditHistory,  
@@ -91,7 +91,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.ApproveVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.ApproveNaVenue,  
                     FfxivWorlds.REGION_EU => Permission.ApproveEuVenue,  
@@ -100,7 +100,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.EditManagers => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.EditNaManagers,  
                     FfxivWorlds.REGION_EU => Permission.EditEuManagers,  
@@ -109,7 +109,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.EditVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.EditNaVenue,  
                     FfxivWorlds.REGION_EU => Permission.EditEuVenue,  
@@ -118,7 +118,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.OpenVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.OpenNaVenue,  
                     FfxivWorlds.REGION_EU => Permission.OpenEuVenue,  
@@ -127,7 +127,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.CloseVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA  => Permission.CloseNaVenue,  
                     FfxivWorlds.REGION_EU  => Permission.CloseEuVenue,  
@@ -136,7 +136,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.EditPhotography => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA  => Permission.EditNaPhotography,  
                     FfxivWorlds.REGION_EU  => Permission.EditEuPhotography,  
@@ -145,7 +145,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.HiatusVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA  => Permission.HiatusNaVenue,  
                     FfxivWorlds.REGION_EU  => Permission.HiatusEuVenue,  
@@ -154,7 +154,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.DeleteVenue => 
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA  => Permission.DeleteNaVenue,  
                     FfxivWorlds.REGION_EU  => Permission.DeleteEuVenue,  
@@ -163,7 +163,7 @@ public static class PermissionExtensions
                     _ => null
                 },
             Permission.RespondToFlags =>
-                FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter) switch
+                FfxivWorlds.GetRegionForDataCenter(dataCenter) switch
                 {
                     FfxivWorlds.REGION_NA => Permission.RespondToNaFlags,
                     FfxivWorlds.REGION_EU => Permission.RespondToEuFlags,

@@ -32,8 +32,8 @@ internal class DiscordHostedService : IHostedService
     private readonly IInteractionContextFactory _contextFactory;
     private readonly IComponentBroker _componentBroker;
     private readonly Pipeline<MessageVeniInteractionContext> _messagePipeline;
-    private readonly IVenueApprovalService _venueApprovalService;
-    private readonly IGuildManager _guildManager;
+    private readonly VenueApprovalService _venueApprovalService;
+    private readonly GuildManager _guildManager;
     private readonly IRepository _db;
     private readonly IActivityManager _activityManager;
     private readonly PresenceConfiguration _presenceConfiguration;
@@ -43,8 +43,8 @@ internal class DiscordHostedService : IHostedService
         IInteractionContextFactory contextFactory,
         IComponentBroker componentBroker,
         IServiceProvider serviceProvider,
-        IVenueApprovalService venueApprovalService,
-        IGuildManager guildManager,
+        VenueApprovalService venueApprovalService,
+        GuildManager guildManager,
         IRepository db,
         PresenceConfiguration presenceConfiguration,
         IActivityManager activityManager)
@@ -199,7 +199,6 @@ internal class DiscordHostedService : IHostedService
         {
             typingHandle?.Dispose();
         }
-
     }
 
     private void LogSlashCommandExecuted(SocketSlashCommand slashCommand, SlashCommandVeniInteractionContext context)

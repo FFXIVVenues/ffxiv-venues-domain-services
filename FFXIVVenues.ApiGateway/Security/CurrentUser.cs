@@ -14,7 +14,7 @@ public interface ICurrentUser
     bool IsAuthenticated { get; }
     string Claim(string type);
 
-    long Id { get; }
+    ulong Id { get; }
     string Nickname { get; }
     string Username { get; }
 }
@@ -25,7 +25,7 @@ public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
     public string Claim(string type) => Principal?.FindFirst(type)?.Value;
 
     public bool IsAuthenticated => Principal?.Identity?.IsAuthenticated ?? false;
-    public long Id => long.Parse(Claim(JwtRegisteredClaimNames.Sub));
+    public ulong Id => ulong.Parse(Claim(JwtRegisteredClaimNames.Sub));
     public string Username => Claim(JwtRegisteredClaimNames.PreferredUsername);
     public string Nickname => Claim(JwtRegisteredClaimNames.Nickname);
     public string AvatarUrl => Claim(JwtRegisteredClaimNames.Picture);

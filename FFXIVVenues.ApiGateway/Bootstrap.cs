@@ -1,31 +1,19 @@
-
-
-using Amazon.Runtime.Internal;
-using Castle.Core.Resource;
 using FFXIVVenues.ApiGateway.Bootstrap;
 using FFXIVVenues.ApiGateway.Controllers.OData;
 using FFXIVVenues.ApiGateway.Helpers;
 using FFXIVVenues.ApiGateway.Media;
-using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData;
-using FFXIVVenues.DomainData.Entities.Venues;
 using FFXIVVenues.DomainSecurity;
 using FFXIVVenues.FlagService.Client;
-using FFXIVVenues.FlagService.Client.Events;
-using FFXIVVenues.VenueModels;
-using FFXIVVenues.VenueModels.Observability;
 using FFXIVVenues.VenueService.Client.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Scalar.AspNetCore;
 using Serilog;
@@ -98,7 +86,6 @@ builder.Services.AddSecurityServices(o => {
 builder.Services.AddSingleton(venueCache);
 builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
-builder.Services.AddSingleton<IChangeBroker, ChangeBroker>();
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
@@ -159,25 +146,6 @@ app.MapScalarApiReference(o =>
     o.EndpointPathPrefix = "/docs/{documentName}";
     o.Title = "FFXIV Venues API Gateway {documentName}";
 });
-
-// Remove this observer and the WebSocket endpoint
-// Veni requires fully moving over to subscribing to events
-// via Message Queues beforehand
-var venueEventsObserver = new Observer([ObservableOperation.Create, ObservableOperation.Update, ObservableOperation.Delete], null, null);
-venueEventsObserver.ObserverAction += async (o, e) => {
-    using (var serviceScope = app.Services.CreateScope())
-    {
-        var bus = serviceScope.ServiceProvider.GetService<IMessageBus>();
-        object @event = o switch
-        {
-            ObservableOperation.Create => new VenueCreatedEvent(e.Id),
-            ObservableOperation.Update => new VenueUpdatedEvent(e.Id),
-            ObservableOperation.Delete => new VenueDeletedEvent(e.Id)
-        };
-        await bus?.PublishAsync(@event).AsTask();
-    }
-};
-app.Services.GetService<IChangeBroker>()?.Observe(venueEventsObserver, InvocationKind.Delayed);
 
 Log.Information("Starting migrations");
 await app.Services.MigrateDomainDataAsync();

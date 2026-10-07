@@ -9,7 +9,7 @@ using FFXIVVenues.BotGateway.VenueRendering;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueEditing.ComponentHandlers;
 
-public class EditHandler(IAuthorizer authorizer, IApiService apiService, IVenueRenderer venueRenderer)
+public class EditHandler(IAuthorizer authorizer, IApiService apiService, DtoVenueRenderer venueRenderer)
     : IComponentHandler
 {
 

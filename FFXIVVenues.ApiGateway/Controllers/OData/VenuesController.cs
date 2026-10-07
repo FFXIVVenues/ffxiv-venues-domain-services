@@ -1,23 +1,21 @@
 using FFXIVVenues.ApiGateway.Helpers;
-using FFXIVVenues.ApiGateway.Observability;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Entities.Venues;
-using FFXIVVenues.VenueModels.Observability;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using FFXIVVenues.VenueService.Client.Events;
+using Wolverine;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
-public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, ICurrentUser user) : ODataController
+public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUser user) : ODataController
 {
 
     [EnableQuery]
@@ -51,7 +49,7 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
         await db.Venues.AddAsync(venue);
         await db.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Create, venue);
+        await bus.PublishAsync(new VenueCreatedEvent(venue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Created(venue);
     }
 
@@ -64,13 +62,13 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
         if (existingVenue == null || existingVenue.Deleted != null)
             return NotFound();
         
-        if (existingVenue.Managers?.Contains(user.Id.ToString()) != null)
+        if (existingVenue.Managers?.Contains(user.Id.ToString()) != true)
             return Forbid();
 
         venue.CopyChangedValues(existingVenue);
         await db.SaveChangesAsync();
 
-        changeBroker.Queue(ObservableOperation.Update, existingVenue);
+        await bus.PublishAsync(new VenueUpdatedEvent(existingVenue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return Ok(existingVenue);
     }
 
@@ -85,7 +83,8 @@ public class VenuesController(DomainDataContext db, IChangeBroker changeBroker, 
 
         venue.Deleted = DateTimeOffset.UtcNow;
         await db.SaveChangesAsync();
-
+        
+        await bus.SendAsync(new VenueDeletedEvent(venue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return venue;
     }
 

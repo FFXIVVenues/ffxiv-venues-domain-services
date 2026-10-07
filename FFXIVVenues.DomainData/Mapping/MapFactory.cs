@@ -51,8 +51,7 @@ public class MapFactory : IMapFactory
                         : null));
             cfg.CreateMap<VenueModels.Venue, Entities.Venues.Venue>()
                 .ForMember(d => d.Added, ex => ex.Ignore())
-                .ForMember(d => d.LastModified, ex => ex.Ignore())
-                .ForMember(d => d.Approved, ex => ex.Ignore());
+                .ForMember(d => d.LastModified, ex => ex.Ignore());
         }, new NullLoggerFactory());
         
         this._projectionConfiguration = new MapperConfiguration(cfg =>

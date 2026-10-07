@@ -12,24 +12,27 @@ using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.Utils.Broadcasting;
 using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.BotGateway.VenueEvents;
-using FFXIVVenues.VenueModels;
+using FFXIVVenues.DomainData.Context;
+using FFXIVVenues.DomainData.Entities.Venues;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.VenueApproval;
 
 public class VenueApprovalService(
     IRepository repository,
     DiscordSocketClient client,
-    IVenueRenderer venueRenderer,
+    DomainVenueRenderer venueRenderer,
+    IDbContextFactory<DomainDataContext> dbFactory,
     IApiService apiService,
     UiConfiguration uiConfiguration,
     NotificationsConfiguration config,
     IAuthorizer authorizer,
-    IGuildManager guildManager)
-    : IVenueApprovalService
+    GuildManager guildManager)
 {
     private readonly ConcurrentDictionary<string, Broadcast> _broadcasts = new();
 
-    public async Task<BroadcastReceipt> SendForApproval(Venue venue, string bannerUrl)
+    public async Task<BroadcastReceipt> SendForApprovalAsync(Venue venue)
     {
         var dc = FfxivWorlds.GetRegionForDataCenter(venue.Location?.DataCenter);
         var recipients = config.Approvals.ResolveFor(dc);
@@ -37,7 +40,7 @@ public class VenueApprovalService(
         _broadcasts[broadcast.Id] = broadcast;
         return await broadcast
             .WithMessage($"Heyo indexers!\nVenue '**{venue.Name}**' ({venue.Id}) needs approving! :heart:")
-            .WithEmbed(await venueRenderer.ValidateAndRenderAsync(venue, bannerUrl))
+            .WithEmbed(await venueRenderer.ValidateAndRenderAsync(venue))
             .WithComponent(bcc =>
             {
                 ComponentBuilder approveRejectComponent = null;
@@ -84,13 +87,17 @@ public class VenueApprovalService(
     public async Task<bool> ApproveVenueAsync(Venue venue, ulong approver)
     {
         // It may have been edited by indexers, so get the latest.
-        venue = await apiService.GetVenueAsync(venue.Id);
+        var db = await dbFactory.CreateDbContextAsync();
+        venue = await db.Venues.FindAsync(venue.Id);
+        if (venue == null)
+            return false; 
+        
         var response = await apiService.ApproveAsync(venue.Id);
         if (!response.IsSuccessStatusCode)
             return false;
             
-        _ = guildManager.AssignRolesForVenueAsync(venue);
-        _ = guildManager.FormatDisplayNamesForVenueAsync(venue);
+        _ = guildManager.AssignRolesForDomainVenueAsync(venue);
+        _ = guildManager.FormatDisplayNamesForDomainVenueAsync(venue);
 
         foreach (var managerId in venue.Managers)
         {
@@ -102,7 +109,7 @@ public class VenueApprovalService(
                 embed: (await venueRenderer.ValidateAndRenderAsync(venue)).Build());
         }
         
-        _ = new VenueApprovedHandler(repository, client, apiService, uiConfiguration).HandleAsync(
+        _ = new VenueApprovedHandler(repository, client, db, uiConfiguration).HandleAsync(
             new VenueApprovedEvent(venue.Id, approver));
 
         return true;
@@ -143,9 +150,6 @@ public class VenueApprovalService(
             });
                 
             await rejectBic.Component.Channel.SendMessageAsync("Okay! Well, maybe the next one then. 😢");
-            
-            _ = new VenueDeletedHandler(repository, client).HandleAsync(
-                new VenueDeletedEvent(venue.Id, venue.Name, confirmDeleteBic.CurrentUser.Id));
         });
 
         var cancelHandler = bcc.RegisterComponentHandler(cancelBic =>

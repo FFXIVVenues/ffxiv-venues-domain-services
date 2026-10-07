@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
+using FFXIVVenues.DomainData.Context;
+using FFXIVVenues.VenueService.Client.Events;
 using Serilog;
 
 namespace FFXIVVenues.BotGateway.VenueEvents;
 
-public class VenueDeletedHandler(IRepository repository, IDiscordClient client)
+public class VenueDeletedHandler(IRepository repository, IDiscordClient client, DomainDataContext db)
 {
     public async Task HandleAsync(VenueDeletedEvent @event)
     {
@@ -17,15 +19,20 @@ public class VenueDeletedHandler(IRepository repository, IDiscordClient client)
         if (!streams.Any()) 
             return;
 
+        var venue = await db.Venues.FindAsync(@event.VenueId);
+        if (venue == null) return;
+        
         var embed = new EmbedBuilder()
-            .WithTitle(@event.VenueName)
+            .WithTitle(venue.Name)
             .WithAuthor("🗑️ Venue Deleted")
-            .WithDescription("**By** " + @event.UserId switch
-                {
-                    2 => "Mass Audit Delete",
-                    _ => MentionUtils.MentionUser(@event.UserId)
-                })
+            
             .WithColor(Color.Red);
+        if (@event.Actor != 0)
+            embed.WithDescription("**By** " + @event.Actor switch
+            {
+                2 => "Mass Audit Delete",
+                _ => MentionUtils.MentionUser(@event.Actor)
+            });
         
         foreach (var stream in streams)
         {

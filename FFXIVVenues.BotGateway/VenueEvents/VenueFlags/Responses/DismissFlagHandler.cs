@@ -13,7 +13,7 @@ public class DismissFlagHandler(
     IRepository repository,
     IApiService apiService,
     IAuthorizer authorizer,
-    IFlagServiceClient flagServiceClient)
+    FlagServiceClient flagServiceClient)
     : BaseAuditHandler
 {
     

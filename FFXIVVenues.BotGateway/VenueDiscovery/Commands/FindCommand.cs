@@ -14,7 +14,7 @@ namespace FFXIVVenues.BotGateway.VenueDiscovery.Commands
 {
     [DiscordCommand("find", "Find a venue by it's name.")]
     [DiscordCommandOption("query", "Part or all of the name of the venues you want to find", ApplicationCommandOptionType.String, Required = true)]
-    public class FindCommand(IApiService apiService, IVenueRenderer venueRenderer) : ICommandHandler
+    public class FindCommand(IApiService apiService, DtoVenueRenderer venueRenderer) : ICommandHandler
     {
         public async Task HandleAsync(SlashCommandVeniInteractionContext context)
         {

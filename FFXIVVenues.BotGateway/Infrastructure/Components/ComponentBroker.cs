@@ -8,14 +8,11 @@ using FFXIVVenues.BotGateway.Utils;
 
 namespace FFXIVVenues.BotGateway.Infrastructure.Components;
 
-public class ComponentBroker : IComponentBroker
+public class ComponentBroker(IServiceProvider serviceProvider) : IComponentBroker
 {
     
     public const string ValuesToHandlersKey = "VALUES_TO_HANDLERS";
-    private readonly TypeMap<IComponentHandler> _handlers;
-
-    public ComponentBroker(IServiceProvider serviceProvider) =>
-        this._handlers = new(serviceProvider);
+    private readonly TypeMap<IComponentHandler> _handlers = new(serviceProvider);
 
     public void Add<THandler>(string key) where THandler : IComponentHandler =>
         this._handlers.Add<THandler>(key);
@@ -25,7 +22,7 @@ public class ComponentBroker : IComponentBroker
         var key = context.Interaction.Data.CustomId.Split(":");
         if (key[0] == ValuesToHandlersKey)
             key = context.Interaction.Data.Values?.FirstOrDefault()?.Split(":");
-        var handler = this._handlers.Activate(key[0]);
+        var handler = this._handlers.Activate(key[0], ActivateResolve.NewServiceScope);
         if (handler == default)
             return Task.CompletedTask;
         return handler.HandleAsync(context, key[1].Split(','));

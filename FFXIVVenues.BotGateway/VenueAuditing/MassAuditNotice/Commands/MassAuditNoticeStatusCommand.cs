@@ -14,7 +14,7 @@ namespace FFXIVVenues.BotGateway.VenueAuditing.MassAuditNotice.Commands
     {
         public async Task HandleAsync(SlashCommandVeniInteractionContext context)
         {
-            var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ReportMassAudit, null);
+            var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ReportMassAudit);
             if (!authorized.Authorized)
             {
                 await context.Interaction.RespondAsync("Sorry, I can't let you do that. 👀", ephemeral: true);

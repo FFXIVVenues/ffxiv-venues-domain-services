@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using FFXIVVenues.DomainData.Context;
-using FFXIVVenues.DomainData.Mapping;
+﻿using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.VenueService.Client.Events;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FFXIVVenues.ScheduleService.EventsHandlers;
 

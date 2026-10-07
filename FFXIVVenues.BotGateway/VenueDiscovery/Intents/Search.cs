@@ -9,7 +9,7 @@ using FFXIVVenues.BotGateway.VenueRendering;
 
 namespace FFXIVVenues.BotGateway.VenueDiscovery.Intents;
 
-internal class Search(IApiService apiService, IVenueRenderer venueRenderer) : IntentHandler
+internal class Search(IApiService apiService, DtoVenueRenderer venueRenderer) : IntentHandler
 {
     public override async Task Handle(VeniInteractionContext context)
     {

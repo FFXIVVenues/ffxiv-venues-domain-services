@@ -100,4 +100,4 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
     }
 }
 
-public record LoggedInUser(long userId, string username, string nickname, string avatarUrl);
+public record LoggedInUser(ulong userId, string username, string nickname, string avatarUrl);

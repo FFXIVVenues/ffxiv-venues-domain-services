@@ -13,7 +13,7 @@ public class MassAuditStartCommand(IAuthorizer authorizer, IMassAuditService mas
 {
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit, null);
+        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit);
         if (!authorized.Authorized)
         {
             await context.Interaction.RespondAsync("Sorry, I can't let you do that. 👀", ephemeral: true);

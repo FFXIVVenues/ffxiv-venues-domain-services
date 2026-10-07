@@ -13,7 +13,7 @@ using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.PropertyEntrySessionSta
 
 namespace FFXIVVenues.BotGateway.VenueControl.VenueAuthoring.PropertyEntrySessionStates
 {
-    class DiscordEntrySessionState(IRepository db, IDiscordValidator discordValidator) : ISessionState
+    class DiscordEntrySessionState(IRepository db, DiscordValidator discordValidator) : ISessionState
     {
         public Task Enter(VeniInteractionContext c)
         {

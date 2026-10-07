@@ -2,27 +2,17 @@
 using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.BotGateway.Infrastructure.Commands;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
-using FFXIVVenues.BotGateway.VenueAuditing.MassAudit;
 using FFXIVVenues.BotGateway.Infrastructure.Commands.Attributes;
 
 namespace FFXIVVenues.BotGateway.VenueAuditing.MassAudit.Commands;
 
 [DiscordCommandRestrictToMasterGuild]
 [DiscordCommand("massaudit cancel", "Cancel a currently executing audit round.")] 
-public class MassAuditCancelCommand : ICommandHandler
+public class MassAuditCancelCommand(IAuthorizer authorizer, IMassAuditService massAuditService) : ICommandHandler
 {
-    private readonly IAuthorizer _authorizer;
-    private readonly IMassAuditService _massAuditService;
-
-    public MassAuditCancelCommand(IAuthorizer authorizer, IMassAuditService massAuditService)
-    {
-        _authorizer = authorizer;
-        _massAuditService = massAuditService;
-    }
-
     public async Task HandleAsync(SlashCommandVeniInteractionContext context)
     {
-        var authorized = this._authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit, null);
+        var authorized = authorizer.Authorize(context.Interaction.User.Id, Permission.ControlMassAudit);
         if (!authorized.Authorized)
         {
             await context.Interaction.RespondAsync("Sorry, I can't let you do that. 👀", ephemeral: true);
@@ -30,7 +20,7 @@ public class MassAuditCancelCommand : ICommandHandler
         }
 
         await context.Interaction.DeferAsync();
-        var result = await this._massAuditService.CancelAsync();
+        var result = await massAuditService.CancelAsync();
         switch (result)
         {
             case CancelResult.NothingToCancel:

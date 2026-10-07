@@ -74,25 +74,17 @@ public class MassDeleteService(IRepository repository, IApiService apiService, I
                         result.StatusCode);
                 }
 
-                taskContext.Log($"Completed deletion of venues.");
-                taskContext.SetCompleted();
                 await repository.UpsertAsync(taskContext);
-                
-                if (result.IsSuccessStatusCode)
-                {
-                    var venue = await result.Content.ReadFromJsonAsync<Venue>(cancellationToken);
-                    _ = new VenueDeletedHandler(repository, discordClient).HandleAsync(
-                        new VenueDeletedEvent(remainingVenue.VenueId, venue.Name, 2));
-                }
-
-                if (await discordClient.GetChannelAsync(taskContext.RequestedIn) is not IMessageChannel channel)
-                    channel = await discordClient.GetDMChannelAsync(taskContext.RequestedIn);
-                await channel.SendMessageAsync(
-                    $"Hey {MentionUtils.MentionUser(taskContext.RequestedBy)}, I've completed the deletes!");
-
-                Log.Debug("Mass delete: completed deletion of venues");
             }
-
+            
+            Log.Debug("Mass delete: completed deletion of venues");
+            taskContext.Log($"Completed deletion of venues.");
+            taskContext.SetCompleted();
+            
+            if (await discordClient.GetChannelAsync(taskContext.RequestedIn) is not IMessageChannel channel)
+                channel = await discordClient.GetDMChannelAsync(taskContext.RequestedIn);
+            await channel.SendMessageAsync(
+                $"Hey {MentionUtils.MentionUser(taskContext.RequestedBy)}, I've completed the deletes!");
         }
         catch (Exception e)
         {

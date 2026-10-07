@@ -1,8 +1,12 @@
-﻿using Discord;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Discord;
 using FFXIVVenues.BotGateway.Authorisation;
 using FFXIVVenues.BotGateway.Infrastructure.Components;
 using FFXIVVenues.BotGateway.Infrastructure.Context;
-using FFXIVVenues.BotGateway.Infrastructure.Persistence.Abstraction;
 using FFXIVVenues.BotGateway.Utils;
 using FFXIVVenues.BotGateway.VenueAuditing.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueAuthoring;
@@ -12,34 +16,30 @@ using FFXIVVenues.BotGateway.VenueControl.VenueClosing.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueDeletion.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueControl.VenueOpening.ComponentHandlers;
 using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing.Handlers;
-using FFXIVVenues.BotGateway.VenueEvents.VenueSubscribing.Models;
 using FFXIVVenues.BotGateway.VenueRendering.ComponentHandlers;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.VenueModels;
+using Microsoft.EntityFrameworkCore;
 using MomentNet.Display;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Venue = FFXIVVenues.DomainData.Entities.Venues.Venue;
 
 namespace FFXIVVenues.BotGateway.VenueRendering;
 
-public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, DomainDataContext db, IDiscordValidator discordValidator, ISiteValidator siteValidator) : IVenueRenderer
+public class DomainVenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, IDbContextFactory<DomainDataContext> dbFactory, DiscordValidator discordValidator, SiteValidator siteValidator) : BaseVenueRenderer
 {
-
-    public async Task<EmbedBuilder> ValidateAndRenderAsync(Venue venue, string bannerUrl = null,
+    public async Task<EmbedBuilder> ValidateAndRenderAsync(Venue venue, string bannerUrl = null, 
         VenueRenderFlags renderFlags = VenueRenderFlags.None)
     {
         var flags = renderFlags;
         var discordTask = discordValidator
-            .CheckInviteAsync(venue)
+            .CheckInviteAsync(venue.Discord)
             .ContinueWith(r => {
                if (r.Result.Result is not (DiscordCheckResult.Valid or DiscordCheckResult.Unset))
                    flags |= VenueRenderFlags.FlagInvalidDiscord;
             });
+        
         var siteTask = siteValidator
-            .CheckUrlAsync(venue)
+            .CheckUrlAsync(venue.Website)
             .ContinueWith(r => {
                 if (r.Result is not (SiteCheckResult.Valid or SiteCheckResult.Unset))
                     flags |= VenueRenderFlags.FlagInvalidSite;
@@ -49,10 +49,11 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
         return this.Render(venue, bannerUrl, flags);
     }
     
-    public EmbedBuilder Render(Venue venue, string bannerUrl = null, VenueRenderFlags renderFlags = VenueRenderFlags.None)
+    public EmbedBuilder Render(Venue venue, string bannerUrl = null, 
+        VenueRenderFlags renderFlags = VenueRenderFlags.None)
     {
         var uiUrl = $"{uiConfig.BaseUrl}/#{venue.Id}"; 
-        bannerUrl ??= venue.BannerUri?.ToString();
+        bannerUrl ??= uiConfig.BannerUriTemplate.Replace("{venueId}", venue.Id).Replace("{bannerKey}", venue.Banner);
 
         var stringBuilder = new StringBuilder();
         stringBuilder.Append("**Venue Id**: ");
@@ -67,18 +68,18 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
             stringBuilder.AppendLine(venue.LastModified.Value.DateTime.FromNow()[0].ToString().ToUpper() + venue.LastModified.Value.DateTime.FromNow()[1..]);
         }
         stringBuilder.Append("**Location**: ");
-        stringBuilder.AppendLine(venue.Location.ToString());
+        stringBuilder.AppendLine(this.RenderLocationString(venue.Location));
         stringBuilder.Append("**SFW**: ");
         stringBuilder.AppendLine(venue.Sfw ? "Yes" : "No");
         
         stringBuilder.Append("**Website**: ");
-        stringBuilder.Append(venue.Website?.ToString() ?? "No website");
+        stringBuilder.Append(venue.Website ?? "No website");
         if (renderFlags.HasFlag(VenueRenderFlags.FlagInvalidSite))
             stringBuilder.AppendLine(" - **\u26a0\ufe0f Invalid site**");
         else stringBuilder.AppendLine();
         
         stringBuilder.Append("**Discord**: ");
-        stringBuilder.Append(venue.Discord?.ToString() ?? "No discord");
+        stringBuilder.Append(venue.Discord ?? "No discord");
         if (renderFlags.HasFlag(VenueRenderFlags.FlagInvalidDiscord))
             stringBuilder.AppendLine(" - \u26a0\ufe0f **Invalid invite**");
         else stringBuilder.AppendLine();
@@ -96,11 +97,11 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
         if (venue.Description != null)
             foreach (var paragraph in venue.Description)
             {
-                var trimmmedParagraph = paragraph;
+                var trimmedParagraph = paragraph;
                 if (paragraph.Length > charsLeft)
-                    trimmmedParagraph = paragraph[..charsLeft];
+                    trimmedParagraph = paragraph[..charsLeft];
                 stringBuilder.Append(paragraph);
-                charsLeft -= trimmmedParagraph.Length;
+                charsLeft -= trimmedParagraph.Length;
 
                 if (charsLeft < 10)
                 {
@@ -117,15 +118,6 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
                 .AppendLine();
         
         stringBuilder.AppendLine();
-        var resolution = venue.Resolve(DateTimeOffset.Now);
-        if (resolution != null && resolution.IsAt(DateTimeOffset.Now))
-            stringBuilder.AppendLine(":green_circle: **Open right now**");
-        else if (resolution != null)
-            stringBuilder.Append(":black_circle: **Open ").Append(resolution.Start.UtcDateTime.ToNow()).AppendLine("**");
-        else
-            stringBuilder.AppendLine(":black_circle: **Not open right now**");
-
-        stringBuilder.AppendLine();
         stringBuilder.AppendLine("**Schedule**: ");
         if (venue.Schedule == null || venue.Schedule.Count == 0)
         {
@@ -136,38 +128,38 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
             foreach (var schedule in venue.Schedule)
             {
 
-                if (schedule.Interval is { IntervalType: IntervalType.EveryXWeeks })
+                if (schedule.IntervalType == IntervalType.EveryXWeeks)
                 {
-                    if (schedule.Interval.IntervalArgument == 1)
+                    if (schedule.IntervalArgument == 1)
                         stringBuilder.Append("Weekly on ");
-                    else if (schedule.Interval.IntervalArgument == 2)
+                    else if (schedule.IntervalArgument == 2)
                         stringBuilder.Append("Biweekly on ");
                     else
                     {
-                        stringBuilder.Append(schedule.Interval.IntervalArgument);
+                        stringBuilder.Append(schedule.IntervalArgument);
                         stringBuilder.Append(" weekly on ");
                     }
                     stringBuilder.Append(schedule.Day.ToString());
                     stringBuilder.Append('s');
                 }
-                else if (schedule.Interval is { IntervalType: IntervalType.EveryXthDayOfTheMonth, IntervalArgument: > 0 })
+                else if (schedule.IntervalType == IntervalType.EveryXthDayOfTheMonth && schedule.IntervalArgument > 0)
                 {
-                    stringBuilder.Append(schedule.Interval.IntervalArgument);
-                    stringBuilder.Append(Nth(schedule.Interval.IntervalArgument));
+                    stringBuilder.Append(schedule.IntervalArgument);
+                    stringBuilder.Append(Nth(schedule.IntervalArgument));
                     stringBuilder.Append(' ');
                     stringBuilder.Append(schedule.Day.ToString());
                     stringBuilder.Append(" of the month");
                 }
-                else if (schedule.Interval is { IntervalType: IntervalType.EveryXthDayOfTheMonth, IntervalArgument: -1 })
+                else if (schedule.IntervalType == IntervalType.EveryXthDayOfTheMonth && schedule.IntervalArgument == -1)
                 {
                     stringBuilder.Append("Last ");
                     stringBuilder.Append(schedule.Day.ToString());
                     stringBuilder.Append(" of the month");
                 }
-                else if (schedule.Interval is { IntervalType: IntervalType.EveryXthDayOfTheMonth, IntervalArgument: < -1 })
+                else if (schedule.IntervalType == IntervalType.EveryXthDayOfTheMonth && schedule.IntervalArgument < -1)
                 {
-                    stringBuilder.Append(Math.Abs(schedule.Interval.IntervalArgument));
-                    stringBuilder.Append(Nth(Math.Abs(schedule.Interval.IntervalArgument)));
+                    stringBuilder.Append(Math.Abs(schedule.IntervalArgument));
+                    stringBuilder.Append(Nth(Math.Abs(schedule.IntervalArgument)));
                     stringBuilder.Append(" last ");
                     stringBuilder.Append(schedule.Day.ToString());
                     stringBuilder.Append(" of the month");
@@ -175,43 +167,44 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
                         
                 stringBuilder
                     .Append(", ")
-                    .Append(schedule.Start.Hour)
+                    .Append(schedule.StartHour)
                     .Append(':')
-                    .Append(schedule.Start.Minute.ToString("00"))
+                    .Append(schedule.StartMinute.ToString("00"))
                     .Append(" (")
-                    .Append(TimeZone(schedule.Start.TimeZone))
+                    .Append(TimeZone(schedule.TimeZone))
                     .Append(")");
-                if (schedule.Start.NextDay)
+                var endIsNextDay = schedule.StartHour > schedule.EndHour ||
+                                   (schedule.StartHour == schedule.EndHour &&
+                                    schedule.StartMinute > schedule.EndMinute);
+                if (endIsNextDay)
                 {
                     stringBuilder.Append(" (");
                     stringBuilder.Append(schedule.Day.Next().ToShortName());
                     stringBuilder.Append(")");
                 }
 
-                if (schedule.End != null)
-                {
+                if (schedule.EndHour.HasValue && schedule.EndMinute.HasValue)
                     stringBuilder
                         .Append(" - ")
-                        .Append(schedule.End.Hour)
+                        .Append(schedule.EndHour.Value)
                         .Append(':')
-                        .Append(schedule.End.Minute.ToString("00"))
+                        .Append(schedule.EndMinute.Value.ToString("00"))
                         .Append(" (")
-                        .Append(TimeZone(schedule.End.TimeZone))
+                        .Append(TimeZone(schedule.TimeZone))
                         .Append(')');
-                    if (schedule.End.NextDay)
-                    {
-                        stringBuilder.Append(" (");
-                        stringBuilder.Append(schedule.Day.Next().ToShortName());
-                        stringBuilder.Append(")");
-                    }
+                
+                if (endIsNextDay)
+                {
+                    stringBuilder.Append(" (");
+                    stringBuilder.Append(schedule.Day.Next().ToShortName());
+                    stringBuilder.Append(')');
                 }
 
                 stringBuilder.AppendLine();
             }
         }
 
-
-        if (venue.ScheduleOverrides != null && venue.ScheduleOverrides.Any(o => o.End > DateTime.Now))
+        if (venue.ScheduleOverrides?.Any(o => o.End > DateTime.Now) ?? false)
         {
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("**Adhoc Openings / Closures**:");
@@ -266,6 +259,7 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
 
     public async Task<ComponentBuilder> RenderActionComponentsAsync(IVeniInteractionContext context, Venue venue, ulong user)
     {
+        var db = await dbFactory.CreateDbContextAsync();
         var subscription = await db.Favorites.FindAsync(user, venue.Id);
 
         var builder = new ComponentBuilder();
@@ -417,27 +411,7 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
 
         return component.WithSelectMenu(selectMenu);
     }
-
-    public ComponentBuilder RenderVenueSelection(IEnumerable<Venue> venues, string handlerKey)
-    {
-        var componentBuilder = new ComponentBuilder();
-        var selectMenuBuilder = new SelectMenuBuilder()
-            .WithStaticHandler(handlerKey);
-        foreach (var venue in venues.OrderBy(v => v.Name))
-        {
-            var selectMenuOption = new SelectMenuOptionBuilder
-            {
-                Label = venue.Name,
-                Description = venue.Location.ToString(),
-                Value = venue.Id
-            };
-            selectMenuBuilder.AddOption(selectMenuOption);
-        }
-        componentBuilder.WithSelectMenu(selectMenuBuilder);
-
-        return componentBuilder;
-    }
-
+    
     public string RenderLocationString(DomainData.Entities.Venues.Location location)
     {
         if (!string.IsNullOrWhiteSpace(location.Override))
@@ -477,67 +451,24 @@ public class VenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfig, Dom
         return stringBuilder.ToString();
     }
 
-    private static string Nth(int d)
+    public ComponentBuilder RenderVenueSelection(IEnumerable<Venue> venues, string handlerKey)
     {
-        if (d is > 3 and < 21) return "th";
-
-        return (d % 10) switch
+        var componentBuilder = new ComponentBuilder();
+        var selectMenuBuilder = new SelectMenuBuilder()
+            .WithStaticHandler(handlerKey);
+        foreach (var venue in venues.OrderBy(v => v.Name))
         {
-            1 => "st",
-            2 => "nd",
-            3 => "rd",
-            _ => "th"
-        };
+            var selectMenuOption = new SelectMenuOptionBuilder
+            {
+                Label = venue.Name,
+                Description = venue.Location?.ToString(),
+                Value = venue.Id
+            };
+            selectMenuBuilder.AddOption(selectMenuOption);
+        }
+        componentBuilder.WithSelectMenu(selectMenuBuilder);
+
+        return componentBuilder;
     }
 
-    private static string TimeZone(string id) => id switch
-    {
-        "Eastern Standard Time" => "EST",
-        "America/New_York" => "EST",
-        "Central Standard Time" => "CST",
-        "America/Chicago" => "CST",
-        "Mountain Standard Time" => "MST",
-        "America/Denver" => "MST",
-        "Pacific Standard Time" => "PST",
-        "America/Los_Angeles" => "PST",
-        "Atlantic Standard Time" => "AST",
-        "America/Halifax" => "AST",
-        "Central Europe Standard Time" => "CEST",
-        "Europe/Budapest" => "CEST",
-        "E. Europe Standard Time" => "EEST",
-        "Europe/Chisinau" => "EEST",
-        "Greenwich Mean Time" => "GMT",
-        "GMT Standard Time" => "GMT",
-        "Europe/London" => "GMT",
-        "UTC" => "Server Time",
-        "Asia/Hong_Kong" => "HKT",
-        "Australia/Perth" => "AWT",
-        "Australia/Adelaide" => "ACT",
-        "Australia/Sydney" => "AET",
-        _ => id
-    };
-
-}
-
-public interface IVenueRenderer
-{
-    Task<EmbedBuilder> ValidateAndRenderAsync(Venue venue, string bannerUrl = null, VenueRenderFlags renderFlags = VenueRenderFlags.None);
-    
-    EmbedBuilder Render(Venue venue, string bannerUrl = null, VenueRenderFlags renderFlags = VenueRenderFlags.None);
-
-    Task<ComponentBuilder> RenderActionComponentsAsync(IVeniInteractionContext context, Venue venue, ulong user);
-
-    ComponentBuilder RenderEditComponents(Venue venue, ulong user);
-
-    ComponentBuilder RenderVenueSelection(IEnumerable<Venue> venues, string handlerKey);
-
-    string RenderLocationString(DomainData.Entities.Venues.Location location);
-}
-
-[Flags]
-public enum VenueRenderFlags
-{
-    None = 0,
-    FlagInvalidDiscord = 1,
-    FlagInvalidSite = 2
 }

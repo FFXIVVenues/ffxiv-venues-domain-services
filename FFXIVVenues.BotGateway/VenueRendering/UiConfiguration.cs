@@ -1,8 +1,7 @@
-﻿namespace FFXIVVenues.BotGateway.VenueRendering
+﻿namespace FFXIVVenues.BotGateway.VenueRendering;
+
+public class UiConfiguration
 {
-    public class UiConfiguration
-    {
-        public string BaseUrl { get; set; }
-        public string UriTemplate { get; set; }
-    }
+    public string BaseUrl { get; set; }
+    public string BannerUriTemplate { get; set; }
 }
