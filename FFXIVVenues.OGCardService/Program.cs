@@ -1,10 +1,8 @@
-using System.Runtime.CompilerServices;
 using FFXIVVenues.DomainData;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Mapping;
 using FFXIVVenues.OGCardService;
 using Serilog;
-using Serilog.Events;
 
 var config = new ConfigurationBuilder()
     .AddEnvironmentVariables("FFXIV_VENUES_OGCARD__")
@@ -12,21 +10,24 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var connectionString = config.GetConnectionString("FFXIVVenues");
-var redirectUriTemplate = config.GetValue<string>("RedirectUriTemplate", 
-    "https://ffxivvenues.dev/venue/{venueId}");
-var mediaUriTemplate = config.GetValue<string>("BannerUriTemplate", 
-    "https://images.ffxivvenues.dev/{venueId}/{bannerKey}");
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
     .CreateLogger();
 
+var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
+var bannerUriTemplate = config.GetValue<string>("BannerUriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDomainData(connectionString, mediaUriTemplate);
+builder.Services.AddDomainData(c =>
+{
+    c.ConnectionString = connectionString;
+    c.MediaUriTemplate = bannerUriTemplate;
+});
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 var app = builder.Build();
 
+var redirectUriTemplate = config.GetValue<string>("RedirectUriTemplate", "https://ffxivvenues.dev/venue/{venueId}");
 app.MapGet("/venue/{venueId}", (string venueId, IMapFactory mapFactory, DomainDataContext domainData, HttpContext context) =>
 {
     context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";

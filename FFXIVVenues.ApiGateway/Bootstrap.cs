@@ -20,6 +20,8 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Options;
+using Microsoft.OData.ModelBuilder.Core.V1;
 using Wolverine;
 using Wolverine.RabbitMQ;
 
@@ -33,12 +35,9 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
-var connectionString = config.GetConnectionString("FFXIVVenues");
-var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
-var mediaStorageProvider = config.GetValue<string>("MediaStorage:Provider");
-var authorizationKeys = new List<AuthorizationKey>();
-config.GetSection("Security:AuthorizationKeys").Bind(authorizationKeys);
+var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
+var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
@@ -56,7 +55,8 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseWolverine(opts =>
 {
-    opts.UseRabbitMq(rabbitServiceUrl).AutoProvision();
+    opts.UseRabbitMq(rabbitServiceUrl)
+        .AutoProvision();
     opts.AddFlagServiceMessages();
     // Move to Venue Service soon
     opts.PublishMessage<VenueCreatedEvent>()
@@ -68,30 +68,45 @@ builder.Host.UseWolverine(opts =>
 });
 
 // Configure services
-if (mediaStorageProvider.ToLower() == "s3")
-    builder.Services.AddSingleton<IMediaRepository, S3MediaRepository>();
-else if (mediaStorageProvider.ToLower() == "azure")
-    builder.Services.AddSingleton<IMediaRepository, AzureMediaRepository>();
-else
-    builder.Services.AddSingleton<IMediaRepository, LocalMediaRepository>();
 
 builder.ConfigureAuthorization();
-builder.Services.AddDomainData(connectionString, mediaUriTemplate);
-builder.Services.AddSecurityServices(o => {
+builder.Services.AddSingleton<IMediaRepository>(sp =>
+    sp.GetRequiredService<IOptions<MediaConfiguration>>().Value.MediaStorageProvider switch
+    {
+        "s3" => ActivatorUtilities.CreateInstance<S3MediaRepository>(sp),
+        _ => ActivatorUtilities.CreateInstance<LocalMediaRepository>(sp),
+    });
+builder.Services.Configure<MediaConfiguration>(m => 
+{
+    m.MediaStorageProvider = config.GetValue<string>("MediaStorage:Provider");
+    m.MediaUriTemplate = mediaUriTemplate;
+});
+builder.Services.AddSecurityServices(o => 
+{
     o.SigningPrivateKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PrivateKeyPath") ?? o.SigningPrivateKeyPath;
     o.SigningPublicKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PublicKeyPath") ?? o.SigningPublicKeyPath;
 });
+builder.Services.AddDomainData(c =>
+{
+    c.ConnectionString = connectionString;
+    c.MediaUriTemplate = mediaUriTemplate;
+});
+builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(_ =>
+{
+    var authorizationKeys = new List<AuthorizationKey>();
+    config.GetSection("Security:AuthorizationKeys").Bind(authorizationKeys);
+    return authorizationKeys;
+});
 builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
-builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorizationKeys);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddHttpClient();
-builder.Services.AddControllers().AddOData(o => 
+builder.Services.AddControllers().AddOData((o, sp) =>
 {
     o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
     var modelBuilder = new ODataModelBuilder();
-    modelBuilder.AddVenuesEdm(mediaUriTemplate);
+    modelBuilder.AddVenuesEdm(sp.GetRequiredService<IOptionsMonitor<MediaConfiguration>>());
     modelBuilder.EnableLowerCamelCase();
     o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), 
         s => s.AddVenuesSerializer());
@@ -149,3 +164,9 @@ Log.Information("Migrations complete");
 
 Log.Information("Starting application");
 await app.RunAsync();
+
+public class MediaConfiguration 
+{
+    public string MediaStorageProvider { get; set; }
+    public string MediaUriTemplate { get; set; }
+}

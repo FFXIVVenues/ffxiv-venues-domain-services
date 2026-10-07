@@ -11,9 +11,10 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var connectionString = config.GetConnectionString("FFXIVVenues");
-var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
-var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl");
+var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
+var mediaUriTemplate = config.GetValue<string>("BannerUriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
     .WriteTo.Console()
@@ -24,7 +25,11 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDomainData(connectionString, mediaUriTemplate);
+builder.Services.AddDomainData(c =>
+{
+    c.ConnectionString = connectionString;
+    c.MediaUriTemplate = mediaUriTemplate;
+});
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>

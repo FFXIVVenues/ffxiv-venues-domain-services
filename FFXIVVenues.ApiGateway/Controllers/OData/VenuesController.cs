@@ -1,23 +1,27 @@
 using FFXIVVenues.ApiGateway.Helpers;
+using FFXIVVenues.ApiGateway.Media;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Entities.Venues;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FFXIVVenues.VenueService.Client.Events;
+using Microsoft.Extensions.Options;
 using Wolverine;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
-public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUser user) : ODataController
+public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUser user, IMediaRepository media, IOptionsSnapshot<MediaConfiguration> mediaConfig) : ODataController
 {
+
+    private const long MaxBannerBytes = 10_048_576;
 
     [EnableQuery]
     public ActionResult<IQueryable<Venue>> Get() =>
@@ -90,6 +94,78 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
         
         await bus.SendAsync(new VenueDeletedEvent(venue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
         return venue;
+    }
+
+    [HttpGet("odata/Venues({key})/banner")]
+    public async Task<ActionResult> GetBanner([FromRoute] string key)
+    {
+        if (media.IsMetered)
+            return StatusCode(StatusCodes.Status403Forbidden);
+
+        var venue = await db.Venues.AsNoTracking().SingleOrDefaultAsync(v => v.Id == key && v.Approved && v.Deleted == null);
+        if (venue == null)
+            return NotFound();
+
+        if (string.IsNullOrEmpty(venue.Banner))
+            return NoContent();
+
+        var (stream, contentType) = await media.Download(venue.Id, venue.Banner, HttpContext.RequestAborted);
+        return File(stream, contentType);
+    }
+
+    [HttpPut("odata/Venues({key})/banner")]
+    public async Task<ActionResult> PutToBanner([FromRoute] string key)
+    {
+        var venue = await db.Venues.FindAsync(key);
+        if (venue == null || venue.Deleted != null)
+            return NotFound();
+
+        if (venue.Managers?.Contains(user.Id.ToString()) != true)
+            return Forbid();
+
+        if (Request.ContentLength is not > 0)
+            return StatusCode(StatusCodes.Status411LengthRequired);
+        if (Request.ContentLength > MaxBannerBytes)
+            return StatusCode(StatusCodes.Status413PayloadTooLarge);
+        if (Request.ContentType?.StartsWith("image/") != true)
+            return StatusCode(StatusCodes.Status415UnsupportedMediaType);
+
+        var previousBanner = venue.Banner;
+        venue.Banner = await media.Upload(venue.Id, Request.ContentType, Request.ContentLength.Value, Request.Body, HttpContext.RequestAborted);
+        venue.LastModified = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync();
+
+        if (!string.IsNullOrEmpty(previousBanner))
+            await media.Delete(venue.Id, previousBanner);
+
+        await bus.PublishAsync(new VenueUpdatedEvent(venue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
+        
+        var bannerUri = new Uri(mediaConfig.Value.MediaUriTemplate.Replace("{venueId}", venue.Id).Replace("{bannerKey}", venue.Banner));
+        return this.Created(bannerUri, null);
+    }
+
+    [HttpDelete("odata/Venues({key})/banner")]
+    public async Task<ActionResult> DeleteToBanner([FromRoute] string key)
+    {
+        var venue = await db.Venues.FindAsync(key);
+        if (venue == null || venue.Deleted != null)
+            return NotFound();
+
+        if (venue.Managers?.Contains(user.Id.ToString()) != true)
+            return Forbid();
+
+        if (string.IsNullOrEmpty(venue.Banner))
+            return NoContent();
+
+        var previousBanner = venue.Banner;
+        venue.Banner = null;
+        venue.LastModified = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync();
+
+        await media.Delete(venue.Id, previousBanner);
+
+        await bus.PublishAsync(new VenueUpdatedEvent(venue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });
+        return NoContent();
     }
 
 }

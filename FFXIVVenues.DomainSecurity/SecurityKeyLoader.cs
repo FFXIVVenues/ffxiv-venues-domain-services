@@ -1,18 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using ScottBrady.IdentityModel.Crypto;
 using ScottBrady.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace FFXIVVenues.DomainSecurity;
 
-public class SecurityKeyLoader(SecurityOptions options)
+public class SecurityKeyLoader(IOptions<SecurityOptions> options)
 {
     // Also available from id.ffxivvenues.com
     public const string EdDsaKeyId = "ffxivvenues-ed25519-key";
@@ -23,8 +18,8 @@ public class SecurityKeyLoader(SecurityOptions options)
         if (_edDsaSecurityKey is not null)
             return _edDsaSecurityKey;
 
-        var privatePem = File.ReadAllText(options.SigningPrivateKeyPath);
-        var publicPem = File.ReadAllText(options.SigningPublicKeyPath);
+        var privatePem = File.ReadAllText(options.Value.SigningPrivateKeyPath);
+        var publicPem = File.ReadAllText(options.Value.SigningPublicKeyPath);
         var d = LoadKey(privatePem, true);
         var x = LoadKey(publicPem, false);
         var edDsa = EdDsa.Create(new EdDsaParameters(ExtendedSecurityAlgorithms.Curves.Ed25519) { D = d, X = x });
@@ -52,10 +47,4 @@ public class SecurityKeyLoader(SecurityOptions options)
                 $"Expected an Ed25519 {(wantPrivate ? "private" : "public")} key but got {keyParameter.GetType().Name}.")
         };
     }
-}
-
-public enum AsymmetricKeyType
-{
-    Public, 
-    Private
 }

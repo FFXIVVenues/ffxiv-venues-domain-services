@@ -27,7 +27,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDomainData(connectionString);
+builder.Services.AddDomainData(c =>
+    c.ConnectionString = connectionString);
 builder.Services.AddSingleton<ScheduleExpander>();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();

@@ -39,7 +39,11 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSingleton(config);
 builder.Services.AddSingleton<IEnumerable<WebHook>>(webHooks);
 builder.Services.AddSingleton<WebHookEventDistributor>();
-builder.Services.AddDomainData(connectionString, bannerUriTemplate);
+builder.Services.AddDomainData(c =>
+{
+    c.ConnectionString = connectionString;
+    c.MediaUriTemplate = bannerUriTemplate;
+});
 builder.Services.AddSecurityServices(o =>
 {
     o.SigningPrivateKeyPath = config.GetValue<string>("Security:Signing:Ed25519:PrivateKeyPath") ?? o.SigningPrivateKeyPath;

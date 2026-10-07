@@ -16,6 +16,10 @@ internal static partial class Bootstrap
             _ => new InMemoryRepository()
         };
         serviceCollection.AddSingleton(repository);
-        serviceCollection.AddDomainData(config.ConnectionString, config.UiConfig.BannerUriTemplate);
+        serviceCollection.AddDomainData(c =>
+        {
+            c.ConnectionString = config.ConnectionString;
+            c.MediaUriTemplate = config.UiConfig.BannerUriTemplate;
+        });
     }
 }

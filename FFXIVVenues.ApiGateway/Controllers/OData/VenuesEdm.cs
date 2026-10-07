@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData.ModelBuilder;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
 internal static class VenuesEdm
 {
 
-    public static ODataModelBuilder AddVenuesEdm(this ODataModelBuilder builder, string bannerUriTemplate)
+    public static ODataModelBuilder AddVenuesEdm(this ODataModelBuilder builder, IOptionsMonitor<MediaConfiguration> mediaConfig)
     {
         var venueSet = builder.EntitySet<Venue>("Venues");
 
@@ -24,7 +25,7 @@ internal static class VenuesEdm
             var bannerKey = c.GetPropertyValue("banner") as string;
             var venueId = c.GetPropertyValue("id") as string;
             return bannerKey is null ? null
-                : bannerUriTemplate.Replace("{venueId}", venueId).Replace("{bannerKey}", bannerKey);
+                : mediaConfig.CurrentValue.MediaUriTemplate.Replace("{venueId}", venueId).Replace("{bannerKey}", bannerKey);
         });
         venue.Property(v => v.Added).Computed();
         venue.Property(v => v.LastModified).Computed();
@@ -33,6 +34,7 @@ internal static class VenuesEdm
         venue.Property(v => v.Website);
         venue.Property(v => v.Discord);
         venue.Property(v => v.Sfw);
+        venue.Property(v => v.Approved).Computed();
         venue.ContainsMany(v => v.Schedule);
         venue.ContainsMany(v => v.ScheduleOverrides);
         venue.ContainsMany(v => v.Notices);

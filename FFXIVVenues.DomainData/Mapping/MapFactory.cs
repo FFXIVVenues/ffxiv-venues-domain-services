@@ -1,8 +1,7 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using FFXIVVenues.VenueModels;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace FFXIVVenues.DomainData.Mapping;
 
@@ -11,10 +10,8 @@ public class MapFactory : IMapFactory
     private readonly MapperConfiguration _mappingConfiguration;
     private readonly MapperConfiguration _projectionConfiguration;
 
-    public MapFactory(MapConfiguration config)
+    public MapFactory(IOptionsMonitor<DomainDataConfiguration> config)
     {
-        // var uriTemplate = config.GetValue<string>("MediaStorage:UriTemplate");
-        var uriTemplate = config.ImageUriTemplate;
         this._mappingConfiguration = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Entities.Venues.Schedule, VenueModels.Schedule>()
@@ -46,8 +43,8 @@ public class MapFactory : IMapFactory
                 .ForMember(d => d.Website, o => o.MapFrom(o => o.Website != null ? new Uri(o.Website) : null))
                 .ForMember(d => d.Discord, o => o.MapFrom(o => o.Discord != null ? new Uri(o.Discord) : null))
                 .ForMember(d => d.BannerUri, o => o.MapFrom(o => 
-                    o.Banner != null 
-                        ? new Uri(uriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 
+                    o.Banner != null && config.CurrentValue.MediaUriTemplate != null
+                        ? new Uri(config.CurrentValue.MediaUriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 
                         : null));
             cfg.CreateMap<VenueModels.Venue, Entities.Venues.Venue>()
                 .ForMember(d => d.Added, ex => ex.Ignore())
@@ -60,8 +57,8 @@ public class MapFactory : IMapFactory
                 .ForMember(d => d.Website, o => o.MapFrom(o => o.Website != null ? new Uri(o.Website) : null))
                 .ForMember(d => d.Discord, o => o.MapFrom(o => o.Discord != null ? new Uri(o.Discord) : null))
                 .ForMember(dto => dto.BannerUri, conf => conf.MapFrom(o => 
-                    o.Banner != null 
-                        ? new Uri(uriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 
+                    o.Banner != null && config.CurrentValue.MediaUriTemplate != null
+                        ? new Uri(config.CurrentValue.MediaUriTemplate.Replace("{venueId}", o.Id).Replace("{bannerKey}", o.Banner)) 
                         : null));
             cfg.CreateProjection<Entities.Venues.Schedule, VenueModels.Schedule>()
                 .ForMember(o => o.Day, x => x.MapFrom(o => (int) o.Day))
@@ -85,6 +82,3 @@ public class MapFactory : IMapFactory
         this._projectionConfiguration.CreateMapper();
     
 }
-
-
-public record MapConfiguration(string ImageUriTemplate);

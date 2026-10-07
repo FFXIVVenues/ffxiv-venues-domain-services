@@ -2,6 +2,7 @@ using FFXIVVenues.DomainData.Context;
 using FFXIVVenues.DomainData.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FFXIVVenues.DomainData;
 
@@ -9,14 +10,12 @@ public static class ServicePoint
 {
     
     public static IServiceCollection AddDomainData(this IServiceCollection services, 
-        string connectionString, 
-        string mediaUriTemplate = null)
+        Action<DomainDataConfiguration> configure)
     {
-        services.AddSingleton(new DbContextOptionsBuilder<DomainDataContext>().UseNpgsql(connectionString).Options);
-        services.AddDbContextFactory<DomainDataContext>();
-        services.AddSingleton(new DomainDataConnectionString(connectionString));
-        if (mediaUriTemplate is not null)
-            services.AddSingleton<IMapFactory>(new MapFactory(new(mediaUriTemplate)));
+        services.Configure(configure);
+        services.AddDbContextFactory<DomainDataContext>((sp, c) => 
+            c.UseNpgsql(sp.GetRequiredService<IOptions<DomainDataConfiguration>>().Value.ConnectionString));
+        services.AddSingleton<IMapFactory, MapFactory>();
         return services;
     }
 
