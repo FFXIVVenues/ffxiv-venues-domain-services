@@ -34,7 +34,7 @@ public class VenuesController(
     public ActionResult<IQueryable<Venue>> Get()
     {
         if (user.IsAuthenticated)
-            return Ok(db.Venues.AsNoTracking().Where(v => v.Approved || v.Managers.Contains(user.Id.ToString()) && v.Deleted == null));
+            return Ok(db.Venues.AsNoTracking().Where(v => (v.Approved || v.Managers.Contains(user.Id.ToString())) && v.Deleted == null));
         return Ok(db.Venues.AsNoTracking().Where(v => v.Approved && v.Deleted == null));
     }
 
