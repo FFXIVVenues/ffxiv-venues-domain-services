@@ -19,7 +19,7 @@ internal static partial class Bootstrap
         serviceCollection.AddDomainData(c =>
         {
             c.ConnectionString = config.ConnectionString;
-            c.MediaUriTemplate = config.UiConfig.BannerUriTemplate;
+            c.MediaUriTemplate = config.UiConfig.MediaUriTemplate;
         });
     }
 }

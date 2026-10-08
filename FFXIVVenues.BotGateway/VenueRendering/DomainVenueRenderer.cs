@@ -53,7 +53,7 @@ public class DomainVenueRenderer(IAuthorizer authorizer, UiConfiguration uiConfi
         VenueRenderFlags renderFlags = VenueRenderFlags.None)
     {
         var uiUrl = $"{uiConfig.BaseUrl}/#{venue.Id}"; 
-        bannerUrl ??= uiConfig.BannerUriTemplate.Replace("{venueId}", venue.Id).Replace("{bannerKey}", venue.Banner);
+        bannerUrl ??= uiConfig.MediaUriTemplate.Replace("{venueId}", venue.Id).Replace("{bannerKey}", venue.Banner);
 
         var stringBuilder = new StringBuilder();
         stringBuilder.Append("**Venue Id**: ");

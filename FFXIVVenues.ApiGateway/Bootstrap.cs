@@ -36,8 +36,10 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
-var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("MediaStorage:UriTemplate configuration not set");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
+var authorisationKeys = config.GetSection("Security:AuthorizationKeys").Get<List<AuthorizationKey>>();
+if (authorisationKeys.Count == 0) throw new Exception("Security:AuthorizationKeys configuration not set");
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
@@ -91,12 +93,7 @@ builder.Services.AddDomainData(c =>
     c.ConnectionString = connectionString;
     c.MediaUriTemplate = mediaUriTemplate;
 });
-builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(_ =>
-{
-    var authorizationKeys = new List<AuthorizationKey>();
-    config.GetSection("Security:AuthorizationKeys").Bind(authorizationKeys);
-    return authorizationKeys;
-});
+builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorisationKeys);
 builder.Services.AddFlagService();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
 builder.Services.AddHttpContextAccessor();

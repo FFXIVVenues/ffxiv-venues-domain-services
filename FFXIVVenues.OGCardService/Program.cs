@@ -15,13 +15,13 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
-var bannerUriTemplate = config.GetValue<string>("BannerUriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var mediaUriTemplate = config.GetValue<string>("MediaUriTemplate") ?? throw new Exception("MediaUriTemplate configuration not set");
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDomainData(c =>
 {
     c.ConnectionString = connectionString;
-    c.MediaUriTemplate = bannerUriTemplate;
+    c.MediaUriTemplate = mediaUriTemplate;
 });
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();

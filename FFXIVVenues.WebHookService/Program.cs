@@ -20,8 +20,9 @@ var config = new ConfigurationBuilder()
 var webHooks = new List<WebHook>();
 config.GetSection("WebHooks").Bind(webHooks);
 var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
-var bannerUriTemplate = config.GetValue<string>("BannerUriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var mediaUriTemplate = config.GetValue<string>("MediaUriTemplate") ?? throw new Exception("MediaUriTemplate configuration not set");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
     .WriteTo.Console()
@@ -42,7 +43,7 @@ builder.Services.AddSingleton<WebHookEventDistributor>();
 builder.Services.AddDomainData(c =>
 {
     c.ConnectionString = connectionString;
-    c.MediaUriTemplate = bannerUriTemplate;
+    c.MediaUriTemplate = mediaUriTemplate;
 });
 builder.Services.AddSecurityServices(o =>
 {

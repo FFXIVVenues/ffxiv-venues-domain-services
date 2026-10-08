@@ -12,6 +12,8 @@ using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.DomainSecurity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace FFXIVVenues.Veni;
 
@@ -28,7 +30,9 @@ internal static partial class Bootstrap
 
         var allConfig = new Configurations
         {
-            DiscordToken = config.GetValue<string>("DiscordBotToken"),
+            ConnectionString = config.GetConnectionString("FFXIVVenues"),
+
+            DiscordToken = config.GetValue<string>("DiscordBotToken") ?? throw new Exception("DiscordBotToken configuration not set"),
             LoggingConfig = config.GetSection("Logging").Get<LoggingConfiguration>() ?? new(),
             LuisConfig = config.GetSection("Clu").Get<CluConfiguration>() ?? new(),
             ApiConfig = config.GetSection("Api").Get<ApiConfiguration>() ?? new(),
@@ -40,9 +44,17 @@ internal static partial class Bootstrap
             PresenceConfig = config.GetSection("Presence").Get<PresenceConfiguration>() ?? new(),
             RabbitConfig = config.GetSection("Rabbit").Get<RabbitConfiguration>() ?? new(),
             SecurityConfig = config.GetSection("Security").Get<SecurityConfiguration>() ?? new(),
-
-            ConnectionString = config.GetConnectionString("FFXIVVenues")
         };
+
+        if (allConfig.ConnectionString is null) throw new Exception("Configuration ConnectionStrings:FFXIVVenues not set");
+        if (allConfig.DiscordToken is null) throw new Exception("Configuration DiscordBotToken not set");
+        if (allConfig.AuthorisationConfig.ManagerPermissions.Length == 0) throw new Exception("Configuration Authorisation:ManagerPermissions not set");
+        if (allConfig.AuthorisationConfig.Master.Length == 0) throw new Exception("Configuration Authorisation:Master not set");
+        if (allConfig.ApiConfig.BaseUrl is null) throw new Exception("Configuration Api:BaseUrl not set");
+        if (allConfig.ApiConfig.AuthorizationKey is null) throw new Exception("Configuration Api:AuthorizationKey not set");
+        if (allConfig.UiConfig.MediaUriTemplate is null) throw new Exception("Configuration Ui:MediaUriTemplate not set");
+        if (allConfig.UiConfig.BaseUrl is null) throw new Exception("Configuration Ui:BaseUrl not set");
+        if (allConfig.RabbitConfig.ServiceUrl is null) throw new Exception("Configuration Rabbit:ServiceUrl not set");
 
         serviceCollection.AddSingleton<IConfiguration>(config);
         serviceCollection.AddSingleton(allConfig.LuisConfig);

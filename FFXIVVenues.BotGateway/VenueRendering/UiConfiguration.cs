@@ -3,5 +3,5 @@
 public class UiConfiguration
 {
     public string BaseUrl { get; set; }
-    public string BannerUriTemplate { get; set; }
+    public string MediaUriTemplate { get; set; }
 }

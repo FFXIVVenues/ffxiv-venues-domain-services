@@ -12,7 +12,7 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
-var mediaUriTemplate = config.GetValue<string>("BannerUriTemplate") ?? throw new Exception("BannerUriTemplate configuration not set");
+var mediaUriTemplate = config.GetValue<string>("MediaUriTemplate") ?? throw new Exception("MediaUriTemplate configuration not set");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
 
 Log.Logger = new LoggerConfiguration()
