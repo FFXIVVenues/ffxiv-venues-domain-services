@@ -47,8 +47,11 @@ public class VenuesController(
             return NotFound();
         if (venue.Deleted != null)
             return NotFound();
-        if (venue.Approved || venue.Managers?.Contains(user.Id.ToString()) == true)
+        if (venue.Approved)
             return Ok(venue);
+        if (user.IsAuthenticated && venue.Managers?.Contains(user.Id.ToString()) == true)
+            return Ok(venue);
+        
         return NotFound();
     }
     
