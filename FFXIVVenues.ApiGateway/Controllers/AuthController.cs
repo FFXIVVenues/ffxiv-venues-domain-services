@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 namespace FFXIVVenues.ApiGateway.Controllers;
 
@@ -100,4 +101,6 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
     }
 }
 
-public record LoggedInUser(ulong userId, string username, string nickname, string avatarUrl);
+public record LoggedInUser(
+    [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] ulong userId, 
+    string username, string nickname, string avatarUrl);

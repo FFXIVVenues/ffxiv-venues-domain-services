@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FFXIVVenues.VenueService.Client.Events;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Wolverine;
 
@@ -29,16 +30,26 @@ public class VenuesController(
     private const long MaxBannerBytes = 10_048_576;
 
     [EnableQuery]
-    public ActionResult<IQueryable<Venue>> Get() =>
-        Ok(db.Venues.AsNoTracking().Where(v => v.Approved && v.Deleted == null));
+    [AllowAnonymous]
+    public ActionResult<IQueryable<Venue>> Get()
+    {
+        if (user.IsAuthenticated)
+            return Ok(db.Venues.AsNoTracking().Where(v => v.Approved || v.Managers.Contains(user.Id.ToString()) && v.Deleted == null));
+        return Ok(db.Venues.AsNoTracking().Where(v => v.Approved && v.Deleted == null));
+    }
 
     [EnableQuery]
+    [AllowAnonymous]
     public async Task<ActionResult<Venue>> Get([FromRoute] string key)
     {
-        var venue = await db.Venues.AsNoTracking().SingleOrDefaultAsync(d => d.Id == key && d.Approved);
+        var venue = await db.Venues.AsNoTracking().SingleOrDefaultAsync(d => d.Id == key);
         if (venue == null)
             return NotFound();
-        return Ok(venue);
+        if (venue.Deleted != null)
+            return NotFound();
+        if (venue.Approved || venue.Managers?.Contains(user.Id.ToString()) == true)
+            return Ok(venue);
+        return NotFound();
     }
     
     [EnableQuery]
