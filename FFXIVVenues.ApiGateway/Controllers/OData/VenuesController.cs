@@ -18,7 +18,12 @@ using Wolverine;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
-public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUser user, IMediaRepository media, IOptionsSnapshot<MediaConfiguration> mediaConfig) : ODataController
+public class VenuesController(
+    DomainDataContext db,
+    IMessageBus bus,
+    ICurrentUser user,
+    IMediaRepository media,
+    IOptionsSnapshot<MediaConfiguration> mediaConfig) : ODataController
 {
 
     private const long MaxBannerBytes = 10_048_576;
@@ -42,6 +47,7 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+        // TODO: Allow overriding this check as Staff
         var venuesCreatedInLast24Hours = await db.Venues.CountAsync(
             v => v.Added >= DateTimeOffset.UtcNow.AddDays(-1) 
               && v.Managers.Contains(user.Id.ToString()));
@@ -51,7 +57,17 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
         venue.Id = IdHelper.GenerateId();
         venue.Banner = null;
         venue.Approved = false;
-        venue.Managers = [ user.Id.ToString() ];
+        venue.Managers = [ user.Id.ToString() ]; // TODO: Allow overriding this as Staff
+        
+        // TODO: Allow overriding this check as Staff
+        if (venue.Schedule.Any(s => 
+                new TimeOnly(s.EndHour!.Value, s.EndMinute!.Value) - new TimeOnly(s.StartHour, s.StartMinute) > TimeSpan.FromHours(7)))
+            return BadRequest("Cannot set Schedule to more than 7 hours");
+        
+        // TODO: Allow overriding this check as Staff
+        if (venue.ScheduleOverrides.Any(s => s.End - s.Start > TimeSpan.FromHours(7)))
+            return BadRequest("Cannot set Schedule Override to more than 7 hours");
+        
         await db.Venues.AddAsync(venue);
         await db.SaveChangesAsync();
 
@@ -74,6 +90,20 @@ public class VenuesController(DomainDataContext db, IMessageBus bus, ICurrentUse
 
         await db.LoadChangedNavigationsAsync(existingVenue, venue);
         venue.CopyChangedValues(existingVenue);
+        
+        // ReSharper disable EntityFramework.NPlusOne.Usage
+        // TODO: Allow overriding this check as Staff
+        if (venue.GetChangedPropertyNames().Contains(nameof(Venue.Schedule)) &&
+            existingVenue.Schedule!.Any(s => 
+                new TimeOnly(s.EndHour!.Value, s.EndMinute!.Value) - new TimeOnly(s.StartHour, s.StartMinute) > TimeSpan.FromHours(7)))
+            return BadRequest("Cannot set Schedule to more than 7 hours");
+        
+        // TODO: Allow overriding this check as Staff
+        if (venue.GetChangedPropertyNames().Contains(nameof(Venue.ScheduleOverrides)) &&
+            existingVenue.ScheduleOverrides.Any(s => s.End - s.Start > TimeSpan.FromHours(7)))
+            return BadRequest("Cannot set Schedule Override to more than 7 hours");
+        // ReSharper enable EntityFramework.NPlusOne.Usage
+        
         await db.SaveChangesAsync();
 
         await bus.PublishAsync(new VenueUpdatedEvent(existingVenue.Id, user.Id), new DeliveryOptions { ScheduleDelay = TimeSpan.FromSeconds(5) });

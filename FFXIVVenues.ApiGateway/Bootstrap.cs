@@ -35,11 +35,11 @@ var config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("FFXIVVenues connection string not set");
-var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("MediaStorage:UriTemplate configuration not set");
-var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Rabbit:ServiceUrl configuration not set");
-var authorisationKeys = config.GetSection("Security:AuthorizationKeys").Get<List<AuthorizationKey>>();
-if (authorisationKeys.Count == 0) throw new Exception("Security:AuthorizationKeys configuration not set");
+var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Exception("Configuration ConnectionStrings:FFXIVVenues not set");
+var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("Configuration MediaStorage:UriTemplate not set");
+var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Configuration Rabbit:ServiceUrl not set");
+var authorisationKeys = config.GetSection("Security:AuthorizationKeys").Get<List<AuthorizationKey>>() ?? throw new Exception("Configuration Security:AuthorizationKeys not set");
+if (authorisationKeys.Count == 0) throw new Exception("Configuration Security:AuthorizationKeys empty");
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(config)
