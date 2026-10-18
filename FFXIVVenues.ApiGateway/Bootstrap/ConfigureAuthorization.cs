@@ -6,10 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Math.EC.Rfc8032;
 using ScottBrady.IdentityModel.Crypto;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FFXIVVenues.ApiGateway.Bootstrap;
@@ -71,8 +69,7 @@ internal static partial class Bootstrap
         builder.Services
             .AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
             .Configure<SecurityKeyLoader>((options, keyLoader) =>
-                options.TokenValidationParameters.IssuerSigningKey = keyLoader.LoadEdDsaKey())
-;
+                options.TokenValidationParameters.IssuerSigningKey = keyLoader.LoadEdDsaKey());
 
         builder.Services.AddAuthorization(options =>
         {

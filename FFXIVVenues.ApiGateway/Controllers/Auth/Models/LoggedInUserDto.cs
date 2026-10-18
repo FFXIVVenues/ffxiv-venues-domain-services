@@ -1,0 +1,22 @@
+#pragma warning disable CS1591
+
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
+using FFXIVVenues.ApiGateway.Security;
+
+namespace FFXIVVenues.ApiGateway.Controllers.Auth.Models;
+
+public record LoggedInUserDto(
+    [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    ulong UserId,
+    string Username,
+    string Nickname,
+    string AvatarUrl,
+    AuthorizationDto Authorization)
+{
+    public static LoggedInUserDto FromCurrentUser(ICurrentUser user) =>
+        new (user.Id, user.Username, user.Nickname, user.Claim(JwtRegisteredClaimNames.Picture), 
+            new AuthorizationDto(user.Authorization.Edit, user.Authorization.EditApproval, user.Authorization.EditManagers, user.Authorization.EditManagers, user.Authorization.UnlimitedSchedules));
+}
+
+public record AuthorizationDto(string Edit, string EditApproval, string EditManagers, string Delete, bool UnlimitedSchedules);

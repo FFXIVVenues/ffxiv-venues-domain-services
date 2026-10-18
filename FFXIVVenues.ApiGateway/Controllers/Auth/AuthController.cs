@@ -1,5 +1,10 @@
 ﻿#pragma warning disable CS1591
 
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using FFXIVVenues.ApiGateway.Controllers.Auth.Models;
 using FFXIVVenues.ApiGateway.Security;
 using FFXIVVenues.DomainSecurity;
 using Microsoft.AspNetCore.Authorization;
@@ -7,17 +12,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Converters;
-using ScottBrady.IdentityModel.Crypto;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Json.Serialization;
 
-namespace FFXIVVenues.ApiGateway.Controllers;
+namespace FFXIVVenues.ApiGateway.Controllers.Auth;
 
 [ApiController]
 [Route("auth")]
@@ -27,8 +23,7 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
     private static MemoryCache nonceCache = new(new MemoryCacheOptions());
 
     [HttpGet("whoami")]
-    public LoggedInUser WhoAmI() =>
-        new (user.Id, user.Username, user.Nickname, user.Claim(JwtRegisteredClaimNames.Picture));
+    public LoggedInUserDto WhoAmI() => LoggedInUserDto.FromCurrentUser(user);
 
     [HttpGet("sso")]
     [AllowAnonymous]
@@ -85,7 +80,7 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
             audience: config["Security:Jwt:Audience"],
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddHours(8),
+            expires: DateTime.UtcNow.AddDays(7),
             signingCredentials: signer.GetSigningCredentials());
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -100,7 +95,3 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
         });
     }
 }
-
-public record LoggedInUser(
-    [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] ulong userId, 
-    string username, string nickname, string avatarUrl);

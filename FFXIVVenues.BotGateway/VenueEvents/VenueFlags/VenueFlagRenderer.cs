@@ -4,7 +4,6 @@ using FFXIVVenues.BotGateway.VenueEvents.VenueFlags.Responses;
 using FFXIVVenues.BotGateway.VenueRendering;
 using FFXIVVenues.DomainData.Entities.Flags;
 using FFXIVVenues.VenueModels;
-using JasperFx.Events;
 using System;
 
 namespace FFXIVVenues.BotGateway.VenueEvents.VenueFlags;

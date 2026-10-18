@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS8618
 
-namespace FFXIVVenues.ApiGateway.Security
+namespace FFXIVVenues.ApiGateway.Security.V1._0
 {
     public class AuthorizationKey
     {

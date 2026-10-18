@@ -1,4 +1,4 @@
-﻿namespace FFXIVVenues.ApiGateway.Security
+﻿namespace FFXIVVenues.ApiGateway.Security.V1._0
 {
     public enum Operation
     {

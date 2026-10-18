@@ -1,17 +1,12 @@
 ﻿using FFXIVVenues.ApiGateway.Helpers.Edm;
 using FFXIVVenues.DomainData.Entities.Venues;
-using Microsoft.AspNetCore.OData.Formatter.Deserialization;
-using Microsoft.AspNetCore.OData.Formatter.Serialization;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData.ModelBuilder;
-using System.Text.Json;
 using Microsoft.Extensions.Options;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
 internal static class VenuesEdm
 {
-
     public static ODataModelBuilder AddVenuesEdm(this ODataModelBuilder builder, IOptionsMonitor<MediaConfiguration> mediaConfig)
     {
         var venueSet = builder.EntitySet<Venue>("Venues");
@@ -34,11 +29,11 @@ internal static class VenuesEdm
         venue.Property(v => v.Website);
         venue.Property(v => v.Discord);
         venue.Property(v => v.Sfw);
-        venue.Property(v => v.Approved).Computed();
+        venue.Property(v => v.Approved);
         venue.ContainsMany(v => v.Schedule);
         venue.ContainsMany(v => v.ScheduleOverrides);
         venue.ContainsMany(v => v.Notices);
-        venue.CollectionProperty(v => v.Managers).Computed();
+        venue.CollectionProperty(v => v.Managers);
         venue.CollectionProperty(v => v.Tags);
 
         var location = builder.EntityType<Location>();
@@ -100,19 +95,6 @@ internal static class VenuesEdm
 
         return builder;
     }
-
-    public static IServiceCollection AddVenuesSerializer(this IServiceCollection services) =>
-        services.AddSingleton<ODataResourceSerializer, EdmComputedSerializer>()
-                .AddSingleton<ODataResourceDeserializer, EdmComputedDeserializer>();
-
-    public static ODataModelBuilder EnableLowerCamelCase(this ODataModelBuilder builder)
-    {
-        foreach (var type in builder.StructuralTypes)
-            foreach (var prop in type.Properties)
-                prop.Name = JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
-        return builder;
-    }
-
 }
 
 

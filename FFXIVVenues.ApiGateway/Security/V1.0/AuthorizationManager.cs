@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 
-namespace FFXIVVenues.ApiGateway.Security;
+namespace FFXIVVenues.ApiGateway.Security.V1._0;
 
 public class AuthorizationManager(
     IEnumerable<AuthorizationKey> authorizationkeys,

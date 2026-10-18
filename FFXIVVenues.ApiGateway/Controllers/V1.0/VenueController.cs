@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FFXIVVenues.ApiGateway.Security.V1._0;
 using FFXIVVenues.VenueService.Client.Events;
 using Wolverine;
 using Domain = FFXIVVenues.DomainData.Entities.Venues;

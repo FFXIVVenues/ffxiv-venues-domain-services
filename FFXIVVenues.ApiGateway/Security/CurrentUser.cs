@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS1591
 
-using Amazon.Auth.AccessControlPolicy;
 using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,9 +16,12 @@ public interface ICurrentUser
     ulong Id { get; }
     string Nickname { get; }
     string Username { get; }
+    string AvatarUrl { get; }
+    
+    Authorization Authorization { get; }
 }
 
-public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
+public class CurrentUser(IHttpContextAccessor accessor, IAuthorizationProvider authorizationProvider) : ICurrentUser
 {
     public ClaimsPrincipal Principal => accessor.HttpContext?.User;
     public string Claim(string type) => Principal?.FindFirst(type)?.Value;
@@ -29,4 +31,5 @@ public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
     public string Username => Claim(JwtRegisteredClaimNames.PreferredUsername);
     public string Nickname => Claim(JwtRegisteredClaimNames.Nickname);
     public string AvatarUrl => Claim(JwtRegisteredClaimNames.Picture);
+    public Authorization Authorization => authorizationProvider.GetAuthorizationFor(Id);
 }

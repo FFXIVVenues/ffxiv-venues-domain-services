@@ -20,8 +20,10 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FFXIVVenues.ApiGateway.Helpers.Edm;
+using FFXIVVenues.ApiGateway.Security.V1._0;
 using Microsoft.Extensions.Options;
-using Microsoft.OData.ModelBuilder.Core.V1;
+using Microsoft.OData.Edm;
 using Wolverine;
 using Wolverine.RabbitMQ;
 
@@ -95,18 +97,24 @@ builder.Services.AddDomainData(c =>
 });
 builder.Services.AddSingleton<IEnumerable<AuthorizationKey>>(authorisationKeys);
 builder.Services.AddFlagService();
+builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
 builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IEdmModel>(sp =>
+{
+    var modelBuilder = new ODataModelBuilder();
+    var mediaConfig = sp.GetRequiredService<IOptionsMonitor<MediaConfiguration>>();
+    modelBuilder.AddVenuesEdm(mediaConfig);
+    modelBuilder.EnableLowerCamelCase();
+    return modelBuilder.GetEdmModel();
+});
 builder.Services.AddControllers().AddOData((o, sp) =>
 {
     o.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null);
-    var modelBuilder = new ODataModelBuilder();
-    modelBuilder.AddVenuesEdm(sp.GetRequiredService<IOptionsMonitor<MediaConfiguration>>());
-    modelBuilder.EnableLowerCamelCase();
-    o.AddRouteComponents("odata", modelBuilder.GetEdmModel(), 
-        s => s.AddVenuesSerializer());
+    var edmModel = sp.GetRequiredService<IEdmModel>();
+    o.AddRouteComponents("odata", edmModel, s => s.AddVenuesSerializer());
 });
 builder.Services.AddApiVersioning(o =>
 {

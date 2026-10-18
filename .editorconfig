@@ -1,0 +1,37 @@
+root = true
+
+[*.cs]
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+# Namespaces
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# Braces: omit for single-line bodies (Allman placement is already the default)
+csharp_prefer_braces = when_multiline:suggestion
+
+# var: only when the type is apparent from the right-hand side
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# Naming: constants (any accessibility) -> UPPER_CASE
+dotnet_naming_rule.constants_should_be_upper_case.symbols = constants
+dotnet_naming_rule.constants_should_be_upper_case.style = upper_case
+dotnet_naming_rule.constants_should_be_upper_case.severity = suggestion
+
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_style.upper_case.capitalization = all_upper
+dotnet_naming_style.upper_case.word_separator = _
+
+# Naming: private fields (including static) -> _lowerCamelCase
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.severity = suggestion
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _

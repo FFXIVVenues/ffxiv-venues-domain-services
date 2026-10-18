@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using FFXIVVenues.ApiGateway.Security.V1._0;
 using FFXIVVenues.VenueService.Client.Events;
 using Wolverine;
 

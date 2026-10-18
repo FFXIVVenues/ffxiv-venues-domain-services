@@ -2,7 +2,7 @@
 using System.Linq;
 using FFXIVVenues.DomainData.Entities.Venues;
 
-namespace FFXIVVenues.ApiGateway.Security;
+namespace FFXIVVenues.ApiGateway.Security.V1._0;
 
 public class NonAuthorizationCheck : IAuthorizationCheck
 {
