@@ -23,7 +23,10 @@ public class AuthController(Signer signer, ICurrentUser user, IConfiguration con
     private static MemoryCache nonceCache = new(new MemoryCacheOptions());
 
     [HttpGet("whoami")]
-    public LoggedInUserDto WhoAmI() => LoggedInUserDto.FromCurrentUser(user);
+    public WhoAmIDto WhoAmI() => WhoAmIDto.FromCurrentUser(user);
+    
+    [HttpGet("whatcanido")]
+    public WhatCanIDoDto WhatCanIDo() => WhatCanIDoDto.FromCurrentUser(user);
 
     [HttpGet("sso")]
     [AllowAnonymous]
