@@ -110,7 +110,7 @@ public class VenuesController(
                     new TimeOnly(s.EndHour!.Value, s.EndMinute!.Value) - new TimeOnly(s.StartHour, s.StartMinute) > TimeSpan.FromHours(7)))
                 return BadRequest("Cannot set Schedule to more than 7 hours");
             
-            if (venue.ScheduleOverrides.Any(s => s.End - s.Start > TimeSpan.FromHours(7)))
+            if (venue.ScheduleOverrides.Any(s => s.Open && s.End - s.Start > TimeSpan.FromHours(7)))
                 return BadRequest("Cannot set Schedule Override to more than 7 hours");
         }
         
@@ -172,7 +172,7 @@ public class VenuesController(
                 return BadRequest("Cannot set Schedule to more than 7 hours");
 
             if (venue.GetChangedPropertyNames().Contains(nameof(Venue.ScheduleOverrides)) &&
-                existingVenue.ScheduleOverrides.Any(s => s.End - s.Start > TimeSpan.FromHours(7)))
+                existingVenue.ScheduleOverrides.Any(s => s.Open && s.End - s.Start > TimeSpan.FromHours(7)))
                 return BadRequest("Cannot set Schedule Override to more than 7 hours");
             // ReSharper enable EntityFramework.NPlusOne.Usage
         }
