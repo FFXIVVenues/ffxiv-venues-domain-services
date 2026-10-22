@@ -20,6 +20,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using FFXIVVenues.ApiGateway.Helpers.Edm;
 using FFXIVVenues.ApiGateway.Security.V1._0;
 using Microsoft.Extensions.Options;
@@ -41,6 +42,7 @@ var connectionString = config.GetConnectionString("FFXIVVenues") ?? throw new Ex
 var mediaUriTemplate = config.GetValue<string>("MediaStorage:UriTemplate") ?? throw new Exception("Configuration MediaStorage:UriTemplate not set");
 var rabbitServiceUrl = config.GetValue<string>("Rabbit:ServiceUrl") ?? throw new Exception("Configuration Rabbit:ServiceUrl not set");
 var authorisationKeys = config.GetSection("Security:AuthorizationKeys").Get<List<AuthorizationKey>>() ?? throw new Exception("Configuration Security:AuthorizationKeys not set");
+var discordBotToken = config.GetValue<string>("DiscordBotToken") ?? throw new Exception("Configuration DiscordBotToken not set");
 if (authorisationKeys.Count == 0) throw new Exception("Configuration Security:AuthorizationKeys empty");
 
 Log.Logger = new LoggerConfiguration()
@@ -102,6 +104,13 @@ builder.Services.AddSingleton<IAuthorizationManager, AuthorizationManager>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("Discord", c =>
+{
+    c.BaseAddress = new Uri("https://discord.com/api/v10/");
+    c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bot", discordBotToken);
+    c.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (https://ffxivvenues.com, 1.0)");
+    c.Timeout = TimeSpan.FromSeconds(10);
+}).RedactLoggedHeaders(["Authorization"]);
 builder.Services.AddSingleton<IEdmModel>(sp =>
 {
     var modelBuilder = new ODataModelBuilder();
