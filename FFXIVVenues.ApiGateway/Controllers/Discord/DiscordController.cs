@@ -33,23 +33,30 @@ public class DiscordController(ICurrentUser user, IHttpClientFactory http) : Con
             return known;
 
         if (DateTimeOffset.UtcNow < unavailableUntil)
-            return StatusCode(StatusCodes.Status503ServiceUnavailable);
+            return StatusCode(StatusCodes.Status429TooManyRequests);
 
-        using var response = await http.CreateClient("Discord").GetAsync($"users/{id}", HttpContext.RequestAborted);
-        switch (response.StatusCode)
+        try
         {
-            case HttpStatusCode.OK:
-                var discordUser = await response.Content.ReadFromJsonAsync<DiscordUser>(HttpContext.RequestAborted);
-                var found = new WhoAmIDto(id, discordUser.Username, discordUser.GlobalName ?? discordUser.Username, discordUser.Avatar is null ? null : $"https://cdn.discordapp.com/avatars/{id}/{discordUser.Avatar}.png?size=64");
-                userCache.Set(id, found, TimeSpan.FromHours(1));
-                return found;
-            case HttpStatusCode.NotFound or HttpStatusCode.BadRequest:
-                return NotFound();
-            case HttpStatusCode.TooManyRequests:
-                unavailableUntil = DateTimeOffset.UtcNow + (response.Headers.RetryAfter?.Delta ?? TimeSpan.FromSeconds(5));
-                return StatusCode(StatusCodes.Status503ServiceUnavailable);
-            default:
-                return StatusCode(StatusCodes.Status502BadGateway);
+            using var response = await http.CreateClient("Discord").GetAsync($"users/{id}", HttpContext.RequestAborted);
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    var discordUser = await response.Content.ReadFromJsonAsync<DiscordUser>(HttpContext.RequestAborted);
+                    var found = new WhoAmIDto(id, discordUser.Username, discordUser.GlobalName ?? discordUser.Username, discordUser.Avatar is null ? null : $"https://cdn.discordapp.com/avatars/{id}/{discordUser.Avatar}.png?size=64");
+                    userCache.Set(id, found, TimeSpan.FromHours(1));
+                    return found;
+                case HttpStatusCode.NotFound or HttpStatusCode.BadRequest:
+                    return NotFound();
+                case HttpStatusCode.TooManyRequests:
+                    unavailableUntil = DateTimeOffset.UtcNow + (response.Headers.RetryAfter?.Delta ?? TimeSpan.FromSeconds(5));
+                    return StatusCode(StatusCodes.Status429TooManyRequests);
+                default:
+                    return StatusCode(StatusCodes.Status502BadGateway);
+            }
+        }
+        catch (TaskCanceledException e) when (e.InnerException is TimeoutException)
+        {
+            return StatusCode(StatusCodes.Status504GatewayTimeout);
         }
     }
 
