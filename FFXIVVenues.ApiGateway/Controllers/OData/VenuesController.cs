@@ -11,13 +11,20 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using FFXIVVenues.ApiGateway.Controllers.Auth.Models;
 using FFXIVVenues.VenueService.Client.Events;
 using JasperFx.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Results;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Wolverine;
+using Authorization = FFXIVVenues.ApiGateway.Security.Authorization;
 
 namespace FFXIVVenues.ApiGateway.Controllers.OData;
 
@@ -27,10 +34,14 @@ public class VenuesController(
     ICurrentUser user,
     IMediaRepository media,
     IAuthorizationProvider auth,
-    IOptionsSnapshot<MediaConfiguration> mediaConfig) : ODataController
+    IOptionsSnapshot<MediaConfiguration> mediaConfig,
+    IHttpClientFactory http) : ODataController
 {
 
     private const long MAX_BANNER_BYTES = 10_048_576;
+
+    private static MemoryCache managerCache = new(new MemoryCacheOptions());
+    private static DateTimeOffset discordUnavailableUntil;
 
     [EnableQuery]
     [AllowAnonymous]
@@ -301,4 +312,58 @@ public class VenuesController(
         return NoContent();
     }
 
+    [HttpGet("odata/Venues({key})/managers({managerId})")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ActionResult<WhoAmIDto>> GetManager([FromRoute] string key, [FromRoute] ulong managerId)
+    {
+        var isStaff = user.Authorization is { EditManagers: not null and not Authorization.ODATA_FALSE };
+        if (!(isStaff || await ManagesVenueWith(managerId, key.Trim('\''))))
+            return Forbid();
+
+        if (managerCache.TryGetValue(managerId, out WhoAmIDto known))
+            return known;
+
+        if (DateTimeOffset.UtcNow < discordUnavailableUntil)
+            return StatusCode(StatusCodes.Status429TooManyRequests);
+
+        try
+        {
+            using var response = await http.CreateClient("Discord")
+                .GetAsync($"users/{managerId}", HttpContext.RequestAborted);
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    var discordUser = await response.Content.ReadFromJsonAsync<DiscordUser>(HttpContext.RequestAborted);
+                    var found = new WhoAmIDto(managerId,
+                        discordUser.Username,
+                        discordUser.GlobalName ?? discordUser.Username,
+                        discordUser.Avatar is null ? null : $"https://cdn.discordapp.com/avatars/{managerId}/{discordUser.Avatar}.png?size=64");
+                    managerCache.Set(managerId, found, TimeSpan.FromHours(1));
+                    return found;
+                case HttpStatusCode.NotFound or HttpStatusCode.BadRequest:
+                    return NotFound();
+                case HttpStatusCode.TooManyRequests:
+                    discordUnavailableUntil = DateTimeOffset.UtcNow + (response.Headers.RetryAfter?.Delta ?? TimeSpan.FromSeconds(5));
+                    return StatusCode(StatusCodes.Status429TooManyRequests);
+                default:
+                    return StatusCode(StatusCodes.Status502BadGateway);
+            }
+        }
+        catch (TaskCanceledException e) when (e.InnerException is TimeoutException)
+        {
+            return StatusCode(StatusCodes.Status504GatewayTimeout);
+        }
+    }
+
+    private record DiscordUser(string Username, [property: JsonPropertyName("global_name")] string GlobalName, string Avatar);
+
+    private async Task<bool> ManagesVenueWith(ulong discordId, string venueId)
+    {
+        if (venueId is null)
+            return false;
+        var venue = await db.Venues.FindAsync(venueId);
+        return venue is { Deleted: null }
+               && venue.Managers?.Contains(user.Id.ToString()) == true
+               && venue.Managers.Contains(discordId.ToString());
+    }
 }
