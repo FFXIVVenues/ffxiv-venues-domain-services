@@ -12,5 +12,5 @@ public record WhatCanIDoDto(
 {
     public static WhatCanIDoDto FromCurrentUser(ICurrentUser user) =>
         new WhatCanIDoDto(user.Authorization.Edit, user.Authorization.EditApproval, user.Authorization.EditManagers,
-            user.Authorization.EditManagers, user.Authorization.UnlimitedSchedules);
+            user.Authorization.Delete, user.Authorization.UnlimitedSchedules);
 }
