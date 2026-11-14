@@ -1,6 +1,7 @@
 using FFXIVVenues.DomainData;
 using FFXIVVenues.FlagService.Client;
 using FFXIVVenues.FlagService.Client.Events;
+using JasperFx.CodeGeneration.Model;
 using Serilog;
 using Wolverine;
 using Wolverine.RabbitMQ;
@@ -29,6 +30,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>
 {
+    opts.ServiceLocationPolicy = ServiceLocationPolicy.AllowedButWarn;
     opts.UseRabbitMq(rabbitServiceUrl).AutoProvision();
     opts.AddFlagServiceMessages();
     opts.ListenToRabbitQueue("FFXIVVenues.Flagging.Commands")

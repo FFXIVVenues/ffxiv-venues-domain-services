@@ -1,6 +1,7 @@
 ﻿using FFXIVVenues.DomainData;
 using FFXIVVenues.VenueService.Client.Events;
 using FFXIVVenues.WebHookService;
+using JasperFx.CodeGeneration.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,6 +45,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.UseWolverine(opts =>
 {
+    opts.ServiceLocationPolicy = ServiceLocationPolicy.AllowedButWarn;
     opts.UseRabbitMq(rabbitServiceUrl)
         .DeclareExchange("FFXIVVenues.Venue.Events", e =>
             e.BindQueue("FFXIVVenues.WebHookService.EventsInbox"))
